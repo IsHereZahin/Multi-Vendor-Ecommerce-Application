@@ -32,7 +32,12 @@
 
         @include('admin.components.sidebar')
         @include('admin.components.header')
-        @yield('content')
+        
+        <div class="page-wrapper">
+            <div class="page-content">
+                @yield('content')
+            </div>
+        </div>
 
         <!--start overlay-->
         <div class="overlay toggle-icon"></div>
@@ -41,7 +46,7 @@
         <!--End Back To Top Button-->
 
         @include('admin.components.footer')
-        
+
     </div>
     <!--end wrapper-->
 
