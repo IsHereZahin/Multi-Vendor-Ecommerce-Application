@@ -23,7 +23,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-column align-items-center text-center">
-                                <img src="{{ (!empty($admindata->phto)) ? url('adminbackend/assets/images/user/'.$admindata->photo):url('adminbackend/assets/images/no_image.jpg') }}" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
+                                <img src="{{ (!empty($admindata->photo)) ? url('adminbackend/assets/images/user/'.$admindata->photo):url('adminbackend/assets/images/no_image.jpg') }}" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
                                 <div class="mt-3">
                                     <h4>{{ $admindata->name ?? '' }}</h4>
                                     <p class="text-secondary mb-1">{{ $admindata->email ?? '' }}</p>
@@ -43,7 +43,7 @@
                 <div class="col-lg-8">
                     <div class="card">
                         <div class="card-body">
-                            <from method="post" action="{{ route('admin.profile.update') }}" enctype="multipart/form-data">
+                            <form method="post" action="{{ route('admin.profile.update') }}" enctype="multipart/form-data">
                                 @csrf
 
                                 <div class="row mb-3">
@@ -51,7 +51,7 @@
                                         <h6 class="mb-0"></h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <img id="showImage" style="height: 10vh" class="rounded avatar-lg" src="{{ (!empty($admindata->phto)) ? url('adminbackend/assets/images/user/'.$admindata->photo):url('adminbackend/assets/images/no_image.jpg') }}" alt="Image">
+                                        <img id="showImage" style="height: 10vh" class="rounded avatar-lg" src="{{ (!empty($admindata->photo)) ? url('adminbackend/assets/images/user/'.$admindata->photo):url('adminbackend/assets/images/no_image.jpg') }}" alt="Image">
                                     </div>
                                 </div>
                                 <!-- end row -->
@@ -61,7 +61,7 @@
                                         <h6 class="mb-0">Photo</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input name="image" class="form-control" type="file" id="image">
+                                        <input name="photo" class="form-control" type="file" id="image">
                                     </div>
                                 </div>
                                 <!-- end row -->
@@ -79,7 +79,7 @@
                                         <h6 class="mb-0">Full Name</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" class="form-control" value="{{ $admindata->name ?? '' }}" />
+                                        <input type="text" class="form-control" name="name" value="{{ $admindata->name ?? '' }}" />
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -87,7 +87,7 @@
                                         <h6 class="mb-0">Email</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" class="form-control" value="{{ $admindata->email ?? '' }}" required/>
+                                        <input type="text" class="form-control" name="email" value="{{ $admindata->email ?? '' }}" required/>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -95,7 +95,7 @@
                                         <h6 class="mb-0">Phone</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" class="form-control" value="{{ $admindata->phone ?? '' }}" />
+                                        <input type="text" class="form-control" name="phone" value="{{ $admindata->phone ?? '' }}" />
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -103,17 +103,17 @@
                                         <h6 class="mb-0">Address</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" class="form-control" value="{{ $admindata->address ?? '' }}" />
+                                        <input type="text" class="form-control" name="address" value="{{ $admindata->address ?? '' }}" />
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="button" class="btn btn-primary px-4" value="Save Changes" />
+                                        <input type="submit" class="btn btn-primary px-4" value="Save Changes" />
                                     </div>
                                 </div>
-                            </from>
+                            </form>
                         </div>
                     </div>
                 </div>
