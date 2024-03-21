@@ -49,8 +49,8 @@ class AdminController extends Controller
 
         if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
             // Delete old image if exists
-            if ($data->photo && file_exists(public_path('adminbackend/assets/images/user/' . $data->photo))) {
-                unlink(public_path('adminbackend/assets/images/user/' . $data->photo));
+            if ($data->photo && file_exists(public_path('adminbackend/assets/images/upload/user/' . $data->photo))) {
+                unlink(public_path('adminbackend/assets/images/upload/user/' . $data->photo));
             }
 
             $file = $request->file('photo');
@@ -60,12 +60,17 @@ class AdminController extends Controller
             $username = Auth::user()->name; // Assuming 'name' is the username field
             $currentTime = time();
             $filename = $username . '_' . $id . '_' . $currentTime . '.' . $extension;
-            $file->move(public_path('adminbackend/assets/images/user'), $filename);
+            $file->move(public_path('adminbackend/assets/images/upload/user'), $filename);
             $data->photo = $filename;
         }
 
         $data->save();
-        return redirect('/admin/profile');
+
+        $notification = array(
+            'alert-type' =>'success',
+            'message' => 'Profile Updated Successfully!'
+        );
+        return redirect('/admin/profile')->with($notification);
     }
 
     /**
