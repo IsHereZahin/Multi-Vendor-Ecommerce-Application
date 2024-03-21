@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{{ asset('adminbackend/assets/css/dark-theme.css') }}" />
     <link rel="stylesheet" href="{{ asset('adminbackend/assets/css/semi-dark.css') }}" />
     <link rel="stylesheet" href="{{ asset('adminbackend/assets/css/header-colors.css') }}" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
     <title>Rukada - Responsive Bootstrap 5 Admin Template</title>
 </head>
 
@@ -32,7 +33,12 @@
 
         @include('admin.components.sidebar')
         @include('admin.components.header')
-        @yield('content')
+
+        <div class="page-wrapper">
+            <div class="page-content">
+                @yield('content')
+            </div>
+        </div>
 
         <!--start overlay-->
         <div class="overlay toggle-icon"></div>
@@ -41,7 +47,7 @@
         <!--End Back To Top Button-->
 
         @include('admin.components.footer')
-        
+
     </div>
     <!--end wrapper-->
 
@@ -69,6 +75,29 @@
       <script src="{{ asset('adminbackend/assets/js/index.js') }}"></script>
     <!--app JS-->
     <script src="{{ asset('adminbackend/assets/js/app.js') }}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+    @if(Session::has('message'))
+    var type = "{{ Session::get('alert-type','info') }}"
+    switch(type){
+        case 'info':
+        toastr.info(" {{ Session::get('message') }} ");
+        break;
+
+        case 'success':
+        toastr.success(" {{ Session::get('message') }} ");
+        break;
+
+        case 'warning':
+        toastr.warning(" {{ Session::get('message') }} ");
+        break;
+
+        case 'error':
+        toastr.error(" {{ Session::get('message') }} ");
+        break;
+    }
+    @endif
+    </script>
 </body>
 
 </html>
