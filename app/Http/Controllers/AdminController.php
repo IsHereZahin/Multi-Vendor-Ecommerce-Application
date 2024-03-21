@@ -50,8 +50,8 @@ class AdminController extends Controller
 
         if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
             // Delete old image if exists
-            if ($data->photo && file_exists(public_path('adminbackend/assets/images/upload/user/' . $data->photo))) {
-                unlink(public_path('adminbackend/assets/images/upload/user/' . $data->photo));
+            if ($data->photo && file_exists(public_path('upload/user/admin/' . $data->photo))) {
+                unlink(public_path('upload/user/admin/' . $data->photo));
             }
 
             $file = $request->file('photo');
@@ -61,7 +61,7 @@ class AdminController extends Controller
             $username = Auth::user()->name; // Assuming 'name' is the username field
             $currentTime = time();
             $filename = $username . '_' . $id . '_' . $currentTime . '.' . $extension;
-            $file->move(public_path('adminbackend/assets/images/upload/user'), $filename);
+            $file->move(public_path('upload/user/admin'), $filename);
             $data->photo = $filename;
         }
 
