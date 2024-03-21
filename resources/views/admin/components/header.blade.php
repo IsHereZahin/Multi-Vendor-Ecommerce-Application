@@ -434,9 +434,9 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item" href="javascript:;">
+                        <a class="dropdown-item" href="{{ route('admin.change.password') }}">
                             <i class="bx bx-cog"></i>
-                            <span>Settings</span>
+                            <span>Change Password</span>
                         </a>
                     </li>
 
