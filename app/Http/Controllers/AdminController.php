@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -49,8 +50,8 @@ class AdminController extends Controller
 
         if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
             // Delete old image if exists
-            if ($data->photo && file_exists(public_path('adminbackend/assets/images/upload/user/' . $data->photo))) {
-                unlink(public_path('adminbackend/assets/images/upload/user/' . $data->photo));
+            if ($data->photo && file_exists(public_path('upload/user/admin/' . $data->photo))) {
+                unlink(public_path('upload/user/admin/' . $data->photo));
             }
 
             $file = $request->file('photo');
@@ -60,7 +61,7 @@ class AdminController extends Controller
             $username = Auth::user()->name; // Assuming 'name' is the username field
             $currentTime = time();
             $filename = $username . '_' . $id . '_' . $currentTime . '.' . $extension;
-            $file->move(public_path('adminbackend/assets/images/upload/user'), $filename);
+            $file->move(public_path('upload/user/admin'), $filename);
             $data->photo = $filename;
         }
 
@@ -71,6 +72,32 @@ class AdminController extends Controller
             'message' => 'Profile Updated Successfully!'
         );
         return redirect('/admin/profile')->with($notification);
+    }
+
+    public function AdminChangePassword()
+    {
+        return view('admin.admin_change_password');
+    }
+
+    public function AdminPasswordUpdate(Request $request)
+    {
+        // Validation
+        $request->validate([
+            'old_password' => ['required'],
+            'new_password' => ['required','string','min:8', 'confirmed'],
+        ]);
+
+        // Match Password
+        if (!Hash::check($request->old_password, auth::user()->password)) {
+            return back()->with("error", "Old Password Doesn't Match!!!");
+        }
+
+        // Update Password
+        User::whereId(auth()->user()->id)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return back()->with("status", "Password Updated Successfully");
     }
 
     /**

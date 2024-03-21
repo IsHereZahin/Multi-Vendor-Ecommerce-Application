@@ -417,7 +417,7 @@
 
             <div class="user-box dropdown">
                 <a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{ asset(optional(Auth::user())->photo ? 'upload/user/admin/' . optional(Auth::user())->photo : 'adminbackend/assets/images/no_image.jpg') }}" class="user-img" alt="User Avatar">
+                    <img src="{{ asset(optional(Auth::user())->photo ? 'upload/user/vendor/' . optional(Auth::user())->photo : 'adminbackend/assets/images/no_image.jpg') }}" class="user-img" alt="User Avatar">
 
                     <div class="user-info ps-3">
                         <p class="user-name mb-0">{{ Auth::user()->name }}</p>
@@ -427,14 +427,14 @@
 
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                        <a class="dropdown-item" href="{{ route('admin.profile') }}">
+                        <a class="dropdown-item" href="{{ route('vendor.profile') }}">
                             <i class="bx bx-user"></i>
                             <span>Profile</span>
                         </a>
                     </li>
 
                     <li>
-                        <a class="dropdown-item" href="{{ route('admin.change.password') }}">
+                        <a class="dropdown-item" href="{{ route('vendor.change.password') }}">
                             <i class="bx bx-cog"></i>
                             <span>Change Password</span>
                         </a>
@@ -465,7 +465,7 @@
                         <div class="dropdown-divider mb-0"></div>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="{{ route('admin.logout') }}">
+                        <a class="dropdown-item" href="{{ route('vendor.logout') }}">
                             <i class='bx bx-log-out-circle'></i>
                             <span>Logout</span>
                         </a>
