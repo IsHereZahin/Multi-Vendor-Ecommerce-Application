@@ -26,10 +26,10 @@
                                     <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab" href="#track-orders" role="tab" aria-controls="track-orders" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
+                                    <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
+                                    <a class="nav-link" id="change-password-tab" data-bs-toggle="tab" href="#change-password" role="tab" aria-controls="change-password" aria-selected="true"><i class="fi-rs-password mr-10"></i>Change Password</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('logout') }}"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
@@ -122,41 +122,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="card mb-3 mb-lg-0">
-                                            <div class="card-header">
-                                                <h3 class="mb-0">Billing Address</h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <address>
-                                                    3522 Interstate<br />
-                                                    75 Business Spur,<br />
-                                                    Sault Ste. <br />Marie, MI 49783
-                                                </address>
-                                                <p>New York</p>
-                                                <a href="#" class="btn-small">Edit</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h5 class="mb-0">Shipping Address</h5>
-                                            </div>
-                                            <div class="card-body">
-                                                <address>
-                                                    4299 Express Lane<br />
-                                                    Sarasota, <br />FL 34249 USA <br />Phone: 1.941.227.4444
-                                                </address>
-                                                <p>Sarasota</p>
-                                                <a href="#" class="btn-small">Edit</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
                                 <div class="card">
                                     <div class="card-header">
@@ -206,6 +171,65 @@
                                     </div>
                                 </div>
                             </div>
+                             <!-- /// Change Password  -->
+
+                            <div class="tab-pane fade" id="change-password" role="tabpanel" aria-labelledby="change-password-tab">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Change Password</h5>
+                                    </div>
+                                    <div class="card-body">
+
+                                        <form method="post" action="{{ route('user.password.update') }}" >
+                                            @csrf
+
+                                            @if (session('status'))
+                                            <div class="alert alert-success" role="alert">
+                                                    {{session('status')}}
+                                            </div>
+                                            @elseif(session('error'))
+                                            <div class="alert alert-danger" role="alert">
+                                                {{session('error')}}
+                                            </div>
+                                            @endif
+
+                                            <div class="row">
+
+                                                <div class="form-group col-md-12">
+                                                    <label>Old Password <span class="required">*</span></label>
+                                                    <input  class="form-control @error('old_password') is-invalid @enderror"  name="old_password" type="password" id="current_password" required placeholder="Old Password"  />
+
+                                                    @error('old_password')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="form-group col-md-12">
+                                                    <label>New Password <span class="required">*</span></label>
+                                                    <input  class="form-control @error('new_password') is-invalid @enderror"  name="new_password" type="password" id="new_password" required placeholder="New Password"  />
+
+                                                    @error('new_password')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="form-group col-md-12">
+                                                    <label>Confirm New Password <span class="required">*</span></label>
+                                                    <input  class="form-control"  name="new_password_confirmation" type="password" id="new_password_confirmation" required placeholder="Confirm New Password"  />
+
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <button type="submit" class="btn btn-fill-out submit font-weight-bold" name="submit" value="Submit">Save Change</button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>

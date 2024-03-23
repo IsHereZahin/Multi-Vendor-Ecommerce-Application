@@ -188,6 +188,8 @@
                                         <img class="svgInject" alt="Nest" src="{{ asset('frontend/assets/imgs/theme/icons/icon-user.svg') }}" />
                                     </a>
                                     <a href="{{ route('login') }}"><span class="lable ml-0">Login</span></a>
+                                    <span class="lable" style="margin-left: 2px; margin-right: 2px;" > | </span>
+                                    <a href="{{ route('register') }}"><span class="lable ml-0">Register</span></a>
                                     @endif
 
                                 </div>
