@@ -42,7 +42,7 @@
                             <div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h3 class="mb-0">Hello {{ Auth::user()->name    }}!</h3>
+                                        <h3 class="mb-0">Hello {{ Auth::user()->name }}!</h3>
                                     </div>
                                     <div class="card-body">
                                         <p>
@@ -163,41 +163,46 @@
                                         <h5>Account Details</h5>
                                     </div>
                                     <div class="card-body">
-                                        <form method="post" name="enq">
+
+                                        <form method="post" action="{{ route('user.profile.update') }}" enctype="multipart/form-data">
+                                            @csrf
+
                                             <div class="row">
                                                 <div class="form-group col-md-6">
-                                                    <label>First Name <span class="required">*</span></label>
-                                                    <input required="" class="form-control" name="name" type="text" />
+                                                    <label>Username <span class="required">*</span></label>
+                                                    <input required="" class="form-control" name="username" type="text" value="{{ $userdata->username }}" disabled/>
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                    <label>Last Name <span class="required">*</span></label>
-                                                    <input required="" class="form-control" name="phone" />
+                                                    <label>Name <span class="required">*</span></label>
+                                                    <input required="" class="form-control" name="name" type="text" value="{{ $userdata->name }}"/>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label>Display Name <span class="required">*</span></label>
-                                                    <input required="" class="form-control" name="dname" type="text" />
+                                                    <label>Email<span class="required">*</span></label>
+                                                    <input required="" class="form-control" name="email" type="email" value="{{ $userdata->email }}"/>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label>Email Address <span class="required">*</span></label>
-                                                    <input required="" class="form-control" name="email" type="email" />
+                                                    <label>Phone<span class="required">*</span></label>
+                                                    <input required="" class="form-control" name="phone" type="text" value="{{ $userdata->phone }}"/>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label>Current Password <span class="required">*</span></label>
-                                                    <input required="" class="form-control" name="password" type="password" />
+                                                    <label>Address<span class="required">*</span></label>
+                                                    <input required="" class="form-control" name="address" type="text" value="{{ $userdata->address }}"/>
                                                 </div>
                                                 <div class="form-group col-md-12">
-                                                    <label>New Password <span class="required">*</span></label>
-                                                    <input required="" class="form-control" name="npassword" type="password" />
+                                                    <label>User Photo <span class="required">*</span></label>
+                                                    <input class="form-control" name="photo" type="file"  id="image" />
                                                 </div>
-                                                <div class="form-group col-md-12">
-                                                    <label>Confirm Password <span class="required">*</span></label>
-                                                    <input required="" class="form-control" name="cpassword" type="password" />
+                                                  <div class="form-group col-md-12">
+                                                    <label>  <span class="required">*</span></label>
+                                                    <img id="showImage" src="{{ (!empty($userdata->photo)) ? url('upload/user/user/'.$userdata->photo):url('adminbackend/assets/images/no_image.jpg') }}" alt="User" class="rounded-circle p-1 bg-primary" width="110">
                                                 </div>
+
                                                 <div class="col-md-12">
                                                     <button type="submit" class="btn btn-fill-out submit font-weight-bold" name="submit" value="Submit">Save Change</button>
                                                 </div>
                                             </div>
                                         </form>
+
                                     </div>
                                 </div>
                             </div>
@@ -208,4 +213,16 @@
         </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#image').change(function(e){
+            var reader = new FileReader();
+            reader.onload = function(e){
+                $('#showImage').attr('src',e.target.result);
+            }
+            reader.readAsDataURL(e.target.files['0']);
+        });
+    });
+</script>
 @endsection

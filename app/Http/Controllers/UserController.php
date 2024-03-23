@@ -15,6 +15,41 @@ class UserController extends Controller
         return view('user.user_dashboard', compact('id', 'userdata'));
     }
 
+    public function UserProfileUpdate(Request $request)
+    {
+        $id = Auth::user()->id;
+        $data = User::find($id);
+        $data->name = $request->name;
+        $data->email = $request->email;
+        $data->phone = $request->phone;
+        $data->address = $request->address;
+
+        if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+            // Delete old image if exists
+            if ($data->photo && file_exists(public_path('upload/user/user/' . $data->photo))) {
+                unlink(public_path('upload/user/user/' . $data->photo));
+            }
+
+            $file = $request->file('photo');
+            $extension = $file->getClientOriginalExtension();
+
+            // Generate a unique filename with username and current timestamp
+            $username = Auth::user()->name; // Assuming 'name' is the username field
+            $currentTime = time();
+            $filename = $username . '_' . $id . '_' . $currentTime . '.' . $extension;
+            $file->move(public_path('upload/user/user'), $filename);
+            $data->photo = $filename;
+        }
+
+        $data->save();
+
+        $notification = array(
+            'alert-type' =>'success',
+            'message' => 'Profile Updated Successfully!'
+        );
+        return redirect()->back()->with($notification);
+    }
+
     /**
      * Display a listing of the resource.
      */

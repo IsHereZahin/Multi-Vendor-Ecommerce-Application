@@ -9,7 +9,7 @@
                     <div class="col-xl-3 col-lg-4">
                         <div class="header-info">
                             <ul>
-                                <li><a href="page-account.html">My Cart</a></li>
+                                <li><a href="{{ '/dashboard' }}">My Cart</a></li>
                                 <li><a href="shop-wishlist.html">Checkout</a></li>
                                 <li><a href="shop-order.html">Order Tracking</a></li>
                             </ul>
@@ -156,26 +156,26 @@
                                 <div class="header-action-icon-2">
 
                                     @if (auth()->check())
-                                    <a href="page-account.html">
+                                    <a href="{{ '/dashboard' }}">
                                         <img class="svgInject" alt="Nest" src="{{ asset('frontend/assets/imgs/theme/icons/icon-user.svg') }}" />
                                     </a>
-                                    <a href="page-account.html"><span class="lable ml-0">Account</span></a>
+                                    <a href="{{ '/dashboard' }}"><span class="lable ml-0">Account</span></a>
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
                                         <ul>
                                             <li>
-                                                <a href="page-account.html"><i class="fi fi-rs-user mr-10"></i>My Account</a>
+                                                <a href="{{ '/dashboard' }}"><i class="fi fi-rs-user mr-10"></i>My Account</a>
                                             </li>
                                             <li>
-                                                <a href="page-account.html"><i class="fi fi-rs-location-alt mr-10"></i>Order Tracking</a>
+                                                <a href="{{ '/dashboard' }}"><i class="fi fi-rs-location-alt mr-10"></i>Order Tracking</a>
                                             </li>
                                             <li>
-                                                <a href="page-account.html"><i class="fi fi-rs-label mr-10"></i>My Voucher</a>
+                                                <a href="{{ '/dashboard' }}"><i class="fi fi-rs-label mr-10"></i>My Voucher</a>
                                             </li>
                                             <li>
                                                 <a href="shop-wishlist.html"><i class="fi fi-rs-heart mr-10"></i>My Wishlist</a>
                                             </li>
                                             <li>
-                                                <a href="page-account.html"><i class="fi fi-rs-settings-sliders mr-10"></i>Setting</a>
+                                                <a href="{{ '/dashboard' }}"><i class="fi fi-rs-settings-sliders mr-10"></i>Setting</a>
                                             </li>
                                             <li>
                                                 <a href="{{ route('logout') }}"><i class="fi fi-rs-sign-out mr-10"></i>Sign out</a>
@@ -414,7 +414,7 @@
                                         <ul class="sub-menu">
                                             <li><a href="page-about.html">About Us</a></li>
                                             <li><a href="page-contact.html">Contact</a></li>
-                                            <li><a href="page-account.html">My Account</a></li>
+                                            <li><a href="{{ '/dashboard' }}">My Account</a></li>
                                             <li><a href="page-login.html">Login</a></li>
                                             <li><a href="page-register.html">Register</a></li>
                                             <li><a href="page-forgot-password.html">Forgot password</a></li>
@@ -622,7 +622,7 @@
                             <ul class="dropdown">
                                 <li><a href="page-about.html">About Us</a></li>
                                 <li><a href="page-contact.html">Contact</a></li>
-                                <li><a href="page-account.html">My Account</a></li>
+                                <li><a href="{{ '/dashboard' }}">My Account</a></li>
                                 <li><a href="page-login.html">Login</a></li>
                                 <li><a href="page-register.html">Register</a></li>
                                 <li><a href="page-forgot-password.html">Forgot password</a></li>
