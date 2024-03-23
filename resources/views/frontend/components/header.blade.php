@@ -9,7 +9,6 @@
                     <div class="col-xl-3 col-lg-4">
                         <div class="header-info">
                             <ul>
-
                                 <li><a href="page-account.html">My Cart</a></li>
                                 <li><a href="shop-wishlist.html">Checkout</a></li>
                                 <li><a href="shop-order.html">Order Tracking</a></li>
@@ -200,12 +199,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
-
 
 
         <div class="header-bottom header-bottom-bg-color sticky-bar">
@@ -658,7 +651,7 @@
                     <a href="page-contact.html"><i class="fi-rs-marker"></i> Our location </a>
                 </div>
                 <div class="single-mobile-header-info">
-                    <a href="page-login.html"><i class="fi-rs-user"></i>Log In / Sign Up </a>
+                    <a href="{{ route('login') }}"><i class="fi-rs-user"></i>Log In / Sign Up </a>
                 </div>
                 <div class="single-mobile-header-info">
                     <a href="#"><i class="fi-rs-headphones"></i>(+01) - 2345 - 6789 </a>
