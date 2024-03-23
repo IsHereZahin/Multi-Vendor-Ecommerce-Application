@@ -9,8 +9,7 @@
                     <div class="col-xl-3 col-lg-4">
                         <div class="header-info">
                             <ul>
-
-                                <li><a href="page-account.html">My Cart</a></li>
+                                <li><a href="{{ '/dashboard' }}">My Cart</a></li>
                                 <li><a href="shop-wishlist.html">Checkout</a></li>
                                 <li><a href="shop-order.html">Order Tracking</a></li>
                             </ul>
@@ -58,7 +57,7 @@
             <div class="container">
                 <div class="header-wrap">
                     <div class="logo logo-width-1">
-                        <a href="index.html"><img src="{{ asset('frontend/assets/imgs/theme/logo.svg') }}" alt="logo" /></a>
+                        <a href="{{ '/' }}"><img src="{{ asset('frontend/assets/imgs/theme/logo.svg') }}" alt="logo" /></a>
                     </div>
                     <div class="header-right">
                         <div class="search-style-2">
@@ -153,34 +152,49 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="header-action-icon-2">
-                                    <a href="page-account.html">
+
+                                    @if (auth()->check())
+                                    <a href="{{ '/dashboard' }}">
                                         <img class="svgInject" alt="Nest" src="{{ asset('frontend/assets/imgs/theme/icons/icon-user.svg') }}" />
                                     </a>
-                                    <a href="page-account.html"><span class="lable ml-0">Account</span></a>
+                                    <a href="{{ '/dashboard' }}"><span class="lable ml-0">Account</span></a>
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
                                         <ul>
                                             <li>
-                                                <a href="page-account.html"><i class="fi fi-rs-user mr-10"></i>My Account</a>
+                                                <a href="{{ '/dashboard' }}"><i class="fi fi-rs-user mr-10"></i>My Account</a>
                                             </li>
                                             <li>
-                                                <a href="page-account.html"><i class="fi fi-rs-location-alt mr-10"></i>Order Tracking</a>
+                                                <a href="{{ '/dashboard' }}"><i class="fi fi-rs-location-alt mr-10"></i>Order Tracking</a>
                                             </li>
                                             <li>
-                                                <a href="page-account.html"><i class="fi fi-rs-label mr-10"></i>My Voucher</a>
+                                                <a href="{{ '/dashboard' }}"><i class="fi fi-rs-label mr-10"></i>My Voucher</a>
                                             </li>
                                             <li>
                                                 <a href="shop-wishlist.html"><i class="fi fi-rs-heart mr-10"></i>My Wishlist</a>
                                             </li>
                                             <li>
-                                                <a href="page-account.html"><i class="fi fi-rs-settings-sliders mr-10"></i>Setting</a>
+                                                <a href="{{ '/dashboard' }}"><i class="fi fi-rs-settings-sliders mr-10"></i>Setting</a>
                                             </li>
                                             <li>
-                                                <a href="page-login.html"><i class="fi fi-rs-sign-out mr-10"></i>Sign out</a>
+                                                <a href="{{ route('logout') }}"><i class="fi fi-rs-sign-out mr-10"></i>Sign out</a>
                                             </li>
                                         </ul>
                                     </div>
+
+                                    @else
+                                    <a href="{{ route('login') }}">
+                                        <img class="svgInject" alt="Nest" src="{{ asset('frontend/assets/imgs/theme/icons/icon-user.svg') }}" />
+                                    </a>
+                                    <a href="{{ route('login') }}"><span class="lable ml-0">Login</span></a>
+                                    <span class="lable" style="margin-left: 2px; margin-right: 2px;" > | </span>
+                                    <a href="{{ route('register') }}"><span class="lable ml-0">Register</span></a>
+                                    @endif
+
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
@@ -189,17 +203,11 @@
         </div>
 
 
-
-
-
-
-
-
         <div class="header-bottom header-bottom-bg-color sticky-bar">
             <div class="container">
                 <div class="header-wrap header-space-between position-relative">
                     <div class="logo logo-width-1 d-block d-lg-none">
-                        <a href="index.html"><img src="{{ asset('frontend/assets/imgs/theme/logo.svg') }}" alt="logo" /></a>
+                        <a href="{{ '/' }}"><img src="{{ asset('frontend/assets/imgs/theme/logo.svg') }}" alt="logo" /></a>
                     </div>
                     <div class="header-nav d-none d-lg-flex">
                         <div class="main-categori-wrap d-none d-lg-block">
@@ -272,7 +280,7 @@
                                 <ul>
 
                                     <li>
-                                        <a class="active" href="index.html">Home  </a>
+                                        <a class="active" href="{{ '/' }}">Home  </a>
 
                                     </li>
                                     <li>
@@ -408,7 +416,7 @@
                                         <ul class="sub-menu">
                                             <li><a href="page-about.html">About Us</a></li>
                                             <li><a href="page-contact.html">Contact</a></li>
-                                            <li><a href="page-account.html">My Account</a></li>
+                                            <li><a href="{{ '/dashboard' }}">My Account</a></li>
                                             <li><a href="page-login.html">Login</a></li>
                                             <li><a href="page-register.html">Register</a></li>
                                             <li><a href="page-forgot-password.html">Forgot password</a></li>
@@ -502,7 +510,7 @@
     <div class="mobile-header-wrapper-inner">
         <div class="mobile-header-top">
             <div class="mobile-header-logo">
-                <a href="index.html"><img src="{{ asset('frontend/assets/imgs/theme/logo.svg') }}" alt="logo" /></a>
+                <a href="{{ '/' }}"><img src="{{ asset('frontend/assets/imgs/theme/logo.svg') }}" alt="logo" /></a>
             </div>
             <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                 <button class="close-style search-close">
@@ -523,7 +531,7 @@
                 <nav>
                     <ul class="mobile-menu font-heading">
                         <li class="menu-item-has-children">
-                            <a href="index.html">Home</a>
+                            <a href="{{ '/' }}">Home</a>
 
                         </li>
                         <li class="menu-item-has-children">
@@ -616,7 +624,7 @@
                             <ul class="dropdown">
                                 <li><a href="page-about.html">About Us</a></li>
                                 <li><a href="page-contact.html">Contact</a></li>
-                                <li><a href="page-account.html">My Account</a></li>
+                                <li><a href="{{ '/dashboard' }}">My Account</a></li>
                                 <li><a href="page-login.html">Login</a></li>
                                 <li><a href="page-register.html">Register</a></li>
                                 <li><a href="page-forgot-password.html">Forgot password</a></li>
@@ -645,7 +653,7 @@
                     <a href="page-contact.html"><i class="fi-rs-marker"></i> Our location </a>
                 </div>
                 <div class="single-mobile-header-info">
-                    <a href="page-login.html"><i class="fi-rs-user"></i>Log In / Sign Up </a>
+                    <a href="{{ route('login') }}"><i class="fi-rs-user"></i>Log In / Sign Up </a>
                 </div>
                 <div class="single-mobile-header-info">
                     <a href="#"><i class="fi-rs-headphones"></i>(+01) - 2345 - 6789 </a>
