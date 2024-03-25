@@ -37,8 +37,13 @@ class AuthenticatedSessionController extends Controller
         } elseif ($request->user()->role === 'user') {
             $url = '/dashboard';
         }
-        
-        return redirect()->intended($url);
+
+        $notification = array (
+            'message' => 'Login Successfully',
+            'alert-type' =>'success'
+        );
+
+        return redirect()->intended($url)->with($notification);
     }
 
     /**
@@ -52,6 +57,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        $notification = array (
+            'message' => 'User Logout Successfully',
+            'alert-type' =>'success'
+        );
+
+        return redirect('/')->with($notification);
     }
 }
