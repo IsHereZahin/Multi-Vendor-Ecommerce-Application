@@ -27,7 +27,7 @@
 						<div class="menu-title">Brand</div>
 					</a>
 					<ul>
-						<li> <a href="app-emailbox.html"><i class="bx bx-right-arrow-alt"></i>Drop Shop</a></li>
+						<li> <a href="{{ route('all.brand') }}"><i class="bx bx-right-arrow-alt"></i>All Brand</a></li>
 					</ul>
 				</li>
 				<li class="menu-label">UI Elements</li>
