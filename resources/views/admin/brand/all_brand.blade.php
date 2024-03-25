@@ -39,13 +39,18 @@
                     <tbody>
                         @foreach($brands as $key => $item)
                             <tr>
-                                <td> {{ $key+1 }} </td>
-                                <td>{{ $item->brand_name }}</td>
-                                <td> <img src="{{ asset($item->brand_image) }}" style="width: 70px; height:40px;" >  </td>
-
+                                <td>{{ $key+1 }}</td>
+                                <td>{{ $item->name }}</td>
                                 <td>
-                                    <a href="" class="btn btn-info">Edit</a>
-                                    <a href="" class="btn btn-danger">Delete</a>
+                                    <img src="{{ asset('upload/brands/'.$item->image) }}" style="width: 70px; height: 70px; border-radius: 50%;">
+                                </td>
+                                <td>
+                                    <a href="{{ route('edit.brand', $item->id) }}" class="btn btn-info btn-sm">Edit</a>
+                                    <form method="POST" action="{{ route('delete.brand', $item->id) }}" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this brand?')">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach
