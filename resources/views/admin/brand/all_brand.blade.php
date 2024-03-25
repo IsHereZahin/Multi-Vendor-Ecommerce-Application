@@ -39,13 +39,12 @@
                     <tbody>
                         @foreach($brands as $key => $item)
                             <tr>
-                                <td> {{ $key+1 }} </td>
-                                <td>{{ $item->brand_name }}</td>
-                                <td> <img src="{{ asset($item->brand_image) }}" style="width: 70px; height:40px;" >  </td>
-
+                                <td>{{ $key+1 }}</td>
+                                <td>{{ $item->name }}</td>
+                                <td><img src="{{ asset('upload/brands/'.$item->image) }}" style="width: 70px; height: 70px;"></td>
                                 <td>
-                                    <a href="" class="btn btn-info">Edit</a>
-                                    <a href="" class="btn btn-danger">Delete</a>
+                                    <a href="#" class="btn btn-info">Edit</a>
+                                    <a href="#" class="btn btn-danger">Delete</a>
                                 </td>
                             </tr>
                         @endforeach

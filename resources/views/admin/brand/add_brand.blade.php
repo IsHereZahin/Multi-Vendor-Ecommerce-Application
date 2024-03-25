@@ -26,7 +26,7 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <form method="post" enctype="multipart/form-data" >
+                            <form method="post" action="{{ route('store.brand') }}" enctype="multipart/form-data" >
                                 @csrf
 
                                 <div class="row mb-3">
@@ -34,7 +34,7 @@
                                         <h6 class="mb-0">Brand Name</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" name="brand_name" class="form-control"   />
+                                        <input type="text" name="name" class="form-control"   />
                                     </div>
                                 </div>
 
@@ -43,7 +43,7 @@
                                         <h6 class="mb-0">Brand Image </h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="file" name="brand_image" class="form-control"  id="image"   />
+                                        <input type="file" name="image" class="form-control"  id="image"   />
                                     </div>
                                 </div>
 
