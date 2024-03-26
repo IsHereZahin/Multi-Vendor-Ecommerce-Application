@@ -20,14 +20,23 @@
 					</a>
 				</li>
 
+                <li>
+					<a href="{{ route('all.brand') }}">
+						<div class="parent-icon"><i class="bx bx-star"></i>
+						</div>
+						<div class="menu-title">Brand</div>
+					</a>
+				</li>
+
 				<li>
 					<a href="javascript:;" class="has-arrow">
 						<div class="parent-icon"><i class="bx bx-category"></i>
 						</div>
-						<div class="menu-title">Brand</div>
+						<div class="menu-title">Categorys</div>
 					</a>
 					<ul>
-						<li> <a href="{{ route('all.brand') }}"><i class="bx bx-right-arrow-alt"></i>All Brand</a></li>
+						<li> <a href="{{ route('all.category') }}"><i class="bx bx-right-arrow-alt"></i>Category</a></li>
+						<li> <a href="{{ route('all.subcategory') }}"><i class="bx bx-right-arrow-alt"></i>Sub Category</a></li>
 					</ul>
 				</li>
 				<li class="menu-label">UI Elements</li>

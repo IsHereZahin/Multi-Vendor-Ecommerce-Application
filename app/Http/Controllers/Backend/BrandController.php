@@ -92,7 +92,13 @@ class BrandController extends Controller
 
     public function DeleteBrand($id)
     {
-        $brand = Brand::findorfail($id);
+        $brand = Brand::findOrFail($id);
+
+        // Delete associated image if it exists
+        if(File::exists(public_path('upload/brands/'.$brand->image))) {
+            File::delete(public_path('upload/brands/'.$brand->image));
+        }
+
         $brand->delete();
 
         $notification = array(
