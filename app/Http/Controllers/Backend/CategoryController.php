@@ -11,8 +11,8 @@ class CategoryController extends Controller
 {
     public function AllCategory()
     {
-        $categorys = Category::latest()->get();
-        return view('admin.category.all_category', compact('categorys'));
+        $categories = Category::latest()->get();
+        return view('admin.category.all_category', compact('categories'));
     }
 
     public function AddCategory(){
@@ -29,7 +29,7 @@ class CategoryController extends Controller
         $image = null;
         if (!empty($request->image)){
             $image = time().'.'.$request->image->getClientOriginalExtension();
-            $request->image->move(public_path('upload/categorys'), $image);
+            $request->image->move(public_path('upload/categories'), $image);
         }
 
         Category::query()->create([
@@ -64,11 +64,11 @@ class CategoryController extends Controller
         // Check if a new image is uploaded
         if($request->hasFile('image')) {
             $image = time().'.'.$request->image->extension();
-            $request->image->move(public_path('upload/categorys'), $image);
+            $request->image->move(public_path('upload/categories'), $image);
 
             // Delete old image if it exists
-            if(File::exists(public_path('upload/categorys/'.$category->image))) {
-                File::delete(public_path('upload/categorys/'.$category->image));
+            if(File::exists(public_path('upload/categories/'.$category->image))) {
+                File::delete(public_path('upload/categories/'.$category->image));
             }
         } else {
             // No new image uploaded, keep the old one
@@ -92,7 +92,13 @@ class CategoryController extends Controller
 
     public function DeleteCategory($id)
     {
-        $category = Category::findorfail($id);
+        $category = Category::findOrFail($id);
+
+        // Delete associated image if it exists
+        if(File::exists(public_path('upload/categories/'.$category->image))) {
+            File::delete(public_path('upload/categories/'.$category->image));
+        }
+
         $category->delete();
 
         $notification = array(

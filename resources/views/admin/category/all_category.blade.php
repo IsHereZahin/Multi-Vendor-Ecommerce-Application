@@ -37,19 +37,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($categorys as $key => $item)
+                        @foreach($categories as $key => $item)
                             <tr>
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ $item->name }}</td>
                                 <td>
-                                    <img src="{{ asset('upload/categorys/'.$item->image) }}" style="width: 70px; height: 70px;">
+                                    <img src="{{ asset('upload/categories/'.$item->image) }}" style="width: 70px; height: 70px;">
                                 </td>
                                 <td>
-                                    <a href="{{ route('edit.category', $item->id) }}" class="btn btn-info btn-sm">Edit</a>
+                                    <a href="{{ route('edit.category', $item->id) }}" class="btn btn-info btn-lg">Edit</a>
                                     <form method="POST" action="{{ route('delete.category', $item->id) }}" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?')">Delete</button>
+                                        <button type="submit" class="btn btn-danger btn-lg" onclick="return confirm('Are you sure you want to delete this category?')">Delete</button>
                                     </form>
                                 </td>
                             </tr>

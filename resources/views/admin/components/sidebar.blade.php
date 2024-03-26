@@ -36,6 +36,7 @@
 					</a>
 					<ul>
 						<li> <a href="{{ route('all.category') }}"><i class="bx bx-right-arrow-alt"></i>Category</a></li>
+						<li> <a href="{{ route('all.subcategory') }}"><i class="bx bx-right-arrow-alt"></i>Sub Category</a></li>
 					</ul>
 				</li>
 				<li class="menu-label">UI Elements</li>

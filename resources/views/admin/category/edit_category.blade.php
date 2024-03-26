@@ -49,7 +49,7 @@
                                         <h6 class="mb-0"></h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <img id="showImage" src="{{ asset('upload/categorys/'.$category->image) }}" alt="category Image" style="width: 100px; height: 100px;" required>
+                                        <img id="showImage" src="{{ asset('upload/categories/'.$category->image) }}" alt="category Image" style="width: 100px; height: 100px;" required>
                                     </div>
                                 </div>
 
