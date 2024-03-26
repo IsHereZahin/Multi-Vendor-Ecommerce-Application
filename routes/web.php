@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Backend\BrandController;
+use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
@@ -47,6 +48,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/brand/edit/{id}', 'EditBrand')->name('edit.brand');
         Route::put('/brand/{id}', 'UpdateBrand')->name('update.brand');
         Route::delete('/brand/delete/{id}', 'DeleteBrand')->name('delete.brand');
+    });
+
+    // Category routes
+    Route::controller(CategoryController::class)->group(function() {
+        Route::get('all/category', 'AllCategory')->name('all.category');
+        Route::get('add/category', 'AddCategory')->name('add.category');
+        Route::post('store/category', 'StoreCategory')->name('store.category');
+        Route::get('/category/edit/{id}', 'EditCategory')->name('edit.category');
+        Route::put('/category/{id}', 'UpdateCategory')->name('update.category');
+        Route::delete('/category/delete/{id}', 'DeleteCategory')->name('delete.category');
     });
 });
 
