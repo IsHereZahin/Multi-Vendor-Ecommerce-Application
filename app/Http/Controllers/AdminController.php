@@ -107,13 +107,12 @@ class AdminController extends Controller
         return view('admin.vendor.inactive_vendor',compact('inActiveVendor'));
     }// End Mehtod
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+
+    public function ActiveVendor()
     {
-        //
-    }
+        $ActiveVendor = User::where('status','active')->where('role','vendor')->latest()->get();
+        return view('admin.vendor.active_vendor',compact('ActiveVendor'));
+    }// End Mehtod
 
     /**
      * Store a newly created resource in storage.
