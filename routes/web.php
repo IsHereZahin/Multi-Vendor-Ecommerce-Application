@@ -78,6 +78,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/subcategory/edit/{id}', 'EditSubCategory')->name('edit.subcategory');
         Route::put('/subcategory/{id}', 'UpdateSubCategory')->name('update.subcategory');
         Route::delete('/subcategory/delete/{id}', 'DeleteSubCategory')->name('delete.subcategory');
+        Route::get('/subcategory/ajax/{category_id}' , 'GetSubCategory')->name('get.subcategory');
     });
 
      // Product All Route
