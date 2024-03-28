@@ -27,15 +27,17 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <form method="post" action="{{ route('vendor.profile.store') }}" enctype="multipart/form-data" >
+                            <form method="post" action="{{ route('active.vendor.approve') }}" enctype="multipart/form-data" >
                                 @csrf
+
+                                <input type="hidden" name="id" value="{{ $inactiveVendorDetails->id }}">
 
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">User Name</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" class="form-control" value="{{ $inactiveVendorDetails->username }}" disabled />
+                                        <input type="text" class="form-control" name="username" value="{{ $inactiveVendorDetails->username }}" />
                                     </div>
                                 </div>
 
@@ -100,7 +102,7 @@
                                         <h6 class="mb-0">Vendor Photo</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <img id="showImage" src="{{ (!empty($inactiveVendorDetails->photo)) ? url('upload/vendor_images/'.$inactiveVendorDetails->photo):url('upload/no_image.jpg') }}" alt="Vendor" style="width:100px; height: 100px;"  >
+                                        <img id="showImage" src="{{ (!empty($inactiveVendorDetails->photo)) ? url('upload/vendor_images/'.$inactiveVendorDetails->photo):url('adminbackend/assets/images/no_image.jpg') }}" alt="Vendor" style="width:100px; height: 100px;"  >
                                     </div>
                                 </div>
 
