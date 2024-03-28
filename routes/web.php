@@ -43,6 +43,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Active InActive Validation Routes
     Route::get('/inactive/vendor', [AdminController::class, 'InactiveVendor'])->name('inactive.vendor');
+    Route::get('/inactive/vendor/details/{id}', [AdminController::class, 'InactiveVendorDetails'])->name('inactive.vendor.details');
     Route::get('/active/vendor' , [AdminController::class, 'ActiveVendor'])->name('active.vendor');
 
     // Brand routes

@@ -114,13 +114,11 @@ class AdminController extends Controller
         return view('admin.vendor.active_vendor',compact('ActiveVendor'));
     }// End Mehtod
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function InactiveVendorDetails($id)
     {
-        //
-    }
+        $inactiveVendorDetails = User::findOrFail($id);
+        return view('admin.vendor.inactive_vendor_details',compact('inactiveVendorDetails'));
+    }// End Mehtod
 
     /**
      * Display the specified resource.
