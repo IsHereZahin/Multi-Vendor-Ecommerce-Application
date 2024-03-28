@@ -135,13 +135,27 @@ class AdminController extends Controller
         return redirect()->route('active.vendor')->with($notification);
     }// End Mehtod
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function ActiveVendorDetails($id)
     {
-        //
-    }
+        $activeVendorDetails = User::findOrFail($id);
+        return view('admin.vendor.active_vendor_details',compact('activeVendorDetails'));
+    }// End Mehtod
+
+
+     public function InActiveVendorApprove(Request $request)
+     {
+        $verdor_id = $request->id;
+        User::findOrFail($verdor_id)->update([
+            'status' => 'inactive',
+        ]);
+
+        $notification = array(
+            'message' => 'Vendor InActive Successfully',
+            'alert-type' => 'warning'
+        );
+
+        return redirect()->route('inactive.vendor')->with($notification);
+    }// End Mehtod
 
     /**
      * Update the specified resource in storage.
