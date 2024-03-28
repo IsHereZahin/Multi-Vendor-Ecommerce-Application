@@ -100,13 +100,12 @@ class AdminController extends Controller
         return back()->with("status", "Password Updated Successfully");
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    // Active Inactive Vendor Account
+    public function InactiveVendor()
     {
-        //
-    }
+        $inActiveVendor = User::where('status','inactive')->where('role','vendor')->latest()->get();
+        return view('admin.vendor.inactive_vendor',compact('inActiveVendor'));
+    }// End Mehtod
 
     /**
      * Show the form for creating a new resource.

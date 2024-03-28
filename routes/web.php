@@ -41,6 +41,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/password/update', [AdminController::class, 'AdminPasswordUpdate'])->name('admin.password.update');
     Route::post('/admin/profile/update', [AdminController::class, 'AdminProfileUpdate'])->name('admin.profile.update');
 
+    // Active InActive Validation Routes
+    Route::get('/inactive/vendor', [AdminController::class, 'InactiveVendor'])->name('inactive.vendor');
+
     // Brand routes
     Route::controller(BrandController::class)->group(function() {
         Route::get('all/brand', 'AllBrand')->name('all.brand');
