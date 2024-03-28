@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -41,6 +42,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/password/update', [AdminController::class, 'AdminPasswordUpdate'])->name('admin.password.update');
     Route::post('/admin/profile/update', [AdminController::class, 'AdminProfileUpdate'])->name('admin.profile.update');
 
+    // Active InActive Validation Routes
+    Route::get('/inactive/vendor', [AdminController::class, 'InactiveVendor'])->name('inactive.vendor');
+    Route::get('/inactive/vendor/details/{id}', [AdminController::class, 'InactiveVendorDetails'])->name('inactive.vendor.details');
+    Route::post('/active/vendor/approve', [AdminController::class, 'ActiveVendorApprove'])->name('active.vendor.approve');
+    Route::get('/active/vendor' , [AdminController::class, 'ActiveVendor'])->name('active.vendor');
+    Route::get('/active/vendor/details/{id}' , [AdminController::class, 'ActiveVendorDetails'])->name('active.vendor.details');
+      Route::post('/inactive/vendor/approve' , [AdminController::class, 'InActiveVendorApprove'])->name('inactive.vendor.approve');
+
     // Brand routes
     Route::controller(BrandController::class)->group(function() {
         Route::get('all/brand', 'AllBrand')->name('all.brand');
@@ -69,11 +78,22 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/subcategory/edit/{id}', 'EditSubCategory')->name('edit.subcategory');
         Route::put('/subcategory/{id}', 'UpdateSubCategory')->name('update.subcategory');
         Route::delete('/subcategory/delete/{id}', 'DeleteSubCategory')->name('delete.subcategory');
+        Route::get('/subcategory/ajax/{category_id}' , 'GetSubCategory')->name('get.subcategory');
+    });
+
+     // Product All Route
+    Route::controller(ProductController::class)->group(function(){
+        Route::get('/all/product' , 'AllProduct')->name('all.product');
+        Route::get('/add/product' , 'AddProduct')->name('add.product');
+        Route::post('/store/product' , 'StoreProduct')->name('store.product');
     });
 });
 
 // Vendor routes
 Route::get('/vendor/login', [VendorController::class, 'VendorLogin'])->name('vendor.login');
+Route::get('/become/vendor', [VendorController::class, 'BecomeVendor'])->name('become.vendor');
+Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->name('vendor.register');
+
 Route::middleware(['auth', 'role:vendor'])->group(function () {
     Route::get('/vendor/dashboard', [VendorController::class, 'VendorDashboard'])->name('vendor.dashboard');
     Route::get('/vendor/logout', [VendorController::class, 'VendorLogout'])->name('vendor.logout');

@@ -100,45 +100,62 @@ class AdminController extends Controller
         return back()->with("status", "Password Updated Successfully");
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    // Active Inactive Vendor Account
+    public function InactiveVendor()
     {
-        //
-    }
+        $inActiveVendor = User::where('status','inactive')->where('role','vendor')->latest()->get();
+        return view('admin.vendor.inactive_vendor',compact('inActiveVendor'));
+    }// End Mehtod
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function ActiveVendor()
     {
-        //
-    }
+        $ActiveVendor = User::where('status','active')->where('role','vendor')->latest()->get();
+        return view('admin.vendor.active_vendor',compact('ActiveVendor'));
+    }// End Mehtod
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function InactiveVendorDetails($id)
     {
-        //
-    }
+        $inactiveVendorDetails = User::findOrFail($id);
+        return view('admin.vendor.inactive_vendor_details',compact('inactiveVendorDetails'));
+    }// End Mehtod
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function ActiveVendorApprove(Request $request)
     {
-        //
-    }
+        $verdor_id = $request->id;
+        User::findOrFail($verdor_id)->update([
+           'status' => 'active'
+        ]);
+
+        $notification = array(
+            'message' => 'Vendor Active Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('active.vendor')->with($notification);
+    }// End Mehtod
+
+    public function ActiveVendorDetails($id)
+    {
+        $activeVendorDetails = User::findOrFail($id);
+        return view('admin.vendor.active_vendor_details',compact('activeVendorDetails'));
+    }// End Mehtod
+
+
+     public function InActiveVendorApprove(Request $request)
+     {
+        $verdor_id = $request->id;
+        User::findOrFail($verdor_id)->update([
+            'status' => 'inactive',
+        ]);
+
+        $notification = array(
+            'message' => 'Vendor InActive Successfully',
+            'alert-type' => 'warning'
+        );
+
+        return redirect()->route('inactive.vendor')->with($notification);
+    }// End Mehtod
 
     /**
      * Update the specified resource in storage.
