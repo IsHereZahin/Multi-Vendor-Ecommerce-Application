@@ -92,4 +92,40 @@ class ProductController extends Controller
 
         return redirect()->route('all.product')->with($notification);
     } // End Method
+
+
+    // Product Active and InActive
+    public function toggleProductStatus(Request $request, $status)
+    {
+        // Validate input
+        $request->validate([
+            'id' => 'required|exists:products,id',
+        ]);
+
+        $product_id = $request->id;
+
+        // Update product status
+        Product::findOrFail($product_id)->update([
+            'status' => $status,
+        ]);
+
+        // Set appropriate notification message and type
+        $notification = [
+            'message' => ($status == 1) ? 'Product Activated Successfully' : 'Product Inactivated Successfully',
+            'alert-type' => ($status == 1) ? 'success' : 'warning',
+        ];
+
+        return redirect()->route('all.product')->with($notification);
+    }
+
+    public function InactiveProductApprove(Request $request)
+    {
+        return $this->toggleProductStatus($request, 0);
+    }
+
+    public function ActiveProductApprove(Request $request)
+    {
+        return $this->toggleProductStatus($request, 1);
+    }
+
 }

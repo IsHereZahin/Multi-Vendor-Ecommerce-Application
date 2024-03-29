@@ -55,13 +55,17 @@
                             <td>{{ $item->product_qty }}</td>
                             <td>
                                 @if($item->status == 1)
-                                    <a href="">
-                                        <span class="badge bg-success">Active</span>
-                                    </a>
+                                    <form method="post" action="{{ route('inactive.product.approve') }}">
+                                    @csrf
+                                        <input type="hidden" name="id" value="{{ $item->id }}">
+                                        <button type="submit" class="btn btn-sm btn-danger">Make Inactive</button>
+                                    </form>
                                 @else
-                                    <a href="">
-                                        <span class="badge bg-danger">InActive</span>
-                                    </a>
+                                    <form method="post" action="{{ route('active.product.approve') }}">
+                                    @csrf
+                                        <input type="hidden" name="id" value="{{ $item->id }}">
+                                        <button type="submit" class="btn btn-sm btn-success">Make Active</button>
+                                    </form>
                                 @endif
                             </td>
                             <td>

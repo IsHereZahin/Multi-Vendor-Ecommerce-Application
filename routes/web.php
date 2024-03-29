@@ -86,6 +86,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/all/product' , 'AllProduct')->name('all.product');
         Route::get('/add/product' , 'AddProduct')->name('add.product');
         Route::post('/store/product' , 'StoreProduct')->name('store.product');
+        Route::post('/product/inactive/approve', 'InactiveProductApprove')->name('inactive.product.approve');
+        Route::post('/product/active/approve', 'ActiveProductApprove')->name('active.product.approve');
     });
 });
 
