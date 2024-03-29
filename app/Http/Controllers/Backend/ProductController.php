@@ -106,7 +106,25 @@ class ProductController extends Controller
         return view('backend.product.product_edit',compact('brands','categories','subcategories','activeVendor','product','uploadedImages'));
     }
 
+    public function updateProduct(Request $request, $id){
+        // dd($request->all());
+        $delete_image = $request->delete_image;
 
+        foreach($delete_image as $image){
+            $id = $image;
+
+            $imageInfo = MultiImg::query()->find($id);
+            $image_name = $imageInfo->photo_name;
+            $imageInfo->delete();
+
+            // Delete old image if it exists
+            if(File::exists(public_path($image_name))) {
+                File::delete(public_path($image_name));
+            }
+
+        }
+        return redirect()->back();
+    }
 
     // Product Active and InActive
     public function toggleProductStatus(Request $request, $status)
