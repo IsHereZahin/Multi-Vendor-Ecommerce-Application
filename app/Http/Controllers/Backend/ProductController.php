@@ -7,10 +7,12 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Brand;
 use App\Models\MultiImg;
+use App\Models\SubCategory;
 use App\Models\User;
 use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -92,6 +94,18 @@ class ProductController extends Controller
 
         return redirect()->route('all.product')->with($notification);
     } // End Method
+
+    public function EditProduct($id)
+    {
+        $activeVendor = User::where('status','active')->where('role','vendor')->latest()->get();
+        $brands = Brand::latest()->get();
+        $categories = Category::latest()->get();
+        $product = Product::findOrFail($id);
+        $subcategories = SubCategory::where('category_id', $product->category_id)->latest()->get();
+        $uploadedImages = MultiImg::where('product_id', $product->id)->get();
+        return view('backend.product.product_edit',compact('brands','categories','subcategories','activeVendor','product','uploadedImages'));
+    }
+
 
 
     // Product Active and InActive
