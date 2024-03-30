@@ -25,10 +25,10 @@ class RedirectIfAuthenticated
                     return redirect('/dashboard');
                 }
                 if (Auth::check() && Auth::user()->role == 'vendor') {
-                    return redirect('/dashboard/vendor');
+                    return redirect('/vendor/dashboard');
                 }
                 if (Auth::check() && Auth::user()->role == 'admin') {
-                    return redirect('/dashboard/admin');
+                    return redirect('/admin/dashboard');
                 }
             }
         }
