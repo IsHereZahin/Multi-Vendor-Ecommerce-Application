@@ -88,6 +88,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/store/product' , 'StoreProduct')->name('store.product');
         Route::get('/product/edit/{id}' , 'EditProduct')->name('edit.product');
         Route::post('/product/update/{id}' , 'updateProduct')->name('update.product');
+        Route::get('/product/delete/{id}' , 'DeleteProduct')->name('delete.product');
 
         // Improved route naming conventions
         Route::post('/product/inactive/approve', 'InactiveProductApprove')->name('inactive.product.approve');
