@@ -24,8 +24,8 @@
         <h5 class="card-title">Add New Product</h5>
         <hr/>
 
-            <form id="myForm" method="post" action="{{ route('store.product') }}" enctype="multipart/form-data" >
-                @csrf
+        <form id="myForm" method="post" action="{{ route('store.product') }}" enctype="multipart/form-data" onsubmit="return validateForm()">
+            @csrf
                 <div class="form-body mt-4">
                     <div class="row">
                         <div class="col-lg-8">
@@ -92,6 +92,29 @@
                                         <label for="inputCompareatprice" class="form-label">Discount Price </label>
                                         <input type="text" name="discount_price" class="form-control" id="inputCompareatprice" placeholder="00.00">
                                     </div>
+
+                                    <div id="errorMessage" style="display: none; color: red;">Discount price cannot be higher than the product price.</div>
+                                    <script>
+                                        function validateForm() {
+                                            var productPrice = parseFloat(document.getElementById('inputPrice').value);
+                                            var discountPrice = parseFloat(document.getElementById('inputCompareatprice').value);
+                                            var errorMessage = document.getElementById('errorMessage');
+
+                                            if (productPrice < 0 || discountPrice > productPrice || discountPrice < 0) {
+                                                errorMessage.innerText = (productPrice < 0) ? "Product price cannot be negative." : (discountPrice > productPrice) ? "Discount price cannot be higher than the product price." : "Discount price cannot be negative.";
+                                                errorMessage.style.display = 'block';
+                                                return false; // Prevent form submission
+                                            } else {
+                                                errorMessage.style.display = 'none';
+                                                return true; // Allow form submission
+                                            }
+                                        }
+
+                                        // Add event listeners to perform validation instantly
+                                        document.getElementById('inputPrice').addEventListener('input', validateForm);
+                                        document.getElementById('inputCompareatprice').addEventListener('input', validateForm);
+                                    </script>
+
 
                                     <div class="form-group col-md-6">
                                         <label for="inputCostPerPrice" class="form-label">Product Code</label>
