@@ -98,7 +98,7 @@
                         @foreach($uploadedImages as $image)
                             <div class="col-md-3 mb-3" style="width: 100px;">
                                 <img src="{{ asset($image->photo_name) }}" class="img-thumbnail" alt="Image" width="100px" height="80px" style="border: 0;">
-                                <input name="delete_image[]" type="checkbox" class="delete-checkbox" data-image-id="{{ $image->id }}" value="{{ $image->id }}"> Delete ({{ $image->id }})
+                                <input name="delete_image[]" type="checkbox" class="delete-checkbox" data-image-id="{{ $image->id }}" value="{{ $image->id }}"> Delete
                             </div>
                         @endforeach
                     </div>
