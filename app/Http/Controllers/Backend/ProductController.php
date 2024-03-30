@@ -13,8 +13,6 @@ use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Stmt\Function_;
 
 class ProductController extends Controller
 {

@@ -18,7 +18,7 @@
     <div class="card-body p-4">
       <h5 class="card-title">Edit Product (ID: {{ $product->id }})</h5> <hr />
 
-      <form id="myForm" action="{{ route('update.product',$product->id ) }}" method="post"  enctype="multipart/form-data">
+      <form id="myForm" action="{{ route('update.product',$product->id ) }}" method="post"  enctype="multipart/form-data" onsubmit="return validateForm()">
         @csrf
         @method('POST') <div class="form-body mt-4">
           <div class="row">
@@ -147,20 +147,42 @@
                   <div class="row g-3">
 
                     <div class="form-group col-md-6">
-                      <label for="inputPrice" class="form-label">Product Price</label>
-                      <input type="text" name="selling_price" value="{{ old('selling_price', $product->selling_price) }}" class="form-control" id="inputPrice" placeholder="00.00" required>
-                      @error('selling_price')
-                        <span class="text-danger">{{ $message }}</span>
-                      @enderror
+                        <label for="inputPrice" class="form-label">Product Price</label>
+                        <input type="text" name="selling_price" value="{{ old('selling_price', $product->selling_price) }}" class="form-control" id="inputPrice" placeholder="00.00" required>
+                        @error('selling_price')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="form-group col-md-6">
-                      <label for="inputCompareatprice" class="form-label">Discount Price</label>
-                      <input type="text" name="discount_price" value="{{ old('discount_price', $product->discount_price) }}" class="form-control" id="inputCompareatprice" placeholder="00.00">
-                      @error('discount_price')
-                        <span class="text-danger">{{ $message }}</span>
-                      @enderror
+                        <label for="inputCompareatprice" class="form-label">Discount Price</label>
+                        <input type="text" name="discount_price" value="{{ old('discount_price', $product->discount_price) }}" class="form-control" id="inputCompareatprice" placeholder="00.00">
+                        @error('discount_price')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
+                    <div id="errorMessage" style="display: none; color: red;">Discount price cannot be higher than the product price.</div>
+
+                    <script>
+                        function validateForm() {
+                            var productPrice = parseFloat(document.getElementById('inputPrice').value);
+                            var discountPrice = parseFloat(document.getElementById('inputCompareatprice').value);
+                            var errorMessage = document.getElementById('errorMessage');
+
+                            if (productPrice < 0 || discountPrice > productPrice || discountPrice < 0) {
+                                errorMessage.innerText = (productPrice < 0) ? "Product price cannot be negative." : (discountPrice > productPrice) ? "Discount price cannot be higher than the product price." : "Discount price cannot be negative.";
+                                errorMessage.style.display = 'block';
+                                return false; // Prevent form submission
+                            } else {
+                                errorMessage.style.display = 'none';
+                                return true; // Allow form submission
+                            }
+                        }
+
+                        // Add event listeners to perform validation instantly
+                        document.getElementById('inputPrice').addEventListener('input', validateForm);
+                        document.getElementById('inputCompareatprice').addEventListener('input', validateForm);
+                    </script>
 
                     <div class="form-group col-md-6">
                       <label for="inputCostPerPrice" class="form-label">Product Code</label>
