@@ -120,6 +120,8 @@ Route::middleware(['auth', 'role:vendor'])->group(function () {
         Route::post('/vendor/product/update/{id}' , 'VendorupdateProduct')->name('vendor.update.product');
         Route::get('/vendor/product/delete/{id}' , 'VendorDeleteProduct')->name('vendor.delete.product');
 
+        Route::get('/vendor/subcategory/ajax/{category_id}' , 'VendorGetSubCategory')->name('vendor.get.subcategory');
+
         // Improved route naming conventions
         Route::post('/vendor/product/inactive/approve', 'VendorInactiveProductApprove')->name('vendor.inactive.product.approve');
         Route::post('/vendor/product/active/approve', 'VendorActiveProductApprove')->name('vendor.active.product.approve');

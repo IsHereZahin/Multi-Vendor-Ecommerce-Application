@@ -7,14 +7,14 @@
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="bx bx-home-alt"></i></a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('vendor.dashboard') }}"><i class="bx bx-home-alt"></i></a></li>
                     <li class="breadcrumb-item" aria-current="page">All Products (<span style="color: rgb(0, 119, 255);">{{ count($products) }}</span>)</li>
                 </ol>
             </nav>
         </div>
         <div class="ms-auto">
             <div class="btn-group">
-                <a href="{{ route('add.product') }}" class="btn btn-primary">Add Product</a>
+                <a href="{{ route('vendor.add.product') }}" class="btn btn-primary">Add Product</a>
             </div>
         </div>
     </div>
