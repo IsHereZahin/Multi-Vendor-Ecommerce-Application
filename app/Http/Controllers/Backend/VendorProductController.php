@@ -226,4 +226,38 @@ class VendorProductController extends Controller
         return redirect()->back()->with($notification);
     }
 
+        // Product Active and InActive
+        public function toggleProductStatus(Request $request, $status)
+        {
+            // Validate input
+            $request->validate([
+                'id' => 'required|exists:products,id',
+            ]);
+
+            $product_id = $request->id;
+
+            // Update product status
+            Product::findOrFail($product_id)->update([
+                'status' => $status,
+            ]);
+
+            // Set appropriate notification message and type
+            $notification = [
+                'message' => ($status == 1) ? 'Product Activated Successfully' : 'Product Inactivated Successfully',
+                'alert-type' => ($status == 1) ? 'success' : 'warning',
+            ];
+
+            return redirect()->route('vendor.all.product')->with($notification);
+        }
+
+        public function VendorInactiveProductApprove(Request $request)
+        {
+            return $this->toggleProductStatus($request, 0);
+        }
+
+        public function VendorActiveProductApprove(Request $request)
+        {
+            return $this->toggleProductStatus($request, 1);
+        }
+
 }

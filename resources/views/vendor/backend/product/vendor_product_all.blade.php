@@ -70,13 +70,13 @@
                             <td>{{ $item->product_qty }}</td>
                             <td>
                                 @if($item->status == 1)
-                                    <form method="post" action="{{ route('inactive.product.approve') }}">
+                                    <form method="post" action="{{ route('vendor.inactive.product.approve') }}">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $item->id }}">
                                         <button type="submit" class="btn btn-sm btn-success w-100">Active</button>
                                     </form>
                                 @else
-                                    <form method="post" action="{{ route('active.product.approve') }}">
+                                    <form method="post" action="{{ route('vendor.active.product.approve') }}">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $item->id }}">
                                         <button type="submit" class="btn btn-sm btn-secondary w-100">Inactive</button>
