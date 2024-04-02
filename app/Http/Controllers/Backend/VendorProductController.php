@@ -194,4 +194,36 @@ class VendorProductController extends Controller
         return redirect()->route('vendor.all.product')->with($notification);
     }
 
+    public function VendorDeleteProduct($id)
+    {
+        // Find the product by ID
+        $product = Product::findOrFail($id);
+
+        // Delete thumbnail image if it exists
+        if (File::exists(public_path($product->product_thambnail))) {
+            File::delete(public_path($product->product_thambnail));
+        }
+
+        // Delete associated images
+        $productImages = MultiImg::where('product_id', $id)->get();
+        foreach ($productImages as $image) {
+            if (File::exists(public_path($image->photo_name))) {
+                File::delete(public_path($image->photo_name));
+            }
+            $image->delete();
+        }
+
+        // Delete the product
+        $product->delete();
+
+        // Prepare notification message
+        $notification = [
+           'message' => 'Product deleted successfully!',
+            'alert-type' => 'warning',
+        ];
+
+        // Redirect back with notification
+        return redirect()->back()->with($notification);
+    }
+
 }
