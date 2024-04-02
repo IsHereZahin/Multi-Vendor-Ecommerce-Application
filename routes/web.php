@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Backend\BannerController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\ProductController;
@@ -107,6 +108,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/slider/edit/{id}', 'EditSlider')->name('edit.slider');
         Route::put('/slider/{id}', 'UpdateSlider')->name('update.slider');
         Route::delete('/slider/delete/{id}', 'DeleteSlider')->name('delete.slider');
+    });
+
+    // Banner routes
+    Route::controller(BannerController::class)->group(function() {
+        Route::get('all/banner', 'AllBanner')->name('all.banner');
+        Route::get('add/banner', 'AddBanner')->name('add.banner');
+        Route::post('store/banner', 'StoreBanner')->name('store.banner');
+        Route::get('/banner/edit/{id}', 'EditBanner')->name('edit.banner');
+        Route::put('/banner/{id}', 'UpdateBanner')->name('update.banner');
+        Route::delete('/banner/delete/{id}', 'DeleteBanner')->name('delete.banner');
     });
 
 });
