@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\VendorProductController;
 use App\Http\Controllers\ProfileController;
@@ -96,6 +97,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/product/inactive/approve', 'InactiveProductApprove')->name('inactive.product.approve');
         Route::post('/product/active/approve', 'ActiveProductApprove')->name('active.product.approve');
     });
+
+
+    // Home Slider routes
+    Route::controller(SliderController::class)->group(function() {
+        Route::get('all/slider', 'AllSlider')->name('all.slider');
+        Route::get('add/slider', 'AddSlider')->name('add.slider');
+        Route::post('store/slider', 'StoreSlider')->name('store.slider');
+        Route::get('/slider/edit/{id}', 'EditSlider')->name('edit.slider');
+        Route::put('/slider/{id}', 'UpdateSlider')->name('update.slider');
+        Route::delete('/slider/delete/{id}', 'DeleteSlider')->name('delete.slider');
+    });
+
 });
 
 // Vendor routes
