@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\MultiImg;
 use App\Models\Product;
 use App\Models\SubCategory;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
@@ -101,4 +102,13 @@ class VendorProductController extends Controller
         return redirect()->route('vendor.all.product')->with($notification);
     } // End Method
 
+    public function VendorEditProduct($id)
+    {
+        $brands = Brand::latest()->get();
+        $categories = Category::latest()->get();
+        $product = Product::findOrFail($id);
+        $subcategories = SubCategory::where('category_id', $product->category_id)->latest()->get();
+        $uploadedImages = MultiImg::where('product_id', $product->id)->get();
+        return view('vendor.backend.product.product_edit',compact('brands','categories','subcategories','product','uploadedImages'));
+    } // End Method
 }
