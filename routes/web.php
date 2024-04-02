@@ -117,7 +117,7 @@ Route::middleware(['auth', 'role:vendor'])->group(function () {
         Route::get('/vendor/add/product' , 'VendorAddProduct')->name('vendor.add.product');
         Route::post('/vendor/store/product' , 'VendorStoreProduct')->name('vendor.store.product');
         Route::get('/vendor/product/edit/{id}' , 'VendorEditProduct')->name('vendor.edit.product');
-        Route::post('/vendor/product/update/{id}' , 'VendorupdateProduct')->name('vendor.update.product');
+        Route::post('/vendor/product/update/{id}' , 'VendorUpdateProduct')->name('vendor.update.product');
         Route::get('/vendor/product/delete/{id}' , 'VendorDeleteProduct')->name('vendor.delete.product');
 
         Route::get('/vendor/subcategory/ajax/{category_id}' , 'VendorGetSubCategory')->name('vendor.get.subcategory');

@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class VendorProductController extends Controller
 {
@@ -111,4 +112,86 @@ class VendorProductController extends Controller
         $uploadedImages = MultiImg::where('product_id', $product->id)->get();
         return view('vendor.backend.product.product_edit',compact('brands','categories','subcategories','product','uploadedImages'));
     } // End Method
+
+    public function VendorUpdateProduct(Request $request, $product_id)
+    {
+        // Update product details
+        $product = Product::findOrFail($product_id);
+        $product->update([
+            'brand_id' => $request->brand_id,
+            'category_id' => $request->category_id,
+            'subcategory_id' => $request->subcategory_id,
+            'product_name' => $request->product_name,
+            'product_slug' => strtolower(str_replace(' ','-',$request->product_name)),
+            'product_code' => $request->product_code,
+            'product_qty' => $request->product_qty,
+            'product_tags' => $request->product_tags,
+            'product_size' => $request->product_size,
+            'product_color' => $request->product_color,
+            'selling_price' => $request->selling_price,
+            'discount_price' => $request->discount_price,
+            'short_descp' => $request->short_descp,
+            'long_descp' => $request->long_descp,
+            'hot_deals' => $request->hot_deals,
+            'featured' => $request->featured,
+            'special_offer' => $request->special_offer,
+            'special_deals' => $request->special_deals,
+            'vendor_id' => Auth::user()->id,
+            'status' => $request->status,
+        ]);
+
+        // Delete images if selected for deletion
+        $delete_image = $request->delete_image;
+
+        if($delete_image) { // Check if $delete_image is not null
+            foreach($delete_image as $image){
+                $id = $image;
+
+                $imageInfo = MultiImg::query()->find($id);
+                $image_name = $imageInfo->photo_name;
+                $imageInfo->delete();
+
+                // Delete old image if it exists
+                if(File::exists(public_path($image_name))) {
+                    File::delete(public_path($image_name));
+                }
+            }
+        }
+
+        // Upload new images
+        if ($request->hasFile('multi_img')) {
+            foreach($request->file('multi_img') as $img){
+                $make_name = hexdec(uniqid()).'.'.$img->getClientOriginalExtension();
+                Image::make($img)->resize(800,800)->save('upload/products/multi-image/'.$make_name);
+                $uploadPath = 'upload/products/multi-image/'.$make_name;
+
+                MultiImg::create([
+                    'product_id' => $product_id,
+                    'photo_name' => $uploadPath,
+                    'created_at' => Carbon::now(),
+                ]);
+            }
+        }
+
+        // Delete old product thumbnail if new one is provided
+        if ($request->hasFile('product_thambnail')) {
+            $old_thumbnail = $product->product_thambnail;
+            if(File::exists(public_path($old_thumbnail))) {
+                File::delete(public_path($old_thumbnail));
+            }
+            $image = $request->file('product_thambnail');
+            $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
+            $save_url = 'upload/products/thambnail/'.$name_gen;
+            $product->update(['product_thambnail' => $save_url]);
+            Image::make($image)->resize(800,800)->save(public_path($save_url));
+        }
+
+        // Redirect back with notification
+        $notification = array(
+            'message' => 'Product Updated Successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('vendor.all.product')->with($notification);
+    }
+
 }
