@@ -239,71 +239,62 @@
                         <a href="{{ '/' }}"><img src="{{ asset('frontend/assets/imgs/theme/logo.svg') }}" alt="logo" /></a>
                     </div>
                     <div class="header-nav d-none d-lg-flex">
+
+                        @php
+                            $categories = App\Models\Category::all();
+                            $categoriesChunked = $categories->chunk(ceil($categories->count() / 2));
+                        @endphp
+
                         <div class="main-categori-wrap d-none d-lg-block">
                             <a class="categories-button-active" href="#">
                                 <span class="fi-rs-apps"></span>   All Categories
                                 <i class="fi-rs-angle-down"></i>
                             </a>
                             <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
-                                <div class="d-flex categori-dropdown-inner">
-                                    <ul>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img src="{{ asset('frontend/assets/imgs/theme/icons/category-1.svg') }}" alt="" />Milks and Dairies</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img src="{{ asset('frontend/assets/imgs/theme/icons/category-2.svg') }}" alt="" />Clothing & beauty</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img src="{{ asset('frontend/assets/imgs/theme/icons/category-3.svg') }}" alt="" />Pet Foods & Toy</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img src="{{ asset('frontend/assets/imgs/theme/icons/category-4.svg') }}" alt="" />Baking material</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img src="{{ asset('frontend/assets/imgs/theme/icons/category-5.svg') }}" alt="" />Fresh Fruit</a>
-                                        </li>
-                                    </ul>
-                                    <ul class="end">
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img src="{{ asset('frontend/assets/imgs/theme/icons/category-6.svg') }}" alt="" />Wines & Drinks</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img src="{{ asset('frontend/assets/imgs/theme/icons/category-7.svg') }}" alt="" />Fresh Seafood</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img src="{{ asset('frontend/assets/imgs/theme/icons/category-8.svg') }}" alt="" />Fast food</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img src="{{ asset('frontend/assets/imgs/theme/icons/category-9.svg') }}" alt="" />Vegetables</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img src="{{ asset('frontend/assets/imgs/theme/icons/category-10.svg') }}" alt="" />Bread and Juice</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="more_slide_open" style="display: none">
+                                @if ($categories->isEmpty())
+                                    <p>No categories found.</p>
+                                @else
                                     <div class="d-flex categori-dropdown-inner">
                                         <ul>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{{ asset('frontend/assets/imgs/theme/icons/icon-1.svg') }}" alt="" />Milks and Dairies</a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{{ asset('frontend/assets/imgs/theme/icons/icon-2.svg') }}" alt="" />Clothing & beauty</a>
-                                            </li>
+                                            @foreach ($categoriesChunked[0] as $data)
+                                                <li>
+                                                    <a href="#"> <img src="{{ asset('upload/categories/'.$data->image) }}" alt="" />{{ $data->name }}</a>
+                                                </li>
+                                            @endforeach
                                         </ul>
                                         <ul class="end">
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{{ asset('frontend/assets/imgs/theme/icons/icon-3.svg') }}" alt="" />Wines & Drinks</a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{{ asset('frontend/assets/imgs/theme/icons/icon-4.svg') }}" alt="" />Fresh Seafood</a>
-                                            </li>
+                                            @foreach ($categoriesChunked[1] as $data)
+                                                <li>
+                                                    <a href="#"> <img src="{{ asset('upload/categories/'.$data->image) }}" alt="" />{{ $data->name }}</a>
+                                                </li>
+                                            @endforeach
                                         </ul>
                                     </div>
-                                </div>
-                                <div class="more_categories"><span class="icon"></span> <span class="heading-sm-1">Show more...</span></div>
+
+                                    <div class="more_slide_open" style="display: none">
+                                        <div class="d-flex categori-dropdown-inner">
+                                            <ul>
+                                                @foreach ($categoriesChunked[0] as $data)
+                                                    <li>
+                                                        <a href="#"> <img src="{{ asset('upload/categories/'.$data->image) }}" alt="" />{{ $data->name }}</a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                            <ul class="end">
+                                                @foreach ($categoriesChunked[1] as $data)
+                                                    <li>
+                                                        <a href="#"> <img src="{{ asset('upload/categories/'.$data->image) }}" alt="" />{{ $data->name }}</a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="more_categories"><span class="icon"></span> <span class="heading-sm-1">Show more...</span></div>
+                                @endif
                             </div>
                         </div>
+
+
                         <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">
                             <nav>
                                 <ul>
@@ -316,9 +307,9 @@
                                         <a href="page-about.html">About</a>
                                     </li>
                                     <li>
-                                        <a href="shop-grid-right.html">Shop <i class="fi-rs-angle-down"></i></a>
+                                        <a href="#">Shop <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
-                                            <li><a href="shop-grid-right.html">Shop Grid – Right Sidebar</a></li>
+                                            <li><a href="#">Shop Grid – Right Sidebar</a></li>
                                             <li><a href="shop-grid-left.html">Shop Grid – Left Sidebar</a></li>
                                             <li><a href="shop-list-right.html">Shop List – Right Sidebar</a></li>
                                             <li><a href="shop-list-left.html">Shop List – Left Sidebar</a></li>
@@ -564,9 +555,9 @@
 
                         </li>
                         <li class="menu-item-has-children">
-                            <a href="shop-grid-right.html">shop</a>
+                            <a href="#">shop</a>
                             <ul class="dropdown">
-                                <li><a href="shop-grid-right.html">Shop Grid – Right Sidebar</a></li>
+                                <li><a href="#">Shop Grid – Right Sidebar</a></li>
                                 <li><a href="shop-grid-left.html">Shop Grid – Left Sidebar</a></li>
                                 <li><a href="shop-list-right.html">Shop List – Right Sidebar</a></li>
                                 <li><a href="shop-list-left.html">Shop List – Left Sidebar</a></li>
