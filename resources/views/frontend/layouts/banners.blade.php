@@ -1,39 +1,37 @@
 <section class="banners mb-25">
     <div class="container">
         <div class="row">
-            <div class="col-lg-4 col-md-6">
-                <div class="banner-img wow animate__animated animate__fadeInUp" data-wow-delay="0">
-                    <img src="{{ asset('frontend/assets/imgs/banner/banner-1.png') }}" alt="" />
-                    <div class="banner-text">
-                        <h4>
-                            Everyday Fresh & <br />Clean with Our<br />
-                            Products
-                        </h4>
-                        <a href="shop-grid-right.html" class="btn btn-xs">Shop Now <i class="fi-rs-arrow-small-right"></i></a>
+
+            @php
+                $banners = App\Models\Banner::take(3)->get();
+            @endphp
+
+            @if ($banners->isEmpty())
+                <p>No banners found</p>
+            @else
+                @foreach ($banners as $banner)
+                    <div class="col-lg-4 col-md-6">
+                        <div class="banner-img wow animate__animated animate__fadeInUp" data-wow-delay="0">
+                            <img src="{{ asset('upload/banners/'.$banner->image) }}" alt="" />
+                            <div class="banner-text">
+                                <h4>
+                                    @php
+                                        // Split the banner title into an array of words
+                                        $words = explode(' ', $banner->title);
+                                        // Get the first three words
+                                        $firstThreeWords = implode(' ', array_slice($words, 0, 3));
+                                        // Get the rest of the title after the third word
+                                        $restOftitle = implode(' ', array_slice($words, 3));
+                                    @endphp
+                                    {{ $firstThreeWords }}<br>{{ $restOftitle }}
+                                </h4>
+                                <a href="{{ $banner->url }}" class="btn btn-xs">Shop Now <i class="fi-rs-arrow-small-right"></i></a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="banner-img wow animate__animated animate__fadeInUp" data-wow-delay=".2s">
-                    <img src="{{ asset('frontend/assets/imgs/banner/banner-2.png') }}" alt="" />
-                    <div class="banner-text">
-                        <h4>
-                            Make your Breakfast<br />
-                            Healthy and Easy
-                        </h4>
-                        <a href="shop-grid-right.html" class="btn btn-xs">Shop Now <i class="fi-rs-arrow-small-right"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 d-md-none d-lg-flex">
-                <div class="banner-img mb-sm-0 wow animate__animated animate__fadeInUp" data-wow-delay=".4s">
-                    <img src="{{ asset('frontend/assets/imgs/banner/banner-3.png') }}" alt="" />
-                    <div class="banner-text">
-                        <h4>The best Organic <br />Products Online</h4>
-                        <a href="shop-grid-right.html" class="btn btn-xs">Shop Now <i class="fi-rs-arrow-small-right"></i></a>
-                    </div>
-                </div>
-            </div>
+                @endforeach
+            @endif
+
         </div>
     </div>
 </section>
