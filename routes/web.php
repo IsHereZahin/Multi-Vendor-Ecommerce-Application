@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Backend\BannerController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\VendorProductController;
 use App\Http\Controllers\ProfileController;
@@ -96,6 +98,28 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/product/inactive/approve', 'InactiveProductApprove')->name('inactive.product.approve');
         Route::post('/product/active/approve', 'ActiveProductApprove')->name('active.product.approve');
     });
+
+
+    // Home Slider routes
+    Route::controller(SliderController::class)->group(function() {
+        Route::get('all/slider', 'AllSlider')->name('all.slider');
+        Route::get('add/slider', 'AddSlider')->name('add.slider');
+        Route::post('store/slider', 'StoreSlider')->name('store.slider');
+        Route::get('/slider/edit/{id}', 'EditSlider')->name('edit.slider');
+        Route::put('/slider/{id}', 'UpdateSlider')->name('update.slider');
+        Route::delete('/slider/delete/{id}', 'DeleteSlider')->name('delete.slider');
+    });
+
+    // Banner routes
+    Route::controller(BannerController::class)->group(function() {
+        Route::get('all/banner', 'AllBanner')->name('all.banner');
+        Route::get('add/banner', 'AddBanner')->name('add.banner');
+        Route::post('store/banner', 'StoreBanner')->name('store.banner');
+        Route::get('/banner/edit/{id}', 'EditBanner')->name('edit.banner');
+        Route::put('/banner/{id}', 'UpdateBanner')->name('update.banner');
+        Route::delete('/banner/delete/{id}', 'DeleteBanner')->name('delete.banner');
+    });
+
 });
 
 // Vendor routes
@@ -111,20 +135,22 @@ Route::middleware(['auth', 'role:vendor'])->group(function () {
     Route::post('/vendor/password/update', [VendorController::class, 'VendorPasswordUpdate'])->name('vendor.password.update');
     Route::post('/vendor/profile/update', [VendorController::class, 'VendorProfileUpdate'])->name('vendor.profile.update');
 
-    // Product All Route
-    Route::controller(VendorProductController::class)->group(function(){
-        Route::get('/vendor/all/product' , 'VendorAllProduct')->name('vendor.all.product');
-        Route::get('/vendor/add/product' , 'VendorAddProduct')->name('vendor.add.product');
-        Route::post('/vendor/store/product' , 'VendorStoreProduct')->name('vendor.store.product');
-        Route::get('/vendor/product/edit/{id}' , 'VendorEditProduct')->name('vendor.edit.product');
-        Route::post('/vendor/product/update/{id}' , 'VendorUpdateProduct')->name('vendor.update.product');
-        Route::get('/vendor/product/delete/{id}' , 'VendorDeleteProduct')->name('vendor.delete.product');
+    Route::middleware(['status:active'])->group(function () {
+        // Product All Route
+        Route::controller(VendorProductController::class)->group(function(){
+            Route::get('/vendor/all/product' , 'VendorAllProduct')->name('vendor.all.product');
+            Route::get('/vendor/add/product' , 'VendorAddProduct')->name('vendor.add.product');
+            Route::post('/vendor/store/product' , 'VendorStoreProduct')->name('vendor.store.product');
+            Route::get('/vendor/product/edit/{id}' , 'VendorEditProduct')->name('vendor.edit.product');
+            Route::post('/vendor/product/update/{id}' , 'VendorUpdateProduct')->name('vendor.update.product');
+            Route::get('/vendor/product/delete/{id}' , 'VendorDeleteProduct')->name('vendor.delete.product');
 
-        Route::get('/vendor/subcategory/ajax/{category_id}' , 'VendorGetSubCategory')->name('vendor.get.subcategory');
+            Route::get('/vendor/subcategory/ajax/{category_id}' , 'VendorGetSubCategory')->name('vendor.get.subcategory');
 
-        // Improved route naming conventions
-        Route::post('/vendor/product/inactive/approve', 'VendorInactiveProductApprove')->name('vendor.inactive.product.approve');
-        Route::post('/vendor/product/active/approve', 'VendorActiveProductApprove')->name('vendor.active.product.approve');
+            // Improved route naming conventions
+            Route::post('/vendor/product/inactive/approve', 'VendorInactiveProductApprove')->name('vendor.inactive.product.approve');
+            Route::post('/vendor/product/active/approve', 'VendorActiveProductApprove')->name('vendor.active.product.approve');
+        });
     });
 
 });
