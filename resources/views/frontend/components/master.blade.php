@@ -24,8 +24,6 @@
 <body>
     <!-- Modal -->
 
-    @include('frontend.components.quick_view')
-
     @include('frontend.components.header')
 
     <main class="main">
