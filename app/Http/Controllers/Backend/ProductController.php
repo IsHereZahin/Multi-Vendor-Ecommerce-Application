@@ -131,6 +131,7 @@ class ProductController extends Controller
             'special_deals' => $request->special_deals,
             'vendor_id' => $request->vendor_id,
             'status' => $request->status,
+            'updated_at' => Carbon::now(),
         ]);
 
         // Delete images if selected for deletion

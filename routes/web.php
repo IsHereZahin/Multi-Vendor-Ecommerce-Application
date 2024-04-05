@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\VendorProductController;
+use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
@@ -28,6 +29,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('frontend.index');
 });
+
+// Product View Details Route
+Route::get('/product-details/{id}/{slug}', [IndexController::class, 'ProductDetails'])->name('product.details');
 
 // User routes
 Route::middleware(['auth', 'role:user'])->group(function () {
