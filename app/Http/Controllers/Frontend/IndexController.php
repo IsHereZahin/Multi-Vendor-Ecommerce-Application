@@ -24,5 +24,10 @@ class IndexController extends Controller
         return view('frontend.product.product_details', compact('product', 'product_size', 'product_color', 'relatedProducts'));
     }
 
-
+    public function CategoryProduct($id)
+    {
+        $products = Product::where('category_id', $id)->latest()->get();
+        $productCount = $products->count();
+        return view('frontend.product.category_product',compact('products', 'productCount'));
+    }
 }

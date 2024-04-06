@@ -32,6 +32,11 @@ Route::get('/', function () {
 
 // Product View Details Route
 Route::get('/product-details/{id}/{slug}', [IndexController::class, 'ProductDetails'])->name('product.details');
+Route::get('/category/{id}/{slug}', [IndexController::class, 'CategoryProduct'])->name('category.products');
+
+// All Vendor
+Route::get('/all/vendors', [VendorController::class, 'AllVendor'])->name('all.vendors');
+Route::get('/vendor/details/{id}', [VendorController::class, 'VendorDetails'])->name('vendor.details');
 
 // User routes
 Route::middleware(['auth', 'role:user'])->group(function () {

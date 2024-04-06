@@ -109,7 +109,7 @@
                                 @if($product->vendor_id == NULL)
                                     <h6> Sold By <a href="#"> <span class="text-danger"> Owner </span> </a></h6>
                                 @else
-                                    <h6> Sold By <a href="#"> <span class="text-danger"> {{ $product['vendor']['name'] }} </span></a></h6>
+                                    <h6> Sold By <a href="{{ route('vendor.details',$product->vendor->id) }}"> <span class="text-danger"> {{ $product['vendor']['name'] }} </span></a></h6>
                                 @endif
                                 <hr>
 
@@ -261,15 +261,11 @@
                                 <div class="tab-pane fade" id="Vendor-info">
                                     <div class="vendor-logo d-flex mb-30">
                                         <div class="vendor-image">
-                                            @php
-                                                $imagePath = 'upload/user/vendor/'.$product->vendor->photo;
-                                                $imageUrl = file_exists(public_path($imagePath)) ? asset($imagePath) : asset('adminbackend/assets/images/no_image.jpg');
-                                            @endphp
-                                            <img src="{{ $imageUrl }}" alt="Vendor Logo" width="60" height="60"/>
+                                            <img class="default-img" src="{{ (!empty($product->vendor->photo)) ? url('upload/user/vendor/'.$product->vendor->photo):url('adminbackend/assets/images/no_image.jpg') }}" alt="Vendor Logo" width="60" height="60" />
                                         </div>
                                         <div class="vendor-details ml-15">
                                             <h6 class="vendor-name">
-                                                <a href="#">{{ $product->vendor->name ?? 'Owner' }}</a>
+                                                <a href="{{ route('vendor.details',$product->vendor->id) }}">{{ $product->vendor->name ?? 'Owner' }}</a>
                                             </h6>
                                             <div class="product-rate-cover text-end">
                                                 <div class="product-rate d-inline-block">
@@ -486,7 +482,7 @@
                                     <div class="product-cart-wrap hover-up">
                                         <div class="product-img-action-wrap">
                                             <div class="product-img product-img-zoom">
-                                                <a href="{{ url('/product-details/'.$product->id.'/'.$product->product_slug) }}" tabindex="0">
+                                                <a href="{{ url('/product-details/'.$product->id.'/'.$product->product_slug) }}">
                                                     <img class="default-img" src="{{ asset($product->product_thambnail) }}" alt=""/>
                                                     @if ($product->multiImages->count() > 1)
                                                         <img class="hover-img" src="{{ asset($product->multiImages->skip(1)->first()->photo_name) }}" alt="" />
@@ -494,9 +490,10 @@
                                                 </a>
                                             </div>
                                             <div class="product-action-1">
+                                                <a aria-label="Add To Wishlist" class="action-btn" href="#"><i class="fi-rs-heart"></i></a>
+                                                <a aria-label="Compare" class="action-btn" href="#"><i class="fi-rs-shuffle"></i></a>
+                                                <!-- Add a unique identifier to each quick view button -->
                                                 <a aria-label="Quick view" class="action-btn quick-view-btn" data-bs-toggle="modal" data-bs-target="#quickViewModalView{{ $product->id }}"><i class="fi-rs-eye"></i></a>
-                                                <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="fi-rs-heart"></i></a>
-                                                <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="fi-rs-shuffle"></i></a>
                                             </div>
                                             <div class="product-badges product-badges-position product-badges-mrg">
                                                 @php
@@ -512,12 +509,20 @@
                                             </div>
                                         </div>
                                         <div class="product-content-wrap">
-                                            <h2><a href="{{ url('/product-details/'.$product->id.'/'.$product->product_slug) }}" tabindex="0">{{ $product->product_name }}</a></h2>
-                                            <!-- Display rating if available -->
-                                            <div class="rating-result" title="{{ $product->rating }}">
-                                                <!-- Rating stars or percentage here -->
+                                            <div class="product-category">
+                                                <a href="{{ route('category.products', ['id' => $product->category->id, 'slug' => $product->category->slug]) }}">{{ $product->category->name }}</a>
                                             </div>
-                                            <div class="product-price">
+                                            <h2><a href="{{ url('/product-details/'.$product->id.'/'.$product->product_slug) }}">{{ $product->product_name }}</a></h2>
+                                            <div class="product-rate-cover">
+                                                <div class="product-rate d-inline-block">
+                                                    <div class="product-rating" style="width: 90%"></div>
+                                                </div>
+                                                <span class="font-small ml-5 text-muted"> (4.0)</span>
+                                            </div>
+                                            <div>
+                                                <span class="font-small text-muted">By <a href="{{ route('vendor.details',$product->vendor->id) }}">{{ $product->vendor->name ?? 'Owner' }}</a></span>
+                                            </div>
+                                            <div class="product-card-bottom">
                                                 @if($product->discount_price == NULL)
                                                     <div class="product-price">
                                                         <span>${{ $product->selling_price }}</span>
@@ -528,6 +533,9 @@
                                                         <span class="old-price">${{ $product->selling_price }}</span>
                                                     </div>
                                                 @endif
+                                                <div class="add-cart">
+                                                    <a class="add" href="#"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
