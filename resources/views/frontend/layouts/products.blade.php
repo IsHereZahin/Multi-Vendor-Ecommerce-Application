@@ -74,7 +74,7 @@
                                         <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
                                     <div>
-                                        <span class="font-small text-muted">By <a href="#">{{ $product->vendor->name ?? 'Owner' }}</a></span>
+                                        <span class="font-small text-muted">By <a href="{{ route('vendor.details',$product->vendor->id) }}">{{ $product->vendor->name ?? 'Owner' }}</a></span>
                                     </div>
                                     <div class="product-card-bottom">
                                         @if($product->discount_price == NULL)
@@ -245,7 +245,7 @@
                                             <span class="font-small ml-5 text-muted"> (4.0)</span>
                                         </div>
                                         <div>
-                                            <span class="font-small text-muted">By <a href="#">{{ $product->vendor->name ?? 'Owner' }}</a></span>
+                                            <span class="font-small text-muted">By <a href="{{ route('vendor.details',$product->vendor->id) }}">{{ $product->vendor->name ?? 'Owner' }}</a></span>
                                         </div>
                                         <div class="product-card-bottom">
                                             @if($product->discount_price == NULL)
@@ -380,7 +380,7 @@
                 <div class="banner-img style-2">
                     <div class="banner-text">
                         <h2 class="mb-100">Bring nature into your home</h2>
-                        <a href="shop-grid-right.html" class="btn btn-xs">Shop Now <i class="fi-rs-arrow-small-right"></i></a>
+                        <a href="#" class="btn btn-xs">Shop Now<i class="fi-rs-arrow-small-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -706,7 +706,7 @@
                                         <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
                                     <div>
-                                        <span class="font-small text-muted">By <a href="#">{{ $product->vendor->name ?? 'Owner' }}</a></span>
+                                        <span class="font-small text-muted">By <a href="{{ route('vendor.details',$product->vendor->id) }}">{{ $product->vendor->name ?? 'Owner' }}</a></span>
                                     </div>
                                     <div class="product-card-bottom">
                                         @if($product->discount_price == NULL)

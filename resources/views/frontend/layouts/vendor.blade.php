@@ -19,7 +19,7 @@
             <div class="vendor-wrap mb-40">
                 <div class="vendor-img-action-wrap">
                     <div class="vendor-img">
-                        <a href="#">
+                        <a href="{{ route('vendor.details',$vendor->id) }}">
                             <img class="default-img" src="{{ (!empty($vendor->photo)) ? url('upload/user/vendor/'.$vendor->photo):url('adminbackend/assets/images/no_image.jpg') }}" alt="" />
                         </a>
                     </div>
@@ -39,7 +39,7 @@
                             <div class="product-category">
                                 <span class="text-muted">Since {{ $vendor->vendor_join_year ?? 'Unknown' }}</span>
                             </div>
-                            <h4 class="mb-5"><a href="vendor-details-1.html">{{ $vendor->name }}</a></h4>
+                            <h4 class="mb-5"><a href="{{ route('vendor.details',$vendor->id) }}">{{ $vendor->name ?? 'Not found!'}}</a></h4>
                             <div class="product-rate-cover">
                                 <span class="font-small total-product">{{ $vendor->products->count() }} Products</span>
                             </div>
@@ -49,10 +49,10 @@
                     <div class="vendor-info mb-30">
                         <ul class="contact-infor text-muted">
 
-                            <li><img src="{{ asset('frontend/assets/imgs/theme/icons/icon-contact.svg') }}" alt="" /><strong>Call Us:</strong><span>{{ $vendor->phone }}</span></li>
+                            <li><img src="{{ asset('frontend/assets/imgs/theme/icons/icon-contact.svg') }}" alt="" /><strong>Call Us:</strong><span>{{ $vendor->phone ?? 'Not found!'}}</span></li>
                         </ul>
                     </div>
-                    <a href="vendor-details-1.html" class="btn btn-xs">Visit Store <i class="fi-rs-arrow-small-right"></i></a>
+                    <a href="{{ route('vendor.details',$vendor->id) }}" class="btn btn-xs">Visit Store <i class="fi-rs-arrow-small-right"></i></a>
                 </div>
             </div>
         </div>

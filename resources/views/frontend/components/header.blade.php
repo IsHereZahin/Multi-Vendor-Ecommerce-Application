@@ -314,13 +314,14 @@
                                         @php
                                             $shops = App\Models\User::where('role', 'vendor')->get();
                                         @endphp
+
                                         <a href="#">Shop <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
                                             @if ($shops->isEmpty())
                                                 <li><a href="#">No shops found</a></li>
                                             @else
                                                 @foreach ($shops as $shop)
-                                                    <li><a href="#">{{ $shop->name }}</a></li>
+                                                    <li><a href="{{ route('vendor.details', $shop->id) }}">{{ $shop->name }}</a></li>
                                                 @endforeach
                                             @endif
                                         </ul>

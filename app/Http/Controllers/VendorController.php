@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -155,16 +156,16 @@ class VendorController extends Controller
             return redirect()->route('all.vendors')->with('message', 'Your search was not found!');
         }
 
-        return view('frontend.layouts.all_vendors', ['vendors' => $vendors]);
+        return view('frontend.vendor.all_vendors', ['vendors' => $vendors]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function VendorDetails($id)
     {
-        //
-    }
+        $vendor = User::findOrFail($id);
+        $products = Product::where('vendor_id', $id)->latest()->get();
+        $productCount = $products->count();
+        return view('frontend.vendor.vendor_details',compact('vendor','products', 'productCount'));
+    } // End Method
 
     /**
      * Store a newly created resource in storage.
