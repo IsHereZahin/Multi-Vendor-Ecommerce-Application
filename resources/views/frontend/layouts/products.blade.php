@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="product-content-wrap">
                                     <div class="product-category">
-                                        <a href="#">{{ $product->category->name }}</a>
+                                        <a href="{{ route('category.products', ['id' => $product->category->id, 'slug' => $product->category->slug]) }}">{{ $product->category->name }}</a>
                                     </div>
                                     <h2><a href="{{ url('/product-details/'.$product->id.'/'.$product->product_slug) }}">{{ $product->product_name }}</a></h2>
                                     <div class="product-rate-cover">
@@ -235,7 +235,7 @@
                                     </div>
                                     <div class="product-content-wrap">
                                         <div class="product-category">
-                                            <a href="#">{{ $product->category->name }}</a>
+                                            <a href="{{ route('category.products', ['id' => $product->category->id, 'slug' => $product->category->slug]) }}">{{ $product->category->name }}</a>
                                         </div>
                                         <h2><a href="{{ url('/product-details/'.$product->id.'/'.$product->product_slug) }}">{{ $product->product_name }}</a></h2>
                                         <div class="product-rate-cover">
@@ -423,7 +423,7 @@
                                         </div>
                                         <div class="product-content-wrap">
                                             <div class="product-category">
-                                                <a href="#">{{ $product->category->name }}</a>
+                                                <a href="{{ route('category.products', ['id' => $product->category->id, 'slug' => $product->category->slug]) }}">{{ $product->category->name }}</a>
                                             </div>
                                             <h2><a href="{{ url('/product-details/'.$product->id.'/'.$product->product_slug) }}">{{ $product->product_name }}</a></h2>
                                             <div class="product-rate d-inline-block">
@@ -656,7 +656,9 @@
     <section class="product-tabs section-padding position-relative">
         <div class="container">
             <div class="section-title style-2 wow animate__animated animate__fadeIn">
-                <h3>{{ $category->name }} Category</h3>
+                <a href="{{ route('category.products', ['id' => $category->id, 'slug' => $category->slug]) }}">
+                    <h3>{{ $category->name }} Category</h3>
+                </a>
             </div>
             <!--End nav-tabs-->
             <div class="tab-content" id="myTabContent">
@@ -696,7 +698,7 @@
                                 </div>
                                 <div class="product-content-wrap">
                                     <div class="product-category">
-                                        <a href="#">{{ $product->category->name }}</a>
+                                        <a href="{{ route('category.products', ['id' => $product->category->id, 'slug' => $product->category->slug]) }}">{{ $product->category->name }}</a>
                                     </div>
                                     <h2><a href="{{ url('/product-details/'.$product->id.'/'.$product->product_slug) }}">{{ $product->product_name }}</a></h2>
                                     <div class="product-rate-cover">

@@ -1,20 +1,22 @@
 @extends('frontend.components.master')
 @section('content')
-<div class="page-header breadcrumb-wrap">
+<div class="page-header mt-30 mb-50">
     <div class="container">
-        <div class="breadcrumb">
-            <a href="{{ '/' }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-            <a href="{{ '/all/vendors' }}" rel="nofollow"><span> All Vendors</span></a>
-            <span>{{ $vendor->name ?? 'Unknown'}}</span>
+        <div class="archive-header">
+            <div class="row align-items-center">
+                <div class="col-xl-3">
+                    <h1 class="mb-15">{{ $products->first()->category->name }}</h1>
+                    <div class="breadcrumb">
+                        <a href="{{ '/' }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                        <span></span> Shop <span></span> {{ $products->first()->category->name }}
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
-
 <div class="container mb-30">
-    <div class="archive-header-2 text-center pt-80 pb-50">
-        <h1 class="display-2 mb-50">{{ $vendor->name ?? 'Unknown'}}</h1>
-    </div>
-
     <div class="row flex-row-reverse">
         <div class="col-lg-4-5">
             <div class="shop-product-fillter">
@@ -27,8 +29,8 @@
                     @endif
                 </div>
             </div>
-
             <div class="row product-grid">
+
                 @foreach ($products as $product)
                 <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
                     <div class="product-cart-wrap mb-30 wow animate__animated animate__fadeIn" data-wow-delay=".1s">
@@ -62,7 +64,7 @@
                         </div>
                         <div class="product-content-wrap">
                             <div class="product-category">
-                                <a href="{{ route('category.products', ['id' => $product->category->id, 'slug' => $product->category->slug]) }}">{{ $product->category->name }}</a>
+                                <a href="#">{{ $product->category->name }}</a>
                             </div>
                             <h2><a href="{{ url('/product-details/'.$product->id.'/'.$product->product_slug) }}">{{ $product->product_name }}</a></h2>
                             <div class="product-rate-cover">
@@ -189,56 +191,62 @@
                     </div>
                 </div>
                 @endforeach
-            </div>
-            <!-- End Product Grid -->
-        </div>
 
+            </div>
+
+        </div>
         <div class="col-lg-1-5 primary-sidebar sticky-sidebar">
-            <div class="sidebar-widget widget-store-info mb-30 bg-3 border-0">
-                <div class="vendor-logo mb-30">
-                    <img class="default-img" src="{{ (!empty($vendor->photo)) ? url('upload/user/vendor/'.$vendor->photo):url('adminbackend/assets/images/no_image.jpg') }}" alt="" />
+            <div class="sidebar-widget widget-category-2 mb-30">
+                <h5 class="section-title style-1 mb-30">Category</h5>
+                @php
+                  $categories = App\Models\Category::has('products')->withCount('products')->get();
+                @endphp
+                <ul>
+                  @foreach ($categories as $category)
+                    <li>
+                      <a href="{{ route('category.products', ['id' => $category->id, 'slug' => $category->slug]) }}">
+                        <img src="{{ asset('upload/categories/'.$category->image) }}" alt="{{ $category->name }}" />
+                        {{ $category->name }} ({{ $category->products_count }})
+                      </a>
+                    </li>
+                  @endforeach
+                </ul>
+            </div>
+            <!-- Product sidebar Widget -->
+            <div class="sidebar-widget product-sidebar mb-30 p-30 bg-grey border-radius-10">
+                <h5 class="section-title style-1 mb-30">New products</h5>
+
+                @php
+                    $newproducts = App\Models\Product::latest()->take(5)->get();
+                @endphp
+
+                @foreach ($newproducts as $product)
+                <div class="single-post clearfix">
+                    <div class="image">
+                    <img src="{{ asset($product->product_thambnail) }}" alt="{{ $product->product_name }}" onError="this.onerror=null; this.src='path/to/default-image.jpg';">
+                    </div>
+                    <div class="content pt-10">
+                    <h6><a href="{{ url('/product-details/'.$product->id.'/'.$product->product_slug) }}">{{ $product->product_name }}</a></h6>
+                    <p class="price mb-0 mt-5">${{ $product->selling_price }}</p>
+                    <div class="product-rate">
+                        <div class="product-rating" style="width: {{ rand(0, 100) }}%"> </div>
+                    </div>
+                    </div>
                 </div>
-                <div class="vendor-info">
-                    <div class="product-category">
-                        <span class="text-muted">Since {{ $vendor->vendor_join_year ?? 'Not found!' }}</span>
-                    </div>
-                    <h4 class="mb-5"><a href="#" class="text-heading">{{ $vendor->name ?? 'Not found!' }}</a></h4>
-                    <div class="product-rate-cover mb-15">
-                        <div class="product-rate d-inline-block">
-                            <div class="product-rating" style="width: 90%"></div>
-                        </div>
-                        <span class="font-small ml-5 text-muted"> (4.0)</span>
-                    </div>
-                    <div class="vendor-des mb-30">
-                        <p class="font-sm text-heading">{{ $vendor->vendor_short_info ?? 'Not found!' }}</p>
-                    </div>
-                    <div class="follow-social mb-20">
-                        <h6 class="mb-15">Follow Us</h6>
-                        <ul class="social-network">
-                            <li class="hover-up">
-                                <a href="#"><img src="{{ asset('frontend/assets/imgs/theme/icons/social-tw.svg') }}" alt="" /></a>
-                            </li>
-                            <li class="hover-up">
-                                <a href="#"> <img src="{{ asset('frontend/assets/imgs/theme/icons/social-fb.svg') }}" alt="" /></a>
-                            </li>
-                            <li class="hover-up">
-                                <a href="#"><img src="{{ asset('frontend/assets/imgs/theme/icons/social-insta.svg') }}" alt="" /></a>
-                            </li>
-                            <li class="hover-up">
-                                <a href="#"><img src="{{ asset('frontend/assets/imgs/theme/icons/social-pin.svg') }}" alt="" /></a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="vendor-info">
-                        <ul class="font-sm mb-20">
-                            <li><img class="mr-5" src="{{ asset('frontend/assets/imgs/theme/icons/icon-location.svg') }}" alt="" /><strong>Address: </strong> <span>{{ $vendor->address ?? 'Not found!' }}</span></li>
-                            <li><img class="mr-5" src="{{ asset('frontend/assets/imgs/theme/icons/icon-contact.svg') }}" alt="" /><strong>Call Us:</strong><span>{{ $vendor->phone ?? 'Not found!' }}</span></li>
-                        </ul>
-                        <a href="#" class="btn btn-xs">Contact Seller <i class="fi-rs-arrow-small-right"></i></a>
-                    </div>
+                @endforeach
+
+            </div>
+            <div class="banner-img wow fadeIn mb-lg-0 animated d-lg-block d-none">
+                <img src="{{ asset('frontend/assets/imgs/banner/banner-11.png') }}" alt="" />
+                <div class="banner-text">
+                    <span>Oganic</span>
+                    <h4>
+                        Save 17% <br />
+                        on <span class="text-brand">Oganic</span><br />
+                        Juice
+                    </h4>
                 </div>
             </div>
-            <!-- Fillter By Price -->
         </div>
     </div>
 </div>
