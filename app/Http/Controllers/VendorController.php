@@ -133,12 +133,29 @@ class VendorController extends Controller
 
         return back()->with("status", "Password Updated Successfully");
     }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+
+    // Frontend All Vendor Information
+    public function AllVendor(Request $request)
     {
-        //
+        $query = $request->input('search');
+
+        $vendors = User::where('role', 'vendor');
+
+        if ($query) {
+            $vendors->where(function ($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%')
+                    ->orWhere('id', 'like', '%' . $query . '%');
+            });
+        }
+
+        $vendors = $vendors->get();
+
+        if ($vendors->isEmpty()) {
+            return redirect()->route('all.vendors')->with('message', 'Your search was not found!');
+        }
+
+        return view('frontend.layouts.all_vendors', ['vendors' => $vendors]);
     }
 
     /**
