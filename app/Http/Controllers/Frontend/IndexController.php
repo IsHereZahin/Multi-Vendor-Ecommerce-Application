@@ -30,4 +30,11 @@ class IndexController extends Controller
         $productCount = $products->count();
         return view('frontend.product.category_product',compact('products', 'productCount'));
     }
+
+    public function SubCategoryProduct($id)
+    {
+        $products = Product::where('subcategory_id', $id)->latest()->get();
+        $productCount = $products->count();
+        return view('frontend.product.subcategory_product',compact('products', 'productCount'));
+    }
 }

@@ -4,7 +4,7 @@
         <div class="container">
             <div class="breadcrumb">
                 <a href="{{ '/' }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                <span></span> <a href="#">{{ $product->category->name }}</a> <span></span>{{ $product->subcategory->name }}
+                <span></span> <a href="{{ route('category.products', ['id' => $product->category->id, 'slug' => $product->category->slug])}}">{{ $product->category->name }}</a> <span></span><a href="{{ route('subcategory.products', ['id' => $product->subcategory->id, 'slug' => $product->subcategory->slug])}}">{{ $product->subcategory->name }}</a>
             </div>
         </div>
     </div>
@@ -125,7 +125,7 @@
                                         @endif
                                     </ul>
                                     <ul class="float-start">
-                                        <li>SubCategory: <span class="text-brand">{{ $product['subcategory']['name'] }}</span></li>
+                                        <li>SubCategory: <span class="text-brand"><a href="{{ route('subcategory.products', ['id' => $product->subcategory->id, 'slug' => $product->subcategory->slug])}}">{{ $product['subcategory']['name'] }}</a> </span></li>
                                         <li class="mb-5">Product Code: <a href="#">{{ $product->product_code }}</a></li>
                                         @php
                                             $tags = explode(',', $product->product_tags ?? '');
