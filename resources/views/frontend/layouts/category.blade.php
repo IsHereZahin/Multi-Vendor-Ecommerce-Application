@@ -19,15 +19,15 @@
                 @else
                     @foreach ($categories as $category)
                         @php
-                            $subcategoriesCount = App\Models\SubCategory::where('category_id', $category->id)->count();
+                            $products = App\Models\Product::where('category_id', $category->id)->count();
                         @endphp
 
                         <div class="card-2 bg-10 wow animate__animated animate__fadeInUp" data-wow-delay=".2s">
                             <figure class="img-hover-scale overflow-hidden">
-                                <a href="#"><img src="{{ asset('upload/categories/'.$category->image) }}" alt="" /></a>
+                                <a href="{{ route('category.products', ['id' => $category->id, 'slug' => $category->slug])}}"><img src="{{ asset('upload/categories/'.$category->image) }}" alt="" /></a>
                             </figure>
-                            <h6><a href="#">{{ $category->name }}</a></h6>
-                            <span>{{ $subcategoriesCount }} items</span>
+                            <h6><a href="{{ route('category.products', ['id' => $category->id, 'slug' => $category->slug])}}">{{ $category->name }}</a></h6>
+                            <span>{{ $products }} items</span>
                         </div>
                     @endforeach
                 @endif

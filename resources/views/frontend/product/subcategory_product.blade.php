@@ -5,20 +5,22 @@
         <div class="archive-header">
             <div class="row align-items-center">
                 <div class="col-xl-6">
-                    <h1 class="mb-15">{{ $products->first()->subcategory->name }}</h1>
-                    <div class="breadcrumb">
-                        <a href="{{ '/' }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                        <span></span>
-                        @if($products->isNotEmpty())
-                            @php
-                                $category = $products->first()->subcategory->category;
-                            @endphp
-                            <a href="{{ route('category.products', ['id' => $category->id, 'slug' => $category->slug]) }}">Category</a> <span></span>
-                        @endif
-                        {{ $products->isNotEmpty() ? $products->first()->subcategory->name : '' }}
-                    </div>
+                    @php
+                        $subcategoryId = request()->segment(2); // Get the subcategory ID from the URL
+                        $subcategory = App\Models\SubCategory::find($subcategoryId); // Find the subcategory by ID
+                    @endphp
+                    @if($subcategory)
+                        <h1 class="mb-15">{{ $subcategory->name }}</h1>
+                        <div class="breadcrumb">
+                            <a href="{{ '/' }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                            <span></span>
+                            @if($subcategory->category)
+                                <a href="{{ route('category.products', ['id' => $subcategory->category->id, 'slug' => $subcategory->category->slug]) }}">{{ $subcategory->category->name }}</a>
+                            @endif
+                            <span></span> {{ $subcategory->name }}
+                        </div>
+                    @endif
                 </div>
-
             </div>
         </div>
     </div>
