@@ -69,7 +69,7 @@
                                 <div class="short-desc mb-30">
                                     <p class="font-lg">{{ $product->short_descp }}</p>
                                 </div>
-                                @if(!empty($product_size))
+                                @if(!empty($product->product_size))
                                     <div class="attr-detail attr-size mb-30">
                                         <strong class="mr-10" style="width:50px;">Size : </strong>
                                         <select class="form-control unicase-form-control" id="sizeSelect">
@@ -81,7 +81,7 @@
                                     </div>
                                 @endif
 
-                                @if(!empty($product_color))
+                                @if(!empty($product->product_color))
                                     <div class="attr-detail attr-color mb-30">
                                         <strong class="mr-10" style="width:50px;">Color : </strong>
                                         <select class="form-control unicase-form-control" id="colorSelect">
@@ -131,7 +131,7 @@
                                             $tags = explode(',', $product->product_tags ?? '');
                                         @endphp
 
-                                        @if (!empty($tags))
+                                        @if (!empty($product->tags))
                                             <li class="mb-5">Tags:
                                                 @foreach ($tags as $index => $tag)
                                                     <a href="#" rel="tag">{{ ucfirst(trim($tag)) }}</a>@if ($index < count($tags) - 1),@endif

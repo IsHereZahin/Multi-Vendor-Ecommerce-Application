@@ -35,7 +35,7 @@
 
                 <div class="form-group mb-3">
                   <label for="inputProductTitle" class="form-label">Product Tags</label>
-                  <input type="text" name="product_tags" data-role="tagsinput" value="{{ old('product_tags', $product->product_tags) }}" class="form-control visually-hidden" required>
+                  <input type="text" name="product_tags" data-role="tagsinput" value="{{ old('product_tags', $product->product_tags) }}" class="form-control visually-hidden">
                   @error('product_tags')
                     <span class="text-danger">{{ $message }}</span>
                   @enderror
@@ -43,7 +43,7 @@
 
                 <div class="form-group mb-3">
                   <label for="inputProductTitle" class="form-label">Product Size</label>
-                  <input type="text" name="product_size" data-role="tagsinput" value="{{ old('product_size', $product->product_size) }}" class="form-control visually-hidden" required>
+                  <input type="text" name="product_size" data-role="tagsinput" value="{{ old('product_size', $product->product_size) }}" class="form-control visually-hidden">
                   @error('product_size')
                     <span class="text-danger">{{ $message }}</span>
                   @enderror
@@ -51,7 +51,7 @@
 
                 <div class="form-group mb-3">
                   <label for="inputProductTitle" class="form-label">Product Color</label>
-                  <input type="text" name="product_color" data-role="tagsinput" value="{{ old('product_color', $product->product_color) }}" class="form-control visually-hidden" required>
+                  <input type="text" name="product_color" data-role="tagsinput" value="{{ old('product_color', $product->product_color) }}" class="form-control visually-hidden">
                   @error('product_color')
                     <span class="text-danger">{{ $message }}</span>
                   @enderror
