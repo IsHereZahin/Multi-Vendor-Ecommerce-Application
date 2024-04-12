@@ -183,10 +183,10 @@
                                                 </ul>
                                             </div>
                                         @elseif(auth()->user()->role === 'admin')
-                                            <a href="{{ 'admin/dashboard' }}">
+                                            <a href="{{ route('admin.dashboard') }}">
                                                 <img class="svgInject" alt="Nest" src="{{ asset('frontend/assets/imgs/theme/icons/icon-user.svg') }}" />
                                             </a>
-                                            <a href="{{ 'admin/dashboard' }}"><span class="lable ml-0">Account</span></a>
+                                            <a href="{{ route('admin.dashboard') }}"><span class="lable ml-0">Account</span></a>
                                             <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
                                                 <ul>
                                                     <li>
@@ -198,10 +198,10 @@
                                                 </ul>
                                             </div>
                                         @elseif(auth()->user()->role === 'vendor')
-                                            <a href="{{ 'vendor/dashboard' }}">
+                                            <a href="{{ route('vendor.dashboard') }}">
                                                 <img class="svgInject" alt="Nest" src="{{ asset('frontend/assets/imgs/theme/icons/icon-user.svg') }}" />
                                             </a>
-                                            <a href="{{ 'vendor/dashboard' }}"><span class="lable ml-0">Account</span></a>
+                                            <a href="{{ route('vendor.dashboard') }}"><span class="lable ml-0">Account</span></a>
                                             <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
                                                 <ul>
                                                     <li>
@@ -259,14 +259,14 @@
                                         <ul>
                                             @foreach ($categoriesChunked[0] as $data)
                                                 <li>
-                                                    <a href="#"> <img src="{{ asset('upload/categories/'.$data->image) }}" alt="" />{{ $data->name }}</a>
+                                                    <a href="{{ route('category.products', ['id' => $data->id, 'slug' => $data->slug]) }}"> <img src="{{ asset('upload/categories/'.$data->image) }}" alt="" />{{ $data->name }}</a>
                                                 </li>
                                             @endforeach
                                         </ul>
                                         <ul class="end">
                                             @foreach ($categoriesChunked[1] as $data)
                                                 <li>
-                                                    <a href="#"> <img src="{{ asset('upload/categories/'.$data->image) }}" alt="" />{{ $data->name }}</a>
+                                                    <a href="{{ route('category.products', ['id' => $data->id, 'slug' => $data->slug]) }}"> <img src="{{ asset('upload/categories/'.$data->image) }}">{{ $data->name }}</a>
                                                 </li>
                                             @endforeach
                                         </ul>
@@ -277,14 +277,14 @@
                                             <ul>
                                                 @foreach ($categoriesChunked[0] as $data)
                                                     <li>
-                                                        <a href="#"> <img src="{{ asset('upload/categories/'.$data->image) }}" alt="" />{{ $data->name }}</a>
+                                                        <a href="{{ route('category.products', ['id' => $data->id, 'slug' => $data->slug]) }}"> <img src="{{ asset('upload/categories/'.$data->image) }}">{{ $data->name }}</a>
                                                     </li>
                                                 @endforeach
                                             </ul>
                                             <ul class="end">
                                                 @foreach ($categoriesChunked[1] as $data)
                                                     <li>
-                                                        <a href="#"> <img src="{{ asset('upload/categories/'.$data->image) }}" alt="" />{{ $data->name }}</a>
+                                                        <a href="{{ route('category.products', ['id' => $data->id, 'slug' => $data->slug]) }}"> <img src="{{ asset('upload/categories/'.$data->image) }}">{{ $data->name }}</a>
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -347,51 +347,52 @@
                                     {{-- End Brand --}}
 
                                     {{-- SubCategory --}}
-                                    <li class="position-static">
-                                        @php
-                                            $categories = App\Models\Category::all();
-                                        @endphp
-                                        <a href="#">Mega menu <i class="fi-rs-angle-down"></i></a>
-                                        <ul class="mega-menu">
-                                            @foreach ($categories as $category)
-                                                @php
-                                                    $subcategories = App\Models\SubCategory::where('category_id', $category->id)->get();
-                                                @endphp
-                                                <li class="sub-mega-menu sub-mega-menu-width-22">
-                                                    <a class="menu-title" href="#">{{ $category->name }}</a>
-                                                    <ul>
-                                                        @foreach ($subcategories as $subcategory)
-                                                            <li><a href="#">{{ $subcategory->name }}</a></li>
-                                                        @endforeach
-                                                    </ul>
+                                    @if($categories->isNotEmpty())
+                                        <li class="position-static">
+                                            <a href="#">Mega menu <i class="fi-rs-angle-down"></i></a>
+                                            <ul class="mega-menu">
+                                                @foreach ($categories as $category)
+                                                    @php
+                                                        $subcategories = App\Models\SubCategory::where('category_id', $category->id)->get();
+                                                    @endphp
+                                                    @if($subcategories->isNotEmpty())
+                                                        <li class="sub-mega-menu sub-mega-menu-width-22">
+                                                            <a class="menu-title" href="{{ route('category.products', ['id' => $category->id, 'slug' => $category->slug]) }}">{{ $category->name }}</a>
+                                                            <ul>
+                                                                @foreach ($subcategories as $subcategory)
+                                                                    <li><a href="{{ route('subcategory.products', ['id' => $subcategory->id, 'slug' => $subcategory->slug]) }}">{{ $subcategory->name }}</a></li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                                <li class="sub-mega-menu sub-mega-menu-width-34">
+                                                    <div class="menu-banner-wrap">
+                                                        <a href="#"><img src="{{ asset('frontend/assets/imgs/banner/banner-menu.png') }}" alt="Nest" /></a>
+                                                        <div class="menu-banner-content">
+                                                            <h4>Hot deals</h4>
+                                                            <h3>
+                                                                Don't miss<br />
+                                                                Trending
+                                                            </h3>
+                                                            <div class="menu-banner-price">
+                                                                <span class="new-price text-success">Save to 50%</span>
+                                                            </div>
+                                                            <div class="menu-banner-btn">
+                                                                <a href="#">Shop now</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="menu-banner-discount">
+                                                            <h3>
+                                                                <span>25%</span>
+                                                                off
+                                                            </h3>
+                                                        </div>
+                                                    </div>
                                                 </li>
-                                            @endforeach
-                                            <li class="sub-mega-menu sub-mega-menu-width-34">
-                                                <div class="menu-banner-wrap">
-                                                    <a href="#"><img src="{{ asset('frontend/assets/imgs/banner/banner-menu.png') }}" alt="Nest" /></a>
-                                                    <div class="menu-banner-content">
-                                                        <h4>Hot deals</h4>
-                                                        <h3>
-                                                            Don't miss<br />
-                                                            Trending
-                                                        </h3>
-                                                        <div class="menu-banner-price">
-                                                            <span class="new-price text-success">Save to 50%</span>
-                                                        </div>
-                                                        <div class="menu-banner-btn">
-                                                            <a href="#">Shop now</a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="menu-banner-discount">
-                                                        <h3>
-                                                            <span>25%</span>
-                                                            off
-                                                        </h3>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
+                                            </ul>
+                                        </li>
+                                    @endif
                                     {{-- End SubCategory --}}
 
                                     <li>

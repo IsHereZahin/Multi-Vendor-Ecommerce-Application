@@ -4,14 +4,23 @@
     <div class="container">
         <div class="archive-header">
             <div class="row align-items-center">
-                <div class="col-xl-3">
-                    <h1 class="mb-15">{{ $products->first()->subcategory->name ?? '' }}</h1>
-                    <div class="breadcrumb">
-                        <a href="{{ '/' }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                        <span></span> Shop <span></span> {{ $products->first()->subcategory->name ?? ''}}
-                    </div>
+                <div class="col-xl-6">
+                    @php
+                        $subcategoryId = request()->segment(2); // Get the subcategory ID from the URL
+                        $subcategory = App\Models\SubCategory::find($subcategoryId); // Find the subcategory by ID
+                    @endphp
+                    @if($subcategory)
+                        <h1 class="mb-15">{{ $subcategory->name }}</h1>
+                        <div class="breadcrumb">
+                            <a href="{{ '/' }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                            <span></span>
+                            @if($subcategory->category)
+                                <a href="{{ route('category.products', ['id' => $subcategory->category->id, 'slug' => $subcategory->category->slug]) }}">{{ $subcategory->category->name }}</a>
+                            @endif
+                            <span></span> {{ $subcategory->name }}
+                        </div>
+                    @endif
                 </div>
-
             </div>
         </div>
     </div>
@@ -196,20 +205,26 @@
 
         </div>
         <div class="col-lg-1-5 primary-sidebar sticky-sidebar">
-            <div class="sidebar-widget widget-subcategory-2 mb-30">
-                <h5 class="section-title style-1 mb-30">subcategory</h5>
+        
+        <div class="sidebar-widget widget-category-2 mb-30">
+                <h5 class="section-title style-1 mb-30">SubCategory</h5>
                 @php
-                  $subcategorys = App\Models\SubCategory::has('products')->withCount('products')->get();
+                    $subcategories = App\Models\SubCategory::has('products')->withCount('products')->get();
                 @endphp
                 <ul>
-                  @foreach ($subcategorys as $subcategory)
-                    <li>
-                      <a href="{{ route('subcategory.products', ['id' => $subcategory->id, 'slug' => $subcategory->slug]) }}">
-                        <img src="{{ asset('upload/categories/'.$subcategory->category->image) }}" alt="{{ $subcategory->category->name }}" />
-                        {{ $subcategory->name }} ({{ $subcategory->products_count }})
-                      </a>
-                    </li>
-                  @endforeach
+                    @foreach ($subcategories as $subcategory)
+                        <li>
+                            <a href="{{ route('subcategory.products', ['id' => $subcategory->id, 'slug' => $subcategory->slug]) }}">
+                                @if($subcategory->category->image)
+                                    <img src="{{ asset('upload/categories/'.$subcategory->category->image) }}" alt="{{ $subcategory->category->name }}" />
+                                @else
+                                    <img src="{{ asset('default-category-image.jpg') }}" alt="Default Image" />
+                                @endif
+                                {{ $subcategory->name }} ({{ $subcategory->products_count }})
+                            </a>
+                        </li>
+                    @endforeach
+
                 </ul>
             </div>
             <!-- Product sidebar Widget -->

@@ -38,17 +38,17 @@
 
                                 <div class="form-group mb-3">
                                     <label for="inputProductTitle" class="form-label">Product Tags</label>
-                                    <input type="text" name="product_tags" class="form-control visually-hidden" data-role="tagsinput" value="new product,top product" required>
+                                    <input type="text" name="product_tags" class="form-control visually-hidden" data-role="tagsinput" value="new product,top product">
                                 </div>
 
                                 <div class="form-group mb-3">
                                     <label for="inputProductTitle" class="form-label">Product Size</label>
-                                    <input type="text" name="product_size" class="form-control visually-hidden" data-role="tagsinput" value="Small,Midium,Large " required>
+                                    <input type="text" name="product_size" class="form-control visually-hidden" data-role="tagsinput" value="Small,Midium,Large ">
                                 </div>
 
                                 <div class="form-group mb-3">
                                     <label for="inputProductTitle" class="form-label">Product Color</label>
-                                    <input type="text" name="product_color" class="form-control visually-hidden" data-role="tagsinput" value="Red,Blue,Black" required>
+                                    <input type="text" name="product_color" class="form-control visually-hidden" data-role="tagsinput" value="Red,Blue,Black">
                                 </div>
 
 

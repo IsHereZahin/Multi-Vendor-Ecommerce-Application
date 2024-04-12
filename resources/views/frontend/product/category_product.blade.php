@@ -4,14 +4,19 @@
     <div class="container">
         <div class="archive-header">
             <div class="row align-items-center">
-                <div class="col-xl-3">
-                    <h1 class="mb-15">{{ $products->first()->category->name }}</h1>
-                    <div class="breadcrumb">
-                        <a href="{{ '/' }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                        <span></span> Shop <span></span> {{ $products->first()->category->name }}
-                    </div>
+                <div class="col-xl-6">
+                    @php
+                        $categoryId = request()->segment(2); // Get the category ID from the URL
+                        $category = App\Models\Category::find($categoryId); // Find the category by ID
+                    @endphp
+                    @if($category)
+                        <h1 class="mb-15">{{ $category->name }}</h1>
+                        <div class="breadcrumb">
+                            <a href="{{ '/' }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                            <span></span> Shop <span></span> {{ $category->name }}
+                        </div>
+                    @endif
                 </div>
-
             </div>
         </div>
     </div>
