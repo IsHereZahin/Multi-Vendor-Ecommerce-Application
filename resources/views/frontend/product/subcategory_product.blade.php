@@ -205,7 +205,8 @@
 
         </div>
         <div class="col-lg-1-5 primary-sidebar sticky-sidebar">
-            <div class="sidebar-widget widget-category-2 mb-30">
+        
+        <div class="sidebar-widget widget-category-2 mb-30">
                 <h5 class="section-title style-1 mb-30">SubCategory</h5>
                 @php
                     $subcategories = App\Models\SubCategory::has('products')->withCount('products')->get();
@@ -223,6 +224,7 @@
                             </a>
                         </li>
                     @endforeach
+
                 </ul>
             </div>
             <!-- Product sidebar Widget -->
