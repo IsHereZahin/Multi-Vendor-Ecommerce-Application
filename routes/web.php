@@ -35,6 +35,9 @@ Route::get('/product-details/{id}/{slug}', [IndexController::class, 'ProductDeta
 Route::get('/category/{id}/{slug}', [IndexController::class, 'CategoryProduct'])->name('category.products');
 Route::get('/subcategory/{id}/{slug}', [IndexController::class, 'SubCategoryProduct'])->name('subcategory.products');
 
+// Add to cart routes
+
+
 // All Vendor
 Route::get('/all/vendors', [VendorController::class, 'AllVendor'])->name('all.vendors');
 Route::get('/vendor/details/{id}', [VendorController::class, 'VendorDetails'])->name('vendor.details');
