@@ -173,7 +173,7 @@
                                                     </div>
                                                     <div class="font-xs">
                                                         <ul>
-                                                            <li class="mb-5">Vendor: <span class="text-brand">{{ $product->vendor->name }}</span></li>
+                                                            <li class="mb-5">Vendor: <span class="text-brand"><a href="{{ route('vendor.details',$product->vendor->id) }}">{{ $product->vendor->name }}</a></span></li>
                                                             @if ($product->created_at)
                                                                 <li class="mb-5">Created: <span class="text-brand">{{ $product->created_at->format('F j, Y') }}</span></li>
                                                             @endif
@@ -344,7 +344,7 @@
                                                         </div>
                                                         <div class="font-xs">
                                                             <ul>
-                                                                <li class="mb-5">Vendor: <span class="text-brand">{{ $product->vendor->name }}</span></li>
+                                                                <li class="mb-5">Vendor: <span class="text-brand"><a href="{{ route('vendor.details',$product->vendor->id) }}">{{ $product->vendor->name }}</a></span></li>
                                                                 @if ($product->created_at)
                                                                     <li class="mb-5">Created: <span class="text-brand">{{ $product->created_at->format('F j, Y') }}</span></li>
                                                                 @endif
@@ -807,7 +807,7 @@
                                                     </div>
                                                     <div class="font-xs">
                                                         <ul>
-                                                            <li class="mb-5">Vendor: <span class="text-brand">{{ $product->vendor->name }}</span></li>
+                                                            <li class="mb-5">Vendor: <span class="text-brand"><a href="{{ route('vendor.details',$product->vendor->id) }}"> {{ $product->vendor->name }}</a></span></li>
                                                             @if ($product->created_at)
                                                                 <li class="mb-5">Created: <span class="text-brand">{{ $product->created_at->format('F j, Y') }}</span></li>
                                                             @endif

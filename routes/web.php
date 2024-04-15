@@ -62,7 +62,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/active/vendor/approve', [AdminController::class, 'ActiveVendorApprove'])->name('active.vendor.approve');
     Route::get('/active/vendor' , [AdminController::class, 'ActiveVendor'])->name('active.vendor');
     Route::get('/active/vendor/details/{id}' , [AdminController::class, 'ActiveVendorDetails'])->name('active.vendor.details');
-      Route::post('/inactive/vendor/approve' , [AdminController::class, 'InActiveVendorApprove'])->name('inactive.vendor.approve');
+    Route::post('/inactive/vendor/approve' , [AdminController::class, 'InActiveVendorApprove'])->name('inactive.vendor.approve');
 
     // Brand routes
     Route::controller(BrandController::class)->group(function() {

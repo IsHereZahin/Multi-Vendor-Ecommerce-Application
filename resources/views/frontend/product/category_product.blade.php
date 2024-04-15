@@ -79,7 +79,7 @@
                                 <span class="font-small ml-5 text-muted"> (4.0)</span>
                             </div>
                             <div>
-                                <span class="font-small text-muted">By <a href="#">{{ $product->vendor->name ?? 'Owner' }}</a></span>
+                                <span class="font-small text-muted">By <a href="{{ route('vendor.details',$product->vendor->id) }}">{{ $product->vendor->name ?? 'Owner' }}</a></span>
                             </div>
                             <div class="product-card-bottom">
                                 @if($product->discount_price == NULL)
@@ -178,7 +178,7 @@
                                             </div>
                                             <div class="font-xs">
                                                 <ul>
-                                                    <li class="mb-5">Vendor: <span class="text-brand">{{ $product->vendor->name }}</span></li>
+                                                    <li class="mb-5">Vendor: <span class="text-brand"><a href="{{ route('vendor.details',$product->vendor->id) }}"> {{ $product->vendor->name }}</a></span></li>
                                                     @if ($product->created_at)
                                                         <li class="mb-5">Created: <span class="text-brand">{{ $product->created_at->format('F j, Y') }}</span></li>
                                                     @endif
