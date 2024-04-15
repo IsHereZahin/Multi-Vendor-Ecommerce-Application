@@ -150,6 +150,35 @@
                                                             <span class="font-small ml-5 text-muted"> (32 reviews)</span>
                                                         </div>
                                                     </div>
+
+                                                    @php
+                                                        $product_size = explode(',', $product->product_size);
+                                                        $product_color = explode(',', $product->product_color);
+                                                    @endphp
+                                                    @if(!empty($product->product_size))
+                                                        <div class="attr-detail attr-size mb-30">
+                                                            <strong class="mr-10" style="width:50px;">Size : </strong>
+                                                            <select class="form-control unicase-form-control" id="sizeSelect">
+                                                                <option selected disabled>--Choose Size--</option>
+                                                                @foreach($product_size as $size)
+                                                                    <option value="{{ $size }}">{{ ucwords($size) }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    @endif
+
+                                                    @if(!empty($product->product_color))
+                                                        <div class="attr-detail attr-color mb-30">
+                                                            <strong class="mr-10" style="width:50px;">Color: </strong>
+                                                            <select class="form-control unicase-form-control" id="colorSelect">
+                                                                <option selected disabled>--Choose Color--</option>
+                                                                @foreach($product_color as $color)
+                                                                    <option value="{{ $color }}">{{ ucwords($color) }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    @endif
+
                                                     <div class="clearfix product-price-cover">
                                                         <div class="product-price primary-color float-left">
                                                             <span class="current-price text-brand">${{ $amount }}</span>
@@ -168,12 +197,13 @@
                                                             <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
                                                         </div>
                                                         <div class="product-extra-link2">
-                                                            <button type="submit" class="button button-add-to-cart"><i class="fi-rs-shopping-cart"></i>Add to cart</button>
+                                                            <input type="hidden" id="product_id">
+                                                            <button type="submit" class="button button-add-to-cart" onclick="addToCard()"><i class="fi-rs-shopping-cart"></i>Add to cart</button>
                                                         </div>
                                                     </div>
                                                     <div class="font-xs">
                                                         <ul>
-                                                            <li class="mb-5">Vendor: <span class="text-brand">{{ $product->vendor->name }}</span></li>
+                                                            <li class="mb-5">Vendor: <span class="text-brand"><a href="{{ route('vendor.details',$product->vendor->id) }}">{{ $product->vendor->name }}</a></span></li>
                                                             @if ($product->created_at)
                                                                 <li class="mb-5">Created: <span class="text-brand">{{ $product->created_at->format('F j, Y') }}</span></li>
                                                             @endif
@@ -321,6 +351,34 @@
                                                                 <span class="font-small ml-5 text-muted"> (32 reviews)</span>
                                                             </div>
                                                         </div>
+                                                        @php
+                                                            $product_size = explode(',', $product->product_size);
+                                                            $product_color = explode(',', $product->product_color);
+                                                        @endphp
+                                                        @if(!empty($product->product_size))
+                                                            <div class="attr-detail attr-size mb-30">
+                                                                <strong class="mr-10" style="width:50px;">Size : </strong>
+                                                                <select class="form-control unicase-form-control" id="sizeSelect">
+                                                                    <option selected disabled>--Choose Size--</option>
+                                                                    @foreach($product_size as $size)
+                                                                        <option value="{{ $size }}">{{ ucwords($size) }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        @endif
+
+                                                        @if(!empty($product->product_color))
+                                                            <div class="attr-detail attr-color mb-30">
+                                                                <strong class="mr-10" style="width:50px;">Color: </strong>
+                                                                <select class="form-control unicase-form-control" id="colorSelect">
+                                                                    <option selected disabled>--Choose Color--</option>
+                                                                    @foreach($product_color as $color)
+                                                                        <option value="{{ $color }}">{{ ucwords($color) }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        @endif
+
                                                         <div class="clearfix product-price-cover">
                                                             <div class="product-price primary-color float-left">
                                                                 <span class="current-price text-brand">${{ $amount }}</span>
@@ -344,7 +402,7 @@
                                                         </div>
                                                         <div class="font-xs">
                                                             <ul>
-                                                                <li class="mb-5">Vendor: <span class="text-brand">{{ $product->vendor->name }}</span></li>
+                                                                <li class="mb-5">Vendor: <span class="text-brand"><a href="{{ route('vendor.details',$product->vendor->id) }}">{{ $product->vendor->name }}</a></span></li>
                                                                 @if ($product->created_at)
                                                                     <li class="mb-5">Created: <span class="text-brand">{{ $product->created_at->format('F j, Y') }}</span></li>
                                                                 @endif
@@ -784,6 +842,34 @@
                                                             <span class="font-small ml-5 text-muted"> (32 reviews)</span>
                                                         </div>
                                                     </div>
+                                                    @php
+                                                        $product_size = explode(',', $product->product_size);
+                                                        $product_color = explode(',', $product->product_color);
+                                                    @endphp
+                                                    @if(!empty($product->product_size))
+                                                        <div class="attr-detail attr-size mb-30">
+                                                            <strong class="mr-10" style="width:50px;">Size : </strong>
+                                                            <select class="form-control unicase-form-control" id="sizeSelect">
+                                                                <option selected disabled>--Choose Size--</option>
+                                                                @foreach($product_size as $size)
+                                                                    <option value="{{ $size }}">{{ ucwords($size) }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    @endif
+
+                                                    @if(!empty($product->product_color))
+                                                        <div class="attr-detail attr-color mb-30">
+                                                            <strong class="mr-10" style="width:50px;">Color: </strong>
+                                                            <select class="form-control unicase-form-control" id="colorSelect">
+                                                                <option selected disabled>--Choose Color--</option>
+                                                                @foreach($product_color as $color)
+                                                                    <option value="{{ $color }}">{{ ucwords($color) }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    @endif
+
                                                     <div class="clearfix product-price-cover">
                                                         <div class="product-price primary-color float-left">
                                                             <span class="current-price text-brand">${{ $amount }}</span>
@@ -807,7 +893,7 @@
                                                     </div>
                                                     <div class="font-xs">
                                                         <ul>
-                                                            <li class="mb-5">Vendor: <span class="text-brand">{{ $product->vendor->name }}</span></li>
+                                                            <li class="mb-5">Vendor: <span class="text-brand"><a href="{{ route('vendor.details',$product->vendor->id) }}"> {{ $product->vendor->name }}</a></span></li>
                                                             @if ($product->created_at)
                                                                 <li class="mb-5">Created: <span class="text-brand">{{ $product->created_at->format('F j, Y') }}</span></li>
                                                             @endif

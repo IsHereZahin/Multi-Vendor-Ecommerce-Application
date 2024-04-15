@@ -35,6 +35,9 @@ Route::get('/product-details/{id}/{slug}', [IndexController::class, 'ProductDeta
 Route::get('/category/{id}/{slug}', [IndexController::class, 'CategoryProduct'])->name('category.products');
 Route::get('/subcategory/{id}/{slug}', [IndexController::class, 'SubCategoryProduct'])->name('subcategory.products');
 
+// Add to cart routes
+
+
 // All Vendor
 Route::get('/all/vendors', [VendorController::class, 'AllVendor'])->name('all.vendors');
 Route::get('/vendor/details/{id}', [VendorController::class, 'VendorDetails'])->name('vendor.details');
@@ -62,7 +65,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/active/vendor/approve', [AdminController::class, 'ActiveVendorApprove'])->name('active.vendor.approve');
     Route::get('/active/vendor' , [AdminController::class, 'ActiveVendor'])->name('active.vendor');
     Route::get('/active/vendor/details/{id}' , [AdminController::class, 'ActiveVendorDetails'])->name('active.vendor.details');
-      Route::post('/inactive/vendor/approve' , [AdminController::class, 'InActiveVendorApprove'])->name('inactive.vendor.approve');
+    Route::post('/inactive/vendor/approve' , [AdminController::class, 'InActiveVendorApprove'])->name('inactive.vendor.approve');
 
     // Brand routes
     Route::controller(BrandController::class)->group(function() {
