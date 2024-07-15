@@ -88,9 +88,8 @@ class SubCategoryController extends Controller
     }
 
 
-    public function GetSubCategory($category_id)
-    {
-        $subcat = SubCategory::where('category_id',$category_id)->orderBy('name','ASC')->get();
-            return json_encode($subcat);
-    }// End Method
+    public function getSubcategories($categoryId) {
+        $subcategories = Subcategory::where('category_id', $categoryId)->get();
+        return response()->json($subcategories);
+    }
 }

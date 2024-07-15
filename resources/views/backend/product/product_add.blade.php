@@ -261,28 +261,26 @@
 </script>
 
 {{-- Sub-Category --}}
-<script type="text/javascript">
-    $(document).ready(function(){
-        $('select[name="category_id"]').on('change', function(){
-            var category_id = $(this).val();
-            if (category_id) {
+<script>
+    $(document).ready(function() {
+        $('#inputVendor').change(function() {
+            var categoryId = $(this).val();
+            if(categoryId) {
                 $.ajax({
-                    url: "{{ url('/subcategory/ajax') }}/"+category_id,
-                    type: "GET",
-                    dataType: "json",
-                    success: function(data){
-                        $('select[name="subcategory_id"]').empty(); // Clear existing options
-                        $.each(data, function(key, value){
-                            $('select[name="subcategory_id"]').append('<option value="'+ value.id + '">' + value.name + '</option>');
+                    url: '/get-subcategories/' + categoryId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#inputCollection').empty();
+                        $('#inputCollection').append('<option value="">Select SubCategory</option>');
+                        $.each(data, function(key, value) {
+                            $('#inputCollection').append('<option value="'+ value.id +'">'+ value.name +'</option>');
                         });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText); // Log any errors to console
-                        alert("An error occurred while fetching subcategories. Please try again.");
                     }
                 });
             } else {
-                $('select[name="subcategory_id"]').empty(); // Clear subcategory options if no category is selected
+                $('#inputCollection').empty();
+                $('#inputCollection').append('<option value="">Select SubCategory</option>');
             }
         });
     });
