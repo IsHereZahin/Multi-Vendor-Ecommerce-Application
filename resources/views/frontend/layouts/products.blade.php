@@ -846,9 +846,10 @@
                                                         $product_size = explode(',', $product->product_size);
                                                         $product_color = explode(',', $product->product_color);
                                                     @endphp
-                                                    @if(!empty($product->product_size))
+
+                                                    @if(!empty($product->product_size) && count($product_size) > 0 && $product->product_size != '0')
                                                         <div class="attr-detail attr-size mb-30">
-                                                            <strong class="mr-10" style="width:50px;">Size : </strong>
+                                                            <strong class="mr-10" style="width:50px;">Size: </strong>
                                                             <select class="form-control unicase-form-control" id="sizeSelect">
                                                                 <option selected disabled>--Choose Size--</option>
                                                                 @foreach($product_size as $size)
@@ -858,7 +859,7 @@
                                                         </div>
                                                     @endif
 
-                                                    @if(!empty($product->product_color))
+                                                    @if(!empty($product->product_color) && count($product_color) > 0 && $product->product_color != '0')
                                                         <div class="attr-detail attr-color mb-30">
                                                             <strong class="mr-10" style="width:50px;">Color: </strong>
                                                             <select class="form-control unicase-form-control" id="colorSelect">

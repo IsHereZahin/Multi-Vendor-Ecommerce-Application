@@ -59,7 +59,7 @@
                                         <h6 class="mb-0">New Password</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="password" name="new_password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" placeholder="Old Password"/>
+                                        <input type="password" name="new_password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" placeholder="New Password"/>
 
                                         @error('new_password')
                                         <span class="invalid-feedback" role="alert">
