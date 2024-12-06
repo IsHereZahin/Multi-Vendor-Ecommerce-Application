@@ -19,7 +19,7 @@
                 @else
                     @foreach ($categories as $category)
                         @php
-                            $products = App\Models\Product::where('category_id', $category->id)->count();
+                            $products = App\Models\Product::where('category_id', $category->id)->where('status', 1)->count();
                         @endphp
 
                         <div class="card-2 bg-10 wow animate__animated animate__fadeInUp" data-wow-delay=".2s">

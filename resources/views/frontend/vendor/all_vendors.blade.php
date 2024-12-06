@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                             <div class="mb-10">
-                                <span class="font-small total-product">{{ $vendor->products->count() }} Products</span>
+                                <span class="font-small total-product">{{ $vendor->products->where('status', 1)->count() }} Products</span>
                             </div>
                         </div>
                         <div class="vendor-info mb-30">

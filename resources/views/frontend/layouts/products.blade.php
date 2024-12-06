@@ -229,7 +229,7 @@
                 <div class="tab-pane fade" id="category{{ $category->id }}" role="tabpanel" aria-labelledby="nav-tab-{{ $category->id }}">
                     <div class="row product-grid-4">
                         @php
-                            $catwiseProduct = App\Models\Product::where('category_id',$category->id)->orderBy('id','DESC')->get();
+                            $catwiseProduct = App\Models\Product::where('category_id',$category->id)->where('status', 1)->orderBy('id','DESC')->get();
                         @endphp
 
                             @foreach($catwiseProduct as $product)
@@ -530,10 +530,10 @@
     <div class="container">
         <div class="row">
             @php
-                $hotDeals = App\Models\Product::whereNotNull('hot_deals')->limit(4)->get();
-                $featured = App\Models\Product::whereNotNull('featured')->limit(4)->get();
-                $specialOffer = App\Models\Product::whereNotNull('special_offer')->limit(4)->get();
-                $specialDeals = App\Models\Product::whereNotNull('special_deals')->limit(4)->get();
+                $hotDeals = App\Models\Product::whereNotNull('hot_deals')->where('status', 1)->limit(4)->get();
+                $featured = App\Models\Product::whereNotNull('featured')->where('status', 1)->limit(4)->get();
+                $specialOffer = App\Models\Product::whereNotNull('special_offer')->where('status', 1)->limit(4)->get();
+                $specialDeals = App\Models\Product::whereNotNull('special_deals')->where('status', 1)->limit(4)->get();
             @endphp
             @if($hotDeals->isNotEmpty())
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-sm-5 mb-md-0 wow animate__animated animate__fadeInUp" data-wow-delay="0">

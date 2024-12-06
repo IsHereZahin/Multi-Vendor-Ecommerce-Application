@@ -155,7 +155,7 @@
                                                     <span class="font-small ml-5 text-muted"> (32 reviews)</span>
                                                 </div>
                                             </div>
-                                            
+
                                             @php
                                                 $product_size = explode(',', $product->product_size);
                                                 $product_color = explode(',', $product->product_color);
@@ -240,8 +240,8 @@
                     <li>
                       <a href="{{ route('category.products', ['id' => $category->id, 'slug' => $category->slug]) }}">
                         <img src="{{ asset('upload/categories/'.$category->image) }}" alt="{{ $category->name }}" />
-                        {{ $category->name }} ({{ $category->products_count }})
-                      </a>
+                        {{ $category->name }} ({{ App\Models\Product::where('category_id', $category->id)->where('status', 1)->count() }})
+                    </a>
                     </li>
                   @endforeach
                 </ul>
@@ -251,7 +251,7 @@
                 <h5 class="section-title style-1 mb-30">New products</h5>
 
                 @php
-                    $newproducts = App\Models\Product::latest()->take(5)->get();
+                    $newproducts = App\Models\Product::latest()->where('status', 1)->take(5)->get();
                 @endphp
 
                 @foreach ($newproducts as $product)

@@ -41,7 +41,7 @@
                             </div>
                             <h4 class="mb-5"><a href="{{ route('vendor.details',$vendor->id) }}">{{ $vendor->name ?? 'Not found!'}}</a></h4>
                             <div class="product-rate-cover">
-                                <span class="font-small total-product">{{ $vendor->products->count() }} Products</span>
+                                <span class="font-small total-product">{{ $vendor->products->where('status', 1)->count() }} Products</span>
                             </div>
                         </div>
 

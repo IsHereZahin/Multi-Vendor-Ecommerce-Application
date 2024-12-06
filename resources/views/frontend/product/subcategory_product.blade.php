@@ -238,7 +238,11 @@
         <div class="sidebar-widget widget-category-2 mb-30">
                 <h5 class="section-title style-1 mb-30">SubCategory</h5>
                 @php
-                    $subcategories = App\Models\SubCategory::has('products')->withCount('products')->get();
+                    $subcategories = App\Models\SubCategory::whereHas('products', function ($query) {
+                        $query->where('status', 1);
+                    })->withCount(['products' => function ($query) {
+                        $query->where('status', 1);
+                    }])->get();
                 @endphp
                 <ul>
                     @foreach ($subcategories as $subcategory)
@@ -261,7 +265,7 @@
                 <h5 class="section-title style-1 mb-30">New products</h5>
 
                 @php
-                    $newproducts = App\Models\Product::latest()->take(5)->get();
+                    $newproducts = App\Models\Product::where('status', 1)->latest()->take(5)->get();
                 @endphp
 
                 @foreach ($newproducts as $product)

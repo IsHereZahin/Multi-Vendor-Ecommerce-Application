@@ -33,7 +33,7 @@ return new class extends Migration
             $table->integer('featured')->nullable();
             $table->integer('special_offer')->nullable();
             $table->integer('special_deals')->nullable();
-            $table->integer('status')->default(0); 
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

@@ -162,7 +162,7 @@ class VendorController extends Controller
     public function VendorDetails($id)
     {
         $vendor = User::findOrFail($id);
-        $products = Product::where('vendor_id', $id)->latest()->get();
+        $products = Product::where('vendor_id', $id)->where('status', 1)->latest()->get();
         $productCount = $products->count();
         return view('frontend.vendor.vendor_details',compact('vendor','products', 'productCount'));
     } // End Method
