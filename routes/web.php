@@ -42,6 +42,10 @@ Route::get('/subcategory/{id}/{slug}', [IndexController::class, 'SubCategoryProd
 Route::get('/all/vendors', [VendorController::class, 'AllVendor'])->name('all.vendors');
 Route::get('/vendor/details/{id}', [VendorController::class, 'VendorDetails'])->name('vendor.details');
 
+// Brand
+Route::get('/brands', [App\Http\Controllers\Frontend\BrandController::class, 'brands'])->name('brands');
+Route::get('/brand/{id}', [App\Http\Controllers\Frontend\BrandController::class, 'brand_show'])->name('brand.show');
+
 // User routes
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/dashboard', [UserController::class, 'UserDashboard'])->name('dashboard');
