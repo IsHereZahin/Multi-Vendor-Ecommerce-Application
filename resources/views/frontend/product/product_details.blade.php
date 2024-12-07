@@ -116,7 +116,7 @@
 
                                 <div class="font-xs">
                                     <ul class="mr-50 float-start">
-                                        <li class="mb-5">Brand: <span class="text-brand">{{ $product['brand']['name'] }}</span></li>
+                                        <li class="mb-5">Brand: <a href="{{ route('brand.show', ['id' => $product->brand->id]) }}"><span class="text-brand">{{ $product['brand']['name'] }}</span></a></li>
                                         <li class="mb-5">Category:<span class="text-brand"><a href="{{ route('category.products', ['id' => $product->category->id, 'slug' => $product->category->slug])}}">{{ $product['category']['name'] }}</a></span></li>
                                         @if ($product->created_at)
                                             <li class="mb-5">Created: <span class="text-brand">{{ $product->created_at->format('M j.Y') }}</span></li>
