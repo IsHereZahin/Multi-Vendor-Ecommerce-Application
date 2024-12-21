@@ -81,6 +81,59 @@
      }
      @endif
     </script>
-</body>
+<script>
+function addToCart(button, productId) {
+    let quantity = parseInt(document.getElementById(`qty_${productId}`).value);
+    let availableQty = parseInt(document.getElementById(`product_qty_${productId}`).value);
+    let size = document.getElementById(`sizeSelect_${productId}`)?.value || null;
+    let color = document.getElementById(`colorSelect_${productId}`)?.value || null;
 
+    if (size === "--Choose Size--") {
+        toastr.warning("Please select a valid size.");
+        return;
+    }
+
+    if (color === "--Choose Color--") {
+        toastr.warning("Please select a valid color.");
+        return;
+    }
+
+    if (quantity > availableQty) {
+        toastr.warning("You cannot add more than the available stock.");
+        return;
+    }
+
+    let data = {
+        product_id: productId,
+        quantity: quantity,
+        size: size,
+        color: color,
+        _token: '{{ csrf_token() }}'
+    };
+
+    button.disabled = true;
+
+    $.ajax({
+        url: "{{ route('cart.add') }}",
+        type: "POST",
+        data: data,
+        dataType: "json",
+        success: function (response) {
+            if (response.success) {
+                toastr.success(response.message);
+            } else {
+                toastr.error(response.message);
+            }
+            button.disabled = false;
+        },
+        error: function (xhr, status, error) {
+            console.error('Error:', xhr.responseText);
+            toastr.error("Something went wrong!");
+            button.disabled = false;
+        }
+    });
+}
+</script>
+
+</body>
 </html>
