@@ -97,7 +97,9 @@
                                     </div>
                                 @endif
                                 <div class="add-cart">
-                                    <a class="add" href="#"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                    <a class="add" href="javascript:void(0);" onclick="quickAddToCart({{ $product->id }})">
+                                        <i class="fi-rs-shopping-cart mr-5"></i>Add
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -135,16 +137,19 @@
                                         <div class="detail-info pr-30 pl-30">
                                             <span class="stock-status out-stock">
                                                 @php
-                                                    $amount = $product->selling_price - $product->discount_price;
-                                                    $discount = 100 - (($amount / $product->selling_price) * 100);
+                                                    $amount = $product->selling_price > 0 ? $product->selling_price - $product->discount_price : 0;
+                                                    $discount = $product->selling_price > 0 ? 100 - (($amount / $product->selling_price) * 100) : 0;
                                                 @endphp
 
                                                 @if ($product->discount_price == NULL)
-                                                    @if ($product->hot_deals == 1)Hot
-                                                    @elseif ($product->featured == 1)Featured
-                                                    @elseif ($product->special_offer == 1)Special
-                                                    @elseif ($product->special_deals == 1)Special Deals
-                                                    @else
+                                                    @if ($product->hot_deals == 1)
+                                                        Hot
+                                                    @elseif ($product->featured == 1)
+                                                        Featured
+                                                    @elseif ($product->special_offer == 1)
+                                                        Special
+                                                    @elseif ($product->special_deals == 1)
+                                                        Special Deals
                                                     @endif
                                                 @else
                                                     <span class="hot">Save {{ round($discount) }} %</span>
@@ -164,14 +169,19 @@
                                                 $product_size = explode(',', $product->product_size);
                                                 $product_color = explode(',', $product->product_color);
                                             @endphp
+
                                             @if(!empty($product->product_size))
                                                 <div class="attr-detail attr-size mb-30">
                                                     <strong class="mr-10" style="width:50px;">Size : </strong>
-                                                    <select class="form-control unicase-form-control" id="sizeSelect">
-                                                        <option selected disabled>--Choose Size--</option>
-                                                        @foreach($product_size as $size)
-                                                            <option value="{{ $size }}">{{ ucwords($size) }}</option>
-                                                        @endforeach
+                                                    <select class="form-control unicase-form-control" id="sizeSelect_{{ $product->id }}">
+                                                        @if(count($product_size) === 1)
+                                                            <option selected value="{{ $product_size[0] }}">{{ ucwords($product_size[0]) }}</option>
+                                                        @else
+                                                            <option selected disabled>--Choose Size--</option>
+                                                            @foreach($product_size as $size)
+                                                                <option value="{{ $size }}">{{ ucwords($size) }}</option>
+                                                            @endforeach
+                                                        @endif
                                                     </select>
                                                 </div>
                                             @endif
@@ -179,11 +189,15 @@
                                             @if(!empty($product->product_color))
                                                 <div class="attr-detail attr-color mb-30">
                                                     <strong class="mr-10" style="width:50px;">Color: </strong>
-                                                    <select class="form-control unicase-form-control" id="colorSelect">
-                                                        <option selected disabled>--Choose Color--</option>
-                                                        @foreach($product_color as $color)
-                                                            <option value="{{ $color }}">{{ ucwords($color) }}</option>
-                                                        @endforeach
+                                                    <select class="form-control unicase-form-control" id="colorSelect_{{ $product->id }}">
+                                                        @if(count($product_color) === 1)
+                                                            <option selected value="{{ $product_color[0] }}">{{ ucwords($product_color[0]) }}</option>
+                                                        @else
+                                                            <option selected disabled>--Choose Color--</option>
+                                                            @foreach($product_color as $color)
+                                                                <option value="{{ $color }}">{{ ucwords($color) }}</option>
+                                                            @endforeach
+                                                        @endif
                                                     </select>
                                                 </div>
                                             @endif
@@ -194,7 +208,7 @@
                                                     @if ($discount > 0)
                                                         <span>
                                                             <span class="save-price font-md color3 ml-15">{{ round($discount) }}% Off</span>
-                                                            <span class="old-price font-md ml-15">${{ $product->selling_price }} </span>
+                                                            <span class="old-price font-md ml-15">${{ $product->selling_price }}</span>
                                                         </span>
                                                     @endif
                                                 </div>
@@ -202,22 +216,52 @@
                                             <div class="detail-extralink mb-30">
                                                 <div class="detail-qty border radius">
                                                     <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                                    <input type="text" name="quantity" class="qty-val" value="1" min="1">
+                                                    <input type="text" name="quantity" id="qty_{{ $product->id }}" class="qty-val" value="1" min="1">
                                                     <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
                                                 </div>
                                                 <div class="product-extra-link2">
-                                                    <button type="submit" class="button button-add-to-cart"><i class="fi-rs-shopping-cart"></i>Add to cart</button>
+                                                    <input type="hidden" id="product_id" value="{{ $product->id }}">
+                                                    <input type="hidden" id="product_qty_{{ $product->id }}" value="{{ $product->product_qty }}">
+                                                    <button type="submit" class="button button-add-to-cart" onClick="addToCart(this, {{ $product->id }})">
+                                                        <i class="fi-rs-shopping-cart"></i> Add to cart
+                                                    </button>
                                                 </div>
                                             </div>
+
                                             <div class="font-xs">
-                                                <ul>
-                                                    <li class="mb-5">Vendor: <span class="text-brand"><a href="{{ route('vendor.details',$product->vendor->id) }}"> {{ $product->vendor->name }}</a></span></li>
+                                                <ul class="list-unstyled">
+                                                    <li class="mb-3">
+                                                        <strong>Vendor:</strong>
+                                                        <span class="text-brand">
+                                                            <a href="{{ route('vendor.details', $product->vendor->id) }}" class="text-decoration-none">{{ $product->vendor->name }}</a>
+                                                        </span>
+                                                    </li>
+
                                                     @if ($product->created_at)
-                                                        <li class="mb-5">Created: <span class="text-brand">{{ $product->created_at->format('F j, Y') }}</span></li>
+                                                        <li class="mb-3">
+                                                            <strong>Published On:</strong>
+                                                            <span class="text-brand">{{ $product->created_at->format('F j, Y') }}</span>
+                                                        </li>
                                                     @endif
+
                                                     @if ($product->updated_at && $product->created_at != $product->updated_at)
-                                                        <li class="mb-5">Last Updated: <span class="text-brand">{{ $product->updated_at->format('F j, Y') }}</span></li>
+                                                        <li class="mb-3">
+                                                            <strong>Last Modified:</strong>
+                                                            <span class="text-brand">{{ $product->updated_at->format('F j, Y') }}</span>
+                                                        </li>
                                                     @endif
+
+                                                    <li class="mb-3">
+                                                        <strong>Stock:</strong>
+                                                        <span class="stock-status" style="padding: 5px 15px; border-radius: 5px; font-weight: 500;
+                                                            {{ $product->product_qty > 0 ? 'background-color: #d4edda; color: #155724;' : 'background-color: #f8d7da; color: #FF4C51;' }}">
+                                                            @if($product->product_qty > 0)
+                                                                <strong>In Stack</strong>
+                                                            @else
+                                                                <strong>Out of Stock</strong>
+                                                            @endif
+                                                        </span>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>

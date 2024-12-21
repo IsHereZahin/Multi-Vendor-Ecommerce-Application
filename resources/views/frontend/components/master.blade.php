@@ -6,6 +6,7 @@
     <title>Nest - Multipurpose eCommerce HTML Template</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="description" content="" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:title" content="" />
     <meta property="og:type" content="" />
@@ -81,59 +82,98 @@
      }
      @endif
     </script>
-<script>
-function addToCart(button, productId) {
-    let quantity = parseInt(document.getElementById(`qty_${productId}`).value);
-    let availableQty = parseInt(document.getElementById(`product_qty_${productId}`).value);
-    let size = document.getElementById(`sizeSelect_${productId}`)?.value || null;
-    let color = document.getElementById(`colorSelect_${productId}`)?.value || null;
+    <script>
+        function addToCart(button, productId) {
+            let quantity = parseInt(document.getElementById(`qty_${productId}`).value);
+            let availableQty = parseInt(document.getElementById(`product_qty_${productId}`).value);
+            let size = document.getElementById(`sizeSelect_${productId}`)?.value || null;
+            let color = document.getElementById(`colorSelect_${productId}`)?.value || null;
 
-    if (size === "--Choose Size--") {
-        toastr.warning("Please select a valid size.");
-        return;
-    }
-
-    if (color === "--Choose Color--") {
-        toastr.warning("Please select a valid color.");
-        return;
-    }
-
-    if (quantity > availableQty) {
-        toastr.warning("You cannot add more than the available stock.");
-        return;
-    }
-
-    let data = {
-        product_id: productId,
-        quantity: quantity,
-        size: size,
-        color: color,
-        _token: '{{ csrf_token() }}'
-    };
-
-    button.disabled = true;
-
-    $.ajax({
-        url: "{{ route('cart.add') }}",
-        type: "POST",
-        data: data,
-        dataType: "json",
-        success: function (response) {
-            if (response.success) {
-                toastr.success(response.message);
-            } else {
-                toastr.error(response.message);
+            if (size === "--Choose Size--") {
+                toastr.warning("Please select a valid size.");
+                return;
             }
-            button.disabled = false;
-        },
-        error: function (xhr, status, error) {
-            console.error('Error:', xhr.responseText);
-            toastr.error("Something went wrong!");
-            button.disabled = false;
-        }
-    });
-}
-</script>
 
+            if (color === "--Choose Color--") {
+                toastr.warning("Please select a valid color.");
+                return;
+            }
+
+            if (quantity > availableQty) {
+                toastr.warning("You cannot add more than the available stock.");
+                return;
+            }
+
+            let data = {
+                product_id: productId,
+                quantity: quantity,
+                size: size,
+                color: color,
+                _token: '{{ csrf_token() }}'
+            };
+
+            button.disabled = true;
+
+            $.ajax({
+                url: "{{ route('cart.add') }}",
+                type: "POST",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                    button.disabled = false;
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', xhr.responseText);
+                    toastr.error("Something went wrong!");
+                    button.disabled = false;
+                }
+            });
+        }
+        function quickAddToCart(productId) {
+            let qtyElement = document.getElementById(`product_qty_${productId}`);
+            if (!qtyElement) {
+                console.error(`Element with id 'product_qty_${productId}' not found.`);
+                return;
+            }
+            let quantity = 1; // Default quantity for quick add
+            let availableQty = parseInt(document.getElementById(`product_qty_${productId}`).value);
+
+            if (quantity > availableQty) {
+                toastr.warning("You cannot add more than the available stock.");
+                return;
+            }
+
+            let data = {
+                product_id: productId,
+                quantity: quantity,
+                size: null, // No size for quick add
+                color: null, // No color for quick add
+                _token: '{{ csrf_token() }}'
+            };
+
+            $.ajax({
+                url: "{{ route('cart.add') }}",
+                type: "POST",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', xhr.responseText);
+                    toastr.error("Something went wrong!");
+                }
+            });
+        }
+    </script>
 </body>
 </html>
