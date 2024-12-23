@@ -178,18 +178,71 @@
             });
         }
 
+        function updateQuantity(action, productId) {
+            let quantityInput = document.getElementById('quantity-' + productId);
+            let currentQuantity = parseInt(quantityInput.value) || 1;
+
+            // Fetch available stock dynamically
+            let availableQty = parseInt(quantityInput.getAttribute('data-available-qty')) || 0;
+
+            let upButton = document.querySelector(`#quantity-${productId}`).closest('.detail-qty').querySelector('.qty-up');
+            let downButton = document.querySelector(`#quantity-${productId}`).closest('.detail-qty').querySelector('.qty-down');
+
+            // Adjust the quantity based on the action
+            if (action === 'up') {
+                if (currentQuantity >= availableQty) {
+                    toastr.warning("You cannot add more than the available stock.");
+                    return;
+                }
+                currentQuantity++;
+            } else if (action === 'down') {
+                if (currentQuantity > 1) {
+                    currentQuantity--;
+                }
+            }
+
+            // Update the input field
+            quantityInput.value = currentQuantity;
+
+            // Disable buttons based on quantity limits
+            upButton.classList.toggle('disabled', currentQuantity >= availableQty);
+            downButton.classList.toggle('disabled', currentQuantity <= 1);
+
+            $.ajax({
+                url: '{{ route("update.quantity") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    product_id: productId,
+                    quantity: currentQuantity
+                },
+                success: function(response) {
+                    if (response.success === false) {
+                        toastr.error(response.message);
+                        quantityInput.value = availableQty;
+                    } else {
+                        updateCartData();
+                    }
+                },
+                error: function(error) {
+                    console.error('Error updating quantity:', error);
+                }
+            });
+        }
+
         function updateCartData() {
             $.ajax({
                 url: "{{ route('cart.data') }}",
                 type: "GET",
                 dataType: "json",
-                success: function (response) {
+                success: function(response) {
                     // Update cart item count
                     $('.pro-count').text(response.count);
 
                     // Update cart dropdown content
                     let cartHtml = '';
                     response.cartItems.forEach(item => {
+                        let subtotal = (item.product.selling_price - item.product.discount_price) * item.quantity;
                         cartHtml += `
                             <li>
                                 <div class="shopping-cart-img">
@@ -206,14 +259,14 @@
                                 </div>
                             </li>
                         `;
+                        $(`#subtotal-${item.id}`).html(`<h4 class="text-brand">$${subtotal.toFixed(2)}</h4>`);
                     });
 
                     $('.cart-dropdown-wrap ul').html(cartHtml);
 
-                    // Update cart total
                     $('.shopping-cart-total span').text(`$${response.total}`);
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     console.error('Error fetching cart data:', xhr.responseText);
                 }
             });

@@ -64,26 +64,38 @@
                                 <td class="price" data-title="Price">
                                     @php
                                         $amount = $item->product->selling_price - $item->product->discount_price;
-                                        $discount = 100 - (($amount / $item->product->selling_price) * 100);
-                                        $subtotal = $amount*$item->quantity;
+                                        $subtotal = $amount * $item->quantity;
                                     @endphp
                                     <h4 class="text-brand">${{ $amount }}</h4>
                                 </td>
 
-                                <!-- Quantity Control Column -->
                                 <td class="text-center detail-info" data-title="Stock">
                                     <div class="detail-extralink mr-15">
                                         <div class="detail-qty border radius">
-                                            <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                            <input type="text" name="quantity" class="qty-val" value="1" min="1">
-                                            <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                            <a href="#" class="qty-down" onclick="updateQuantity('down', {{ $item->product->id }}); return false;">
+                                                <i class="fi-rs-angle-small-down"></i>
+                                            </a>
+                                            <input type="text" name="quantity" id="quantity-{{ $item->product->id }}"
+                                                    class="qty-val" value="{{ $item->quantity }}"
+                                                    min="1" data-available-qty="{{ $item->product->product_qty }}" readonly>
+                                            <a href="#" class="qty-up" onclick="updateQuantity('up', {{ $item->product->id }}); return false;">
+                                                <i class="fi-rs-angle-small-up"></i>
+                                            </a>
                                         </div>
                                     </div>
                                 </td>
 
+                                <style>
+                                    .qty-up.disabled, .qty-down.disabled {
+                                        pointer-events: none;
+                                        opacity: 0.5;
+                                        cursor: not-allowed;
+                                    }
+                                </style>
+
                                 <!-- Subtotal Column -->
-                                <td class="price" data-title="Total" class="subtotal">
-                                    <h4 class="text-brand">${{ $subtotal }}</h4>
+                                <td class="price subtotal" data-title="Total" id="subtotal-{{ $item->id }}">
+                                    <h4 class="text-brand">${{ $item->quantity * ($item->product->selling_price - $item->product->discount_price) }}</h4>
                                 </td>
 
                                 <!-- Color Column -->
@@ -103,7 +115,6 @@
                                 </td>
                             </tr>
                             @endforeach
-
                         </tbody>
                     </table>
                 </div>

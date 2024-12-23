@@ -180,6 +180,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/cart/data', [CartController::class, 'getCartData'])->name('cart.data');
     Route::get('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
     Route::get('/cart/clear', [CartController::class, 'clearCart'])->name('cart.clear');
+    Route::post('/update-quantity', [CartController::class, 'updateQuantity'])->name('update.quantity');
 });
 
 // web.php

@@ -106,4 +106,39 @@ class CartController extends Controller
 
         return view('frontend.cart.index', compact('cartItems'));
     }
+
+    public function updateQuantity(Request $request)
+    {
+        $validated = $request->validate([
+            'product_id' => 'required|integer',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $product = Product::find($validated['product_id']);
+        $cartItem = Cart::where('product_id', $validated['product_id'])->first();
+
+        if (!$product) {
+            return response()->json(['success' => false, 'message' => 'Product not found.']);
+        }
+
+        if ($validated['quantity'] > $product->product_qty) {
+            return response()->json(['success' => false, 'message' => 'Quantity exceeds available stock.']);
+        }
+
+        if ($cartItem) {
+            $cartItem->quantity = $validated['quantity'];
+            $cartItem->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Quantity updated successfully.',
+                'quantity' => $cartItem->quantity,
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cart item not found.',
+            ]);
+        }
+    }
 }
