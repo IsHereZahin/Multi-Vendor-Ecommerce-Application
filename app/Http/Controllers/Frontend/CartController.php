@@ -56,4 +56,54 @@ class CartController extends Controller
         }
     }
 
+    public function getCartData()
+    {
+        $cartItems = Cart::where('user_id', auth()->id())->get();
+
+        $total = $cartItems->sum(function ($item) {
+            return ($item->product->selling_price - $item->product->discount_price) * $item->quantity;
+        });
+
+        return response()->json([
+            'cartItems' => $cartItems,
+            'total' => number_format($total, 2),
+            'count' => $cartItems->count(),
+        ]);
+    }
+
+    // Remove item from cart
+    public function removeItem($id)
+    {
+        $cartItem = Cart::where('id', $id)
+                        ->where('user_id', auth()->id())
+                        ->first();
+
+        if (!$cartItem) {
+            return response()->json(['success' => false, 'message' => 'Cart item not found.']);
+        }
+
+        $cartItem->delete();
+        return redirect()->back()->with(['success' => true, 'message' => 'Item removed from cart successfully!']);
+    }
+
+    // Clear cart
+    public function clearCart()
+    {
+        // Ensure the user is authenticated
+        if (auth()->check()) {
+            // Remove all cart items for the authenticated user
+            Cart::where('user_id', auth()->id())->delete();
+        }
+
+        // Redirect back to the cart page with a success message
+        return redirect()->route('cart.index')->with('success', 'Your cart has been cleared!');
+    }
+
+    // Display cart
+    public function index()
+    {
+        $cartItems = Cart::where('user_id', auth()->id())->get();
+
+        return view('frontend.cart.index', compact('cartItems'));
+    }
 }

@@ -173,7 +173,17 @@ Route::middleware(['auth', 'role:vendor'])->group(function () {
 
 });
 
-Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+// Add routes for cart
+Route::middleware('auth')->group(function () {
+    Route::get('/cart/index', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::get('/cart/data', [CartController::class, 'getCartData'])->name('cart.data');
+    Route::get('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
+    Route::get('/cart/clear', [CartController::class, 'clearCart'])->name('cart.clear');
+});
+
+// web.php
+Route::post('/cart/updateQuantity', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

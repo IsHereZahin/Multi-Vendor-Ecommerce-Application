@@ -122,6 +122,7 @@
                 success: function (response) {
                     if (response.success) {
                         toastr.success(response.message);
+                        updateCartData();
                     } else {
                         toastr.error(response.message);
                     }
@@ -129,11 +130,12 @@
                 },
                 error: function (xhr, status, error) {
                     console.error('Error:', xhr.responseText);
-                    toastr.error("Something went wrong!");
+                    toastr.error("Something went wrong! Make sure you are logged in.");
                     button.disabled = false;
                 }
             });
         }
+
         function quickAddToCart(productId) {
             let qtyElement = document.getElementById(`product_qty_${productId}`);
             if (!qtyElement) {
@@ -151,8 +153,8 @@
             let data = {
                 product_id: productId,
                 quantity: quantity,
-                size: null, // No size for quick add
-                color: null, // No color for quick add
+                size: null,
+                color: null,
                 _token: '{{ csrf_token() }}'
             };
 
@@ -164,16 +166,59 @@
                 success: function (response) {
                     if (response.success) {
                         toastr.success(response.message);
+                        updateCartData();
                     } else {
                         toastr.error(response.message);
                     }
                 },
                 error: function (xhr, status, error) {
                     console.error('Error:', xhr.responseText);
-                    toastr.error("Something went wrong!");
+                    toastr.error("Something went wrong! Make sure you are logged in.");
                 }
             });
         }
+
+        function updateCartData() {
+            $.ajax({
+                url: "{{ route('cart.data') }}",
+                type: "GET",
+                dataType: "json",
+                success: function (response) {
+                    // Update cart item count
+                    $('.pro-count').text(response.count);
+
+                    // Update cart dropdown content
+                    let cartHtml = '';
+                    response.cartItems.forEach(item => {
+                        cartHtml += `
+                            <li>
+                                <div class="shopping-cart-img">
+                                    <a href="#"><img alt="${item.product.product_name}" src="${item.product.product_thambnail}" /></a>
+                                </div>
+                                <div class="shopping-cart-title">
+                                    <h4><a href="/product-details/${item.product.id}/${item.product.product_slug}">${item.product.product_name}</a></h4>
+                                    <h4><span>${item.quantity} × </span>$${(item.product.selling_price - item.product.discount_price)}</h4>
+                                </div>
+                                <div class="shopping-cart-delete">
+                                    <a href="/cart/remove/${item.id}" class="text-body">
+                                        <i class="fi-rs-cross-small"></i>
+                                    </a>
+                                </div>
+                            </li>
+                        `;
+                    });
+
+                    $('.cart-dropdown-wrap ul').html(cartHtml);
+
+                    // Update cart total
+                    $('.shopping-cart-total span').text(`$${response.total}`);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching cart data:', xhr.responseText);
+                }
+            });
+        }
+
     </script>
 </body>
 </html>
