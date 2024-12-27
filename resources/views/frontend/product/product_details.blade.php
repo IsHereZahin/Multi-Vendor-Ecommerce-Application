@@ -4,7 +4,10 @@
         <div class="container">
             <div class="breadcrumb">
                 <a href="{{ '/' }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                <span></span> <a href="{{ route('category.products', ['id' => $product->category->id, 'slug' => $product->category->slug])}}">{{ $product->category->name }}</a> <span></span><a href="{{ route('subcategory.products', ['id' => $product->subcategory->id, 'slug' => $product->subcategory->slug])}}">{{ $product->subcategory->name }}</a>
+                <span></span> <a
+                    href="{{ route('category.products', ['id' => $product->category->id, 'slug' => $product->category->slug]) }}">{{ $product->category->name }}</a>
+                <span></span><a
+                    href="{{ route('subcategory.products', ['id' => $product->subcategory->id, 'slug' => $product->subcategory->slug]) }}">{{ $product->subcategory->name }}</a>
             </div>
         </div>
     </div>
@@ -18,16 +21,16 @@
                                 <span class="zoom-icon"><i class="fi-rs-search"></i></span>
                                 <!-- MAIN SLIDES -->
                                 <div class="product-image-slider">
-                                    @foreach($product->multiImages as $image)
-                                    <figure class="border-radius-10">
-                                        <img src="{{ asset($image->photo_name) }}" alt="product image" />
-                                    </figure>
+                                    @foreach ($product->multiImages as $image)
+                                        <figure class="border-radius-10">
+                                            <img src="{{ asset($image->photo_name) }}" alt="product image" />
+                                        </figure>
                                     @endforeach
                                 </div>
                                 <!-- THUMBNAILS -->
                                 <div class="slider-nav-thumbnails">
-                                    @foreach($product->multiImages as $image)
-                                    <div><img src="{{ asset($image->photo_name) }}" alt="product image" /></div>
+                                    @foreach ($product->multiImages as $image)
+                                        <div><img src="{{ asset($image->photo_name) }}" alt="product image" /></div>
                                     @endforeach
                                 </div>
                             </div>
@@ -55,14 +58,16 @@
 
                                         @php
                                             $amount = $product->selling_price - $product->discount_price;
-                                            $discount = 100 - (($amount / $product->selling_price) * 100);
+                                            $discount = 100 - ($amount / $product->selling_price) * 100;
                                         @endphp
 
                                         <span class="current-price text-brand">${{ $amount }}</span>
                                         @if ($discount > 0)
                                             <span>
-                                                <span class="save-price font-md color3 ml-15">{{ round($discount) }}% Off</span>
-                                                <span class="old-price font-md ml-15">${{ $product->selling_price }} </span>
+                                                <span class="save-price font-md color3 ml-15">{{ round($discount) }}%
+                                                    Off</span>
+                                                <span class="old-price font-md ml-15">${{ $product->selling_price }}
+                                                </span>
                                             </span>
                                         @endif
                                     </div>
@@ -75,15 +80,17 @@
                                     $product_color = explode(',', $product->product_color);
                                 @endphp
 
-                                @if(!empty($product->product_size))
+                                @if (!empty($product->product_size))
                                     <div class="attr-detail attr-size mb-30">
                                         <strong class="mr-10" style="width:50px;">Size : </strong>
-                                        <select class="form-control unicase-form-control" id="sizeSelect_{{ $product->id }}">
-                                            @if(count($product_size) === 1)
-                                                <option selected value="{{ $product_size[0] }}">{{ ucwords($product_size[0]) }}</option>
+                                        <select class="form-control unicase-form-control"
+                                            id="sizeSelect_{{ $product->id }}">
+                                            @if (count($product_size) === 1)
+                                                <option selected value="{{ $product_size[0] }}">
+                                                    {{ ucwords($product_size[0]) }}</option>
                                             @else
                                                 <option selected disabled>--Choose Size--</option>
-                                                @foreach($product_size as $size)
+                                                @foreach ($product_size as $size)
                                                     <option value="{{ $size }}">{{ ucwords($size) }}</option>
                                                 @endforeach
                                             @endif
@@ -91,15 +98,17 @@
                                     </div>
                                 @endif
 
-                                @if(!empty($product->product_color))
+                                @if (!empty($product->product_color))
                                     <div class="attr-detail attr-color mb-30">
                                         <strong class="mr-10" style="width:50px;">Color: </strong>
-                                        <select class="form-control unicase-form-control" id="colorSelect_{{ $product->id }}">
-                                            @if(count($product_color) === 1)
-                                                <option selected value="{{ $product_color[0] }}">{{ ucwords($product_color[0]) }}</option>
+                                        <select class="form-control unicase-form-control"
+                                            id="colorSelect_{{ $product->id }}">
+                                            @if (count($product_color) === 1)
+                                                <option selected value="{{ $product_color[0] }}">
+                                                    {{ ucwords($product_color[0]) }}</option>
                                             @else
                                                 <option selected disabled>--Choose Color--</option>
-                                                @foreach($product_color as $color)
+                                                @foreach ($product_color as $color)
                                                     <option value="{{ $color }}">{{ ucwords($color) }}</option>
                                                 @endforeach
                                             @endif
@@ -110,38 +119,53 @@
                                 <div class="detail-extralink mb-30">
                                     <div class="detail-qty border radius">
                                         <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                        <input type="text" name="quantity" id="qty_{{ $product->id }}" class="qty-val" value="1" min="1">
+                                        <input type="text" name="quantity" id="qty_{{ $product->id }}" class="qty-val"
+                                            value="1" min="1">
                                         <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
                                     </div>
                                     <div class="product-extra-link2">
                                         <input type="hidden" id="product_id" value="{{ $product->id }}">
-                                        <input type="hidden" id="product_qty_{{ $product->id }}" value="{{ $product->product_qty }}">
-                                        <button type="submit" class="button button-add-to-cart" onClick="addToCart(this, {{ $product->id }})">
+                                        <input type="hidden" id="product_qty_{{ $product->id }}"
+                                            value="{{ $product->product_qty }}">
+                                        <button type="submit" class="button button-add-to-cart"
+                                            onClick="addToCart(this, {{ $product->id }})">
                                             <i class="fi-rs-shopping-cart"></i> Add to cart
                                         </button>
                                     </div>
                                 </div>
-                                @if($product->vendor_id == NULL)
+                                @if ($product->vendor_id == null)
                                     <h6> Sold By <a href="#"> <span class="text-danger"> Owner </span> </a></h6>
                                 @else
-                                    <h6> Sold By <a href="{{ route('vendor.details',$product->vendor->id) }}"> <span class="text-danger"> {{ $product['vendor']['name'] }} </span></a></h6>
+                                    <h6> Sold By <a href="{{ route('vendor.details', $product->vendor->id) }}"> <span
+                                                class="text-danger"> {{ $product['vendor']['name'] }} </span></a></h6>
                                 @endif
                                 <hr>
 
                                 <div class="font-xs">
                                     <ul class="mr-50 float-start">
-                                        <li class="mb-5">Brand: <a href="{{ route('brand.show', ['id' => $product->brand->id]) }}"><span class="text-brand">{{ $product['brand']['name'] }}</span></a></li>
-                                        <li class="mb-5">Category:<span class="text-brand"><a href="{{ route('category.products', ['id' => $product->category->id, 'slug' => $product->category->slug])}}">{{ $product['category']['name'] }}</a></span></li>
+                                        <li class="mb-5">Brand: <a
+                                                href="{{ route('brand.show', ['id' => $product->brand->id]) }}"><span
+                                                    class="text-brand">{{ $product['brand']['name'] }}</span></a></li>
+                                        <li class="mb-5">Category:<span class="text-brand"><a
+                                                    href="{{ route('category.products', ['id' => $product->category->id, 'slug' => $product->category->slug]) }}">{{ $product['category']['name'] }}</a></span>
+                                        </li>
                                         @if ($product->created_at)
-                                            <li class="mb-5">Created: <span class="text-brand">{{ $product->created_at->format('M j.Y') }}</span></li>
+                                            <li class="mb-5">Created: <span
+                                                    class="text-brand">{{ $product->created_at->format('M j.Y') }}</span>
+                                            </li>
                                         @endif
                                         @if ($product->updated_at && $product->created_at != $product->updated_at)
-                                            <li class="mb-5">Last Updated: <span class="text-brand">{{ $product->updated_at->format('M j.Y') }}</span></li>
+                                            <li class="mb-5">Last Updated: <span
+                                                    class="text-brand">{{ $product->updated_at->format('M j.Y') }}</span>
+                                            </li>
                                         @endif
                                     </ul>
                                     <ul class="float-start">
-                                        <li>SubCategory: <span class="text-brand"><a href="{{ route('subcategory.products', ['id' => $product->subcategory->id, 'slug' => $product->subcategory->slug])}}">{{ $product['subcategory']['name'] }}</a> </span></li>
-                                        <li class="mb-5">Product Code: <a href="#">{{ $product->product_code }}</a></li>
+                                        <li>SubCategory: <span class="text-brand"><a
+                                                    href="{{ route('subcategory.products', ['id' => $product->subcategory->id, 'slug' => $product->subcategory->slug]) }}">{{ $product['subcategory']['name'] }}</a>
+                                            </span></li>
+                                        <li class="mb-5">Product Code: <a
+                                                href="#">{{ $product->product_code }}</a></li>
                                         @php
                                             $tags = explode(',', $product->product_tags ?? '');
                                         @endphp
@@ -149,11 +173,15 @@
                                         @if (!empty($product->tags))
                                             <li class="mb-5">Tags:
                                                 @foreach ($tags as $index => $tag)
-                                                    <a href="#" rel="tag">{{ ucfirst(trim($tag)) }}</a>@if ($index < count($tags) - 1),@endif
+                                                    <a href="#" rel="tag">{{ ucfirst(trim($tag)) }}</a>
+                                                    @if ($index < count($tags) - 1)
+                                                        ,
+                                                    @endif
                                                 @endforeach
                                             </li>
                                         @endif
-                                        <li>Stock:<span class="in-stock text-brand ml-5">{{ $product->product_qty }} Items In Stock</span></li>
+                                        <li>Stock:<span class="in-stock text-brand ml-5">{{ $product->product_qty }} Items
+                                                In Stock</span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -164,16 +192,20 @@
                         <div class="tab-style3">
                             <ul class="nav nav-tabs text-uppercase">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="Description-tab" data-bs-toggle="tab" href="#Description">Description</a>
+                                    <a class="nav-link active" id="Description-tab" data-bs-toggle="tab"
+                                        href="#Description">Description</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="Additional-info-tab" data-bs-toggle="tab" href="#Additional-info">Additional info</a>
+                                    <a class="nav-link" id="Additional-info-tab" data-bs-toggle="tab"
+                                        href="#Additional-info">Additional info</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="Vendor-info-tab" data-bs-toggle="tab" href="#Vendor-info">Vendor</a>
+                                    <a class="nav-link" id="Vendor-info-tab" data-bs-toggle="tab"
+                                        href="#Vendor-info">Vendor</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab" href="#Reviews">Reviews (3)</a>
+                                    <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab" href="#Reviews">Reviews
+                                        (3)</a>
                                 </li>
                             </ul>
                             <div class="tab-content shop_info_tab entry-main-content">
@@ -276,11 +308,14 @@
                                 <div class="tab-pane fade" id="Vendor-info">
                                     <div class="vendor-logo d-flex mb-30">
                                         <div class="vendor-image">
-                                            <img class="default-img" src="{{ (!empty($product->vendor->photo)) ? url('upload/user/vendor/'.$product->vendor->photo):url('adminbackend/assets/images/no_image.jpg') }}" alt="Vendor Logo" width="60" height="60" />
+                                            <img class="default-img"
+                                                src="{{ !empty($product->vendor->photo) ? url('upload/user/vendor/' . $product->vendor->photo) : url('adminbackend/assets/images/no_image.jpg') }}"
+                                                alt="Vendor Logo" width="60" height="60" />
                                         </div>
                                         <div class="vendor-details ml-15">
                                             <h6 class="vendor-name">
-                                                <a href="{{ route('vendor.details',$product->vendor->id) }}">{{ $product->vendor->name ?? 'Owner' }}</a>
+                                                <a
+                                                    href="{{ route('vendor.details', $product->vendor->id) }}">{{ $product->vendor->name ?? 'Owner' }}</a>
                                             </h6>
                                             <div class="product-rate-cover text-end">
                                                 <div class="product-rate d-inline-block">
@@ -293,12 +328,14 @@
 
                                     <ul class="contact-infor mb-50">
                                         <li>
-                                            <img src="{{ asset('frontend/assets/imgs/theme/icons/icon-location.svg')}}" alt="Location Icon" />
+                                            <img src="{{ asset('frontend/assets/imgs/theme/icons/icon-location.svg') }}"
+                                                alt="Location Icon" />
                                             <strong>Address: </strong>
                                             <span>{{ $product->vendor->address ?? 'Not detected' }}</span>
                                         </li>
                                         <li>
-                                            <img src="{{ asset('frontend/assets/imgs/theme/icons/icon-contact.svg')}}" alt="Contact Icon" />
+                                            <img src="{{ asset('frontend/assets/imgs/theme/icons/icon-contact.svg') }}"
+                                                alt="Contact Icon" />
                                             <strong>Contact Seller:</strong>
                                             <span>{{ $product->vendor->phone ?? 'No phone number!' }}</span>
                                         </li>
@@ -314,10 +351,11 @@
                                                     // Calculate the number of years since the vendor joined
                                                     $yearsSinceJoin = $joinYear ? $currentYear - $joinYear : null;
                                                 @endphp
-                                                    <img src="{{ asset('frontend/assets/imgs/theme/icons/icon-clock.svg')}}" alt="Contact Icon" />
-                                                    <strong>Vendor since:</strong>
-                                                @if($yearsSinceJoin !== null)
-                                                    @if($yearsSinceJoin === 0)
+                                                <img src="{{ asset('frontend/assets/imgs/theme/icons/icon-clock.svg') }}"
+                                                    alt="Contact Icon" />
+                                                <strong>Vendor since:</strong>
+                                                @if ($yearsSinceJoin !== null)
+                                                    @if ($yearsSinceJoin === 0)
                                                         <span class="vendor-since"> this year</span>
                                                     @elseif($yearsSinceJoin === 1)
                                                         <span class="vendor-since"> last year</span>
@@ -357,18 +395,26 @@
                                                         <div class="user justify-content-between d-flex">
                                                             <div class="thumb text-center">
                                                                 <img src="assets/imgs/blog/author-2.png" alt="" />
-                                                                <a href="#" class="font-heading text-brand">Sienna</a>
+                                                                <a href="#"
+                                                                    class="font-heading text-brand">Sienna</a>
                                                             </div>
                                                             <div class="desc">
                                                                 <div class="d-flex justify-content-between mb-10">
                                                                     <div class="d-flex align-items-center">
-                                                                        <span class="font-xs text-muted">December 4, 2022 at 3:12 pm </span>
+                                                                        <span class="font-xs text-muted">December 4, 2022
+                                                                            at 3:12 pm </span>
                                                                     </div>
                                                                     <div class="product-rate d-inline-block">
-                                                                        <div class="product-rating" style="width: 100%"></div>
+                                                                        <div class="product-rating" style="width: 100%">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                                <p class="mb-10">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi repudiandae minus ab deleniti totam officia id incidunt? <a href="#" class="reply">Reply</a></p>
+                                                                <p class="mb-10">Lorem ipsum dolor sit amet, consectetur
+                                                                    adipisicing elit. Delectus, suscipit exercitationem
+                                                                    accusantium obcaecati quos voluptate nesciunt facilis
+                                                                    itaque modi commodi dignissimos sequi repudiandae minus
+                                                                    ab deleniti totam officia id incidunt? <a
+                                                                        href="#" class="reply">Reply</a></p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -376,18 +422,26 @@
                                                         <div class="user justify-content-between d-flex">
                                                             <div class="thumb text-center">
                                                                 <img src="assets/imgs/blog/author-3.png" alt="" />
-                                                                <a href="#" class="font-heading text-brand">Brenna</a>
+                                                                <a href="#"
+                                                                    class="font-heading text-brand">Brenna</a>
                                                             </div>
                                                             <div class="desc">
                                                                 <div class="d-flex justify-content-between mb-10">
                                                                     <div class="d-flex align-items-center">
-                                                                        <span class="font-xs text-muted">December 4, 2022 at 3:12 pm </span>
+                                                                        <span class="font-xs text-muted">December 4, 2022
+                                                                            at 3:12 pm </span>
                                                                     </div>
                                                                     <div class="product-rate d-inline-block">
-                                                                        <div class="product-rating" style="width: 80%"></div>
+                                                                        <div class="product-rating" style="width: 80%">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                                <p class="mb-10">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi repudiandae minus ab deleniti totam officia id incidunt? <a href="#" class="reply">Reply</a></p>
+                                                                <p class="mb-10">Lorem ipsum dolor sit amet, consectetur
+                                                                    adipisicing elit. Delectus, suscipit exercitationem
+                                                                    accusantium obcaecati quos voluptate nesciunt facilis
+                                                                    itaque modi commodi dignissimos sequi repudiandae minus
+                                                                    ab deleniti totam officia id incidunt? <a
+                                                                        href="#" class="reply">Reply</a></p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -395,18 +449,26 @@
                                                         <div class="user justify-content-between d-flex">
                                                             <div class="thumb text-center">
                                                                 <img src="assets/imgs/blog/author-4.png" alt="" />
-                                                                <a href="#" class="font-heading text-brand">Gemma</a>
+                                                                <a href="#"
+                                                                    class="font-heading text-brand">Gemma</a>
                                                             </div>
                                                             <div class="desc">
                                                                 <div class="d-flex justify-content-between mb-10">
                                                                     <div class="d-flex align-items-center">
-                                                                        <span class="font-xs text-muted">December 4, 2022 at 3:12 pm </span>
+                                                                        <span class="font-xs text-muted">December 4, 2022
+                                                                            at 3:12 pm </span>
                                                                     </div>
                                                                     <div class="product-rate d-inline-block">
-                                                                        <div class="product-rating" style="width: 80%"></div>
+                                                                        <div class="product-rating" style="width: 80%">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                                <p class="mb-10">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi repudiandae minus ab deleniti totam officia id incidunt? <a href="#" class="reply">Reply</a></p>
+                                                                <p class="mb-10">Lorem ipsum dolor sit amet, consectetur
+                                                                    adipisicing elit. Delectus, suscipit exercitationem
+                                                                    accusantium obcaecati quos voluptate nesciunt facilis
+                                                                    itaque modi commodi dignissimos sequi repudiandae minus
+                                                                    ab deleniti totam officia id incidunt? <a
+                                                                        href="#" class="reply">Reply</a></p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -422,25 +484,36 @@
                                                 </div>
                                                 <div class="progress">
                                                     <span>5 star</span>
-                                                    <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
+                                                    <div class="progress-bar" role="progressbar" style="width: 50%"
+                                                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%
+                                                    </div>
                                                 </div>
                                                 <div class="progress">
                                                     <span>4 star</span>
-                                                    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                                    <div class="progress-bar" role="progressbar" style="width: 25%"
+                                                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%
+                                                    </div>
                                                 </div>
                                                 <div class="progress">
                                                     <span>3 star</span>
-                                                    <div class="progress-bar" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">45%</div>
+                                                    <div class="progress-bar" role="progressbar" style="width: 45%"
+                                                        aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">45%
+                                                    </div>
                                                 </div>
                                                 <div class="progress">
                                                     <span>2 star</span>
-                                                    <div class="progress-bar" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">65%</div>
+                                                    <div class="progress-bar" role="progressbar" style="width: 65%"
+                                                        aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">65%
+                                                    </div>
                                                 </div>
                                                 <div class="progress mb-30">
                                                     <span>1 star</span>
-                                                    <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">85%</div>
+                                                    <div class="progress-bar" role="progressbar" style="width: 85%"
+                                                        aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">85%
+                                                    </div>
                                                 </div>
-                                                <a href="#" class="font-xs text-muted">How are ratings calculated?</a>
+                                                <a href="#" class="font-xs text-muted">How are ratings
+                                                    calculated?</a>
                                             </div>
                                         </div>
                                     </div>
@@ -454,27 +527,32 @@
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <div class="form-group">
-                                                                <textarea class="form-control w-100" name="comment" id="comment" cols="30" rows="9" placeholder="Write Comment"></textarea>
+                                                                <textarea class="form-control w-100" name="comment" id="comment" cols="30" rows="9"
+                                                                    placeholder="Write Comment"></textarea>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <div class="form-group">
-                                                                <input class="form-control" name="name" id="name" type="text" placeholder="Name" />
+                                                                <input class="form-control" name="name" id="name"
+                                                                    type="text" placeholder="Name" />
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <div class="form-group">
-                                                                <input class="form-control" name="email" id="email" type="email" placeholder="Email" />
+                                                                <input class="form-control" name="email" id="email"
+                                                                    type="email" placeholder="Email" />
                                                             </div>
                                                         </div>
                                                         <div class="col-12">
                                                             <div class="form-group">
-                                                                <input class="form-control" name="website" id="website" type="text" placeholder="Website" />
+                                                                <input class="form-control" name="website" id="website"
+                                                                    type="text" placeholder="Website" />
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <button type="submit" class="button button-contactForm">Submit Review</button>
+                                                        <button type="submit" class="button button-contactForm">Submit
+                                                            Review</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -485,247 +563,330 @@
                         </div>
                     </div>
                     @if ($relatedProducts->count() > 0)
-                    <div class="row mt-60">
-                        <div class="col-12">
-                            <h2 class="section-title style-1 mb-30">Related products</h2>
-                        </div>
-                        <div class="col-12">
-                            <div class="row related-products">
+                        <div class="row mt-60">
+                            <div class="col-12">
+                                <h2 class="section-title style-1 mb-30">Related products</h2>
+                            </div>
+                            <div class="col-12">
+                                <div class="row related-products">
 
-                                @foreach($relatedProducts as $product)
-                                <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                                    <div class="product-cart-wrap hover-up">
-                                        <div class="product-img-action-wrap">
-                                            <div class="product-img product-img-zoom">
-                                                <a href="{{ url('/product-details/'.$product->id.'/'.$product->product_slug) }}">
-                                                    <img class="default-img" src="{{ asset($product->product_thambnail) }}" alt=""/>
-                                                    @if ($product->multiImages->count() > 1)
-                                                        <img class="hover-img" src="{{ asset($product->multiImages->skip(1)->first()->photo_name) }}" alt="" />
-                                                    @endif
-                                                </a>
-                                            </div>
-                                            <div class="product-action-1">
-                                                <a aria-label="Add To Wishlist" class="action-btn" href="#"><i class="fi-rs-heart"></i></a>
-                                                <a aria-label="Compare" class="action-btn" href="#"><i class="fi-rs-shuffle"></i></a>
-                                                <!-- Add a unique identifier to each quick view button -->
-                                                <a aria-label="Quick view" class="action-btn quick-view-btn" data-bs-toggle="modal" data-bs-target="#quickViewModalView{{ $product->id }}"><i class="fi-rs-eye"></i></a>
-                                            </div>
-                                            <div class="product-badges product-badges-position product-badges-mrg">
-                                                @php
-                                                    $amount = $product->selling_price - $product->discount_price;
-                                                    $discount = 100 - (($amount / $product->selling_price) * 100);
-                                                @endphp
-
-                                                @if ($product->discount_price == NULL)
-                                                    <span class="new">New</span>
-                                                @else
-                                                    <span class="hot">Save {{ round($discount) }} %</span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="product-content-wrap">
-                                            <div class="product-category">
-                                                <a href="{{ route('category.products', ['id' => $product->category->id, 'slug' => $product->category->slug]) }}">{{ $product->category->name }}</a>
-                                            </div>
-                                            <h2><a href="{{ url('/product-details/'.$product->id.'/'.$product->product_slug) }}">{{ $product->product_name }}</a></h2>
-                                            <div class="product-rate-cover">
-                                                <div class="product-rate d-inline-block">
-                                                    <div class="product-rating" style="width: 90%"></div>
-                                                </div>
-                                                <span class="font-small ml-5 text-muted"> (4.0)</span>
-                                            </div>
-                                            <div>
-                                                <span class="font-small text-muted">By <a href="{{ route('vendor.details',$product->vendor->id) }}">{{ $product->vendor->name ?? 'Owner' }}</a></span>
-                                            </div>
-                                            <div class="product-card-bottom">
-                                                @if($product->discount_price == NULL)
-                                                    <div class="product-price">
-                                                        <span>${{ $product->selling_price }}</span>
+                                    @foreach ($relatedProducts as $product)
+                                        <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                                            <div class="product-cart-wrap hover-up">
+                                                <div class="product-img-action-wrap">
+                                                    <div class="product-img product-img-zoom">
+                                                        <a
+                                                            href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">
+                                                            <img class="default-img"
+                                                                src="{{ asset($product->product_thumbnail) }}"
+                                                                alt="" />
+                                                            @if ($product->multiImages->count() > 1)
+                                                                <img class="hover-img"
+                                                                    src="{{ asset($product->multiImages->skip(1)->first()->photo_name) }}"
+                                                                    alt="" />
+                                                            @endif
+                                                        </a>
                                                     </div>
-                                                @else
-                                                    <div class="product-price">
-                                                        <span>${{ $amount }}</span>
-                                                        <span class="old-price">${{ $product->selling_price }}</span>
+                                                    <div class="product-action-1">
+                                                        <a aria-label="Add To Wishlist" class="action-btn"
+                                                            href="#"><i class="fi-rs-heart"></i></a>
+                                                        <a aria-label="Compare" class="action-btn" href="#"><i
+                                                                class="fi-rs-shuffle"></i></a>
+                                                        <!-- Add a unique identifier to each quick view button -->
+                                                        <a aria-label="Quick view" class="action-btn quick-view-btn"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#quickViewModalView{{ $product->id }}"><i
+                                                                class="fi-rs-eye"></i></a>
                                                     </div>
-                                                @endif
-                                                <div class="add-cart">
-                                                    <a class="add" href="javascript:void(0);" onclick="quickAddToCart({{ $product->id }})">
-                                                        <i class="fi-rs-shopping-cart mr-5"></i>Add
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                                        @php
+                                                            $amount =
+                                                                $product->selling_price - $product->discount_price;
+                                                            $discount = 100 - ($amount / $product->selling_price) * 100;
+                                                        @endphp
 
-                                <!-- Quick view modal for each product -->
-                                <div class="modal fade custom-modal" id="quickViewModalView{{ $product->id }}" tabindex="-1" aria-labelledby="quickViewModalView{{ $product->id }}" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            <div class="modal-body">
-                                                <div class="row">
-                                                    <div class="col-md-6 col-sm-12 col-xs-12 mb-md-0 mb-sm-5">
-                                                        <div class="detail-gallery">
-                                                            <span class="zoom-icon"><i class="fi-rs-search"></i></span>
-                                                            <!-- MAIN SLIDES -->
-                                                            <div class="product-image-slider">
-                                                                @foreach($product->multiImages as $image)
-                                                                <figure class="border-radius-10">
-                                                                    <img src="{{ asset($image->photo_name) }}" alt="product image" />
-                                                                </figure>
-                                                                @endforeach
-                                                            </div>
-                                                            <!-- THUMBNAILS -->
-                                                            <div class="slider-nav-thumbnails">
-                                                                @foreach($product->multiImages as $image)
-                                                                <div><img src="{{ asset($image->photo_name) }}" alt="product image" /></div>
-                                                                @endforeach
-                                                            </div>
+                                                        @if ($product->discount_price == null)
+                                                            <span class="new">New</span>
+                                                        @else
+                                                            <span class="hot">Save {{ round($discount) }} %</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="product-content-wrap">
+                                                    <div class="product-category">
+                                                        <a
+                                                            href="{{ route('category.products', ['id' => $product->category->id, 'slug' => $product->category->slug]) }}">{{ $product->category->name }}</a>
+                                                    </div>
+                                                    <h2><a
+                                                            href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">{{ $product->product_name }}</a>
+                                                    </h2>
+                                                    <div class="product-rate-cover">
+                                                        <div class="product-rate d-inline-block">
+                                                            <div class="product-rating" style="width: 90%"></div>
                                                         </div>
-                                                        <!-- End Gallery -->
+                                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
                                                     </div>
-                                                    <div class="col-md-6 col-sm-12 col-xs-12">
-                                                        <div class="detail-info pr-30 pl-30">
-                                                            <span class="stock-status out-stock">
-                                                                @php
-                                                                    $amount = $product->selling_price - $product->discount_price;
-                                                                    $discount = 100 - (($amount / $product->selling_price) * 100);
-                                                                @endphp
+                                                    <div>
+                                                        <span class="font-small text-muted">By <a
+                                                                href="{{ route('vendor.details', $product->vendor->id) }}">{{ $product->vendor->name ?? 'Owner' }}</a></span>
+                                                    </div>
+                                                    <div class="product-card-bottom">
+                                                        @if ($product->discount_price == null)
+                                                            <div class="product-price">
+                                                                <span>${{ $product->selling_price }}</span>
+                                                            </div>
+                                                        @else
+                                                            <div class="product-price">
+                                                                <span>${{ $amount }}</span>
+                                                                <span
+                                                                    class="old-price">${{ $product->selling_price }}</span>
+                                                            </div>
+                                                        @endif
+                                                        <div class="add-cart">
+                                                            <a class="add" href="javascript:void(0);"
+                                                                onclick="quickAddToCart({{ $product->id }})">
+                                                                <i class="fi-rs-shopping-cart mr-5"></i>Add
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                                                @if ($product->discount_price == NULL)
-                                                                    @if ($product->hot_deals == 1)Hot
-                                                                    @elseif ($product->featured == 1)Featured
-                                                                    @elseif ($product->special_offer == 1)Special
-                                                                    @elseif ($product->special_deals == 1)Special Deals
-                                                                    @else
-                                                                    @endif
-                                                                @else
-                                                                    <span class="hot">Save {{ round($discount) }} %</span>
-                                                                @endif
-                                                            </span>
-                                                            <h3 class="title-detail"><a href="{{ url('/product-details/'.$product->id.'/'.$product->product_slug) }}" class="text-heading">{{ $product->product_name }}</a></h3>
-                                                            <div class="product-detail-rating">
-                                                                <div class="product-rate-cover text-end">
-                                                                    <div class="product-rate d-inline-block">
-                                                                        <div class="product-rating" style="width: 90%"></div>
+                                        <!-- Quick view modal for each product -->
+                                        <div class="modal fade custom-modal" id="quickViewModalView{{ $product->id }}"
+                                            tabindex="-1" aria-labelledby="quickViewModalView{{ $product->id }}"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6 col-sm-12 col-xs-12 mb-md-0 mb-sm-5">
+                                                                <div class="detail-gallery">
+                                                                    <span class="zoom-icon"><i
+                                                                            class="fi-rs-search"></i></span>
+                                                                    <!-- MAIN SLIDES -->
+                                                                    <div class="product-image-slider">
+                                                                        @foreach ($product->multiImages as $image)
+                                                                            <figure class="border-radius-10">
+                                                                                <img src="{{ asset($image->photo_name) }}"
+                                                                                    alt="product image" />
+                                                                            </figure>
+                                                                        @endforeach
                                                                     </div>
-                                                                    <span class="font-small ml-5 text-muted"> (32 reviews)</span>
+                                                                    <!-- THUMBNAILS -->
+                                                                    <div class="slider-nav-thumbnails">
+                                                                        @foreach ($product->multiImages as $image)
+                                                                            <div><img
+                                                                                    src="{{ asset($image->photo_name) }}"
+                                                                                    alt="product image" /></div>
+                                                                        @endforeach
+                                                                    </div>
                                                                 </div>
+                                                                <!-- End Gallery -->
                                                             </div>
+                                                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                                                <div class="detail-info pr-30 pl-30">
+                                                                    <span class="stock-status out-stock">
+                                                                        @php
+                                                                            $amount =
+                                                                                $product->selling_price -
+                                                                                $product->discount_price;
+                                                                            $discount =
+                                                                                100 -
+                                                                                ($amount / $product->selling_price) *
+                                                                                    100;
+                                                                        @endphp
 
-                                                            @php
-                                                                $product_size = explode(',', $product->product_size);
-                                                                $product_color = explode(',', $product->product_color);
-                                                            @endphp
-
-                                                            @if(!empty($product->product_size))
-                                                                <div class="attr-detail attr-size mb-30">
-                                                                    <strong class="mr-10" style="width:50px;">Size : </strong>
-                                                                    <select class="form-control unicase-form-control" id="sizeSelect_{{ $product->id }}">
-                                                                        @if(count($product_size) === 1)
-                                                                            <option selected value="{{ $product_size[0] }}">{{ ucwords($product_size[0]) }}</option>
-                                                                        @else
-                                                                            <option selected disabled>--Choose Size--</option>
-                                                                            @foreach($product_size as $size)
-                                                                                <option value="{{ $size }}">{{ ucwords($size) }}</option>
-                                                                            @endforeach
-                                                                        @endif
-                                                                    </select>
-                                                                </div>
-                                                            @endif
-
-                                                            @if(!empty($product->product_color))
-                                                                <div class="attr-detail attr-color mb-30">
-                                                                    <strong class="mr-10" style="width:50px;">Color: </strong>
-                                                                    <select class="form-control unicase-form-control" id="colorSelect_{{ $product->id }}">
-                                                                        @if(count($product_color) === 1)
-                                                                            <option selected value="{{ $product_color[0] }}">{{ ucwords($product_color[0]) }}</option>
-                                                                        @else
-                                                                            <option selected disabled>--Choose Color--</option>
-                                                                            @foreach($product_color as $color)
-                                                                                <option value="{{ $color }}">{{ ucwords($color) }}</option>
-                                                                            @endforeach
-                                                                        @endif
-                                                                    </select>
-                                                                </div>
-                                                            @endif
-
-                                                            <div class="clearfix product-price-cover">
-                                                                <div class="product-price primary-color float-left">
-                                                                    <span class="current-price text-brand">${{ $amount }}</span>
-                                                                    @if ($discount > 0)
-                                                                        <span>
-                                                                            <span class="save-price font-md color3 ml-15">{{ round($discount) }}% Off</span>
-                                                                            <span class="old-price font-md ml-15">${{ $product->selling_price }}</span>
-                                                                        </span>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                            <div class="detail-extralink mb-30">
-                                                                <div class="detail-qty border radius">
-                                                                    <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                                                    <input type="text" name="quantity" id="qty_{{ $product->id }}" class="qty-val" value="1" min="1">
-                                                                    <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                                                </div>
-                                                                <div class="product-extra-link2">
-                                                                    <input type="hidden" id="product_id" value="{{ $product->id }}">
-                                                                    <input type="hidden" id="product_qty_{{ $product->id }}" value="{{ $product->product_qty }}">
-                                                                    <button type="submit" class="button button-add-to-cart" onClick="addToCart(this, {{ $product->id }})">
-                                                                        <i class="fi-rs-shopping-cart"></i> Add to cart
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="font-xs">
-                                                                <ul class="list-unstyled">
-                                                                    <li class="mb-3">
-                                                                        <strong>Vendor:</strong>
-                                                                        <span class="text-brand">
-                                                                            <a href="{{ route('vendor.details', $product->vendor->id) }}" class="text-decoration-none">{{ $product->vendor->name }}</a>
-                                                                        </span>
-                                                                    </li>
-
-                                                                    @if ($product->created_at)
-                                                                        <li class="mb-3">
-                                                                            <strong>Published On:</strong>
-                                                                            <span class="text-brand">{{ $product->created_at->format('F j, Y') }}</span>
-                                                                        </li>
-                                                                    @endif
-
-                                                                    @if ($product->updated_at && $product->created_at != $product->updated_at)
-                                                                        <li class="mb-3">
-                                                                            <strong>Last Modified:</strong>
-                                                                            <span class="text-brand">{{ $product->updated_at->format('F j, Y') }}</span>
-                                                                        </li>
-                                                                    @endif
-
-                                                                    <li class="mb-3">
-                                                                        <strong>Stock:</strong>
-                                                                        <span class="stock-status" style="padding: 5px 15px; border-radius: 5px; font-weight: 500;
-                                                                            {{ $product->product_qty > 0 ? 'background-color: #d4edda; color: #155724;' : 'background-color: #f8d7da; color: #FF4C51;' }}">
-                                                                            @if($product->product_qty > 0)
-                                                                                <strong>In Stack</strong>
+                                                                        @if ($product->discount_price == null)
+                                                                            @if ($product->hot_deals == 1)
+                                                                                Hot
+                                                                            @elseif ($product->featured == 1)
+                                                                                Featured
+                                                                            @elseif ($product->special_offer == 1)
+                                                                                Special
+                                                                            @elseif ($product->special_deals == 1)
+                                                                                Special Deals
                                                                             @else
-                                                                                <strong>Out of Stock</strong>
                                                                             @endif
-                                                                        </span>
-                                                                    </li>
-                                                                </ul>
+                                                                        @else
+                                                                            <span class="hot">Save
+                                                                                {{ round($discount) }} %</span>
+                                                                        @endif
+                                                                    </span>
+                                                                    <h3 class="title-detail"><a
+                                                                            href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}"
+                                                                            class="text-heading">{{ $product->product_name }}</a>
+                                                                    </h3>
+                                                                    <div class="product-detail-rating">
+                                                                        <div class="product-rate-cover text-end">
+                                                                            <div class="product-rate d-inline-block">
+                                                                                <div class="product-rating"
+                                                                                    style="width: 90%"></div>
+                                                                            </div>
+                                                                            <span class="font-small ml-5 text-muted"> (32
+                                                                                reviews)</span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    @php
+                                                                        $product_size = explode(
+                                                                            ',',
+                                                                            $product->product_size,
+                                                                        );
+                                                                        $product_color = explode(
+                                                                            ',',
+                                                                            $product->product_color,
+                                                                        );
+                                                                    @endphp
+
+                                                                    @if (!empty($product->product_size))
+                                                                        <div class="attr-detail attr-size mb-30">
+                                                                            <strong class="mr-10"
+                                                                                style="width:50px;">Size : </strong>
+                                                                            <select
+                                                                                class="form-control unicase-form-control"
+                                                                                id="sizeSelect_{{ $product->id }}">
+                                                                                @if (count($product_size) === 1)
+                                                                                    <option selected
+                                                                                        value="{{ $product_size[0] }}">
+                                                                                        {{ ucwords($product_size[0]) }}
+                                                                                    </option>
+                                                                                @else
+                                                                                    <option selected disabled>--Choose
+                                                                                        Size--</option>
+                                                                                    @foreach ($product_size as $size)
+                                                                                        <option
+                                                                                            value="{{ $size }}">
+                                                                                            {{ ucwords($size) }}</option>
+                                                                                    @endforeach
+                                                                                @endif
+                                                                            </select>
+                                                                        </div>
+                                                                    @endif
+
+                                                                    @if (!empty($product->product_color))
+                                                                        <div class="attr-detail attr-color mb-30">
+                                                                            <strong class="mr-10"
+                                                                                style="width:50px;">Color: </strong>
+                                                                            <select
+                                                                                class="form-control unicase-form-control"
+                                                                                id="colorSelect_{{ $product->id }}">
+                                                                                @if (count($product_color) === 1)
+                                                                                    <option selected
+                                                                                        value="{{ $product_color[0] }}">
+                                                                                        {{ ucwords($product_color[0]) }}
+                                                                                    </option>
+                                                                                @else
+                                                                                    <option selected disabled>--Choose
+                                                                                        Color--</option>
+                                                                                    @foreach ($product_color as $color)
+                                                                                        <option
+                                                                                            value="{{ $color }}">
+                                                                                            {{ ucwords($color) }}</option>
+                                                                                    @endforeach
+                                                                                @endif
+                                                                            </select>
+                                                                        </div>
+                                                                    @endif
+
+                                                                    <div class="clearfix product-price-cover">
+                                                                        <div
+                                                                            class="product-price primary-color float-left">
+                                                                            <span
+                                                                                class="current-price text-brand">${{ $amount }}</span>
+                                                                            @if ($discount > 0)
+                                                                                <span>
+                                                                                    <span
+                                                                                        class="save-price font-md color3 ml-15">{{ round($discount) }}%
+                                                                                        Off</span>
+                                                                                    <span
+                                                                                        class="old-price font-md ml-15">${{ $product->selling_price }}</span>
+                                                                                </span>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="detail-extralink mb-30">
+                                                                        <div class="detail-qty border radius">
+                                                                            <a href="#" class="qty-down"><i
+                                                                                    class="fi-rs-angle-small-down"></i></a>
+                                                                            <input type="text" name="quantity"
+                                                                                id="qty_{{ $product->id }}"
+                                                                                class="qty-val" value="1"
+                                                                                min="1">
+                                                                            <a href="#" class="qty-up"><i
+                                                                                    class="fi-rs-angle-small-up"></i></a>
+                                                                        </div>
+                                                                        <div class="product-extra-link2">
+                                                                            <input type="hidden" id="product_id"
+                                                                                value="{{ $product->id }}">
+                                                                            <input type="hidden"
+                                                                                id="product_qty_{{ $product->id }}"
+                                                                                value="{{ $product->product_qty }}">
+                                                                            <button type="submit"
+                                                                                class="button button-add-to-cart"
+                                                                                onClick="addToCart(this, {{ $product->id }})">
+                                                                                <i class="fi-rs-shopping-cart"></i> Add to
+                                                                                cart
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="font-xs">
+                                                                        <ul class="list-unstyled">
+                                                                            <li class="mb-3">
+                                                                                <strong>Vendor:</strong>
+                                                                                <span class="text-brand">
+                                                                                    <a href="{{ route('vendor.details', $product->vendor->id) }}"
+                                                                                        class="text-decoration-none">{{ $product->vendor->name }}</a>
+                                                                                </span>
+                                                                            </li>
+
+                                                                            @if ($product->created_at)
+                                                                                <li class="mb-3">
+                                                                                    <strong>Published On:</strong>
+                                                                                    <span
+                                                                                        class="text-brand">{{ $product->created_at->format('F j, Y') }}</span>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            @if ($product->updated_at && $product->created_at != $product->updated_at)
+                                                                                <li class="mb-3">
+                                                                                    <strong>Last Modified:</strong>
+                                                                                    <span
+                                                                                        class="text-brand">{{ $product->updated_at->format('F j, Y') }}</span>
+                                                                                </li>
+                                                                            @endif
+
+                                                                            <li class="mb-3">
+                                                                                <strong>Stock:</strong>
+                                                                                <span class="stock-status"
+                                                                                    style="padding: 5px 15px; border-radius: 5px; font-weight: 500;
+                                                                            {{ $product->product_qty > 0 ? 'background-color: #d4edda; color: #155724;' : 'background-color: #f8d7da; color: #FF4C51;' }}">
+                                                                                    @if ($product->product_qty > 0)
+                                                                                        <strong>In Stack</strong>
+                                                                                    @else
+                                                                                        <strong>Out of Stock</strong>
+                                                                                    @endif
+                                                                                </span>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Detail Info -->
                                                             </div>
                                                         </div>
-                                                        <!-- Detail Info -->
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            @endforeach
+                                    @endforeach
 
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @endif
                 </div>
             </div>

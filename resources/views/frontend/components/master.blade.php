@@ -246,7 +246,7 @@
                         cartHtml += `
                             <li>
                                 <div class="shopping-cart-img">
-                                    <a href="#"><img alt="${item.product.product_name}" src="${item.product.product_thambnail}" /></a>
+                                    <a href="#"><img alt="${item.product.product_name}" src="${item.product.product_thumbnail}" /></a>
                                 </div>
                                 <div class="shopping-cart-title">
                                     <h4><a href="/product-details/${item.product.id}/${item.product.product_slug}">${item.product.product_name}</a></h4>
@@ -271,7 +271,6 @@
                 }
             });
         }
-
     </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
         <img alt="Nest" src="{{ asset('frontend/assets/imgs/theme/icons/icon-cart.svg') }}" />
         @php
             $cartItems = \App\Models\Cart::where('user_id', auth()->id())->get();
-            $total = $cartItems->sum(function($item) {
+            $total = $cartItems->sum(function ($item) {
                 return ($item->product->selling_price - $item->product->discount_price) * $item->quantity;
             });
         @endphp
@@ -16,11 +16,15 @@
             @foreach ($cartItems as $item)
                 <li>
                     <div class="shopping-cart-img">
-                        <a href="#"><img alt="{{ $item->product->product_name }}" src="{{ asset($item->product->product_thambnail) }}" /></a>
+                        <a href="#"><img alt="{{ $item->product->product_name }}"
+                                src="{{ asset($item->product->product_thumbnail) }}" /></a>
                     </div>
                     <div class="shopping-cart-title">
-                        <h4><a href="{{ url('/product-details/'.$item->product->id.'/'.$item->product->product_slug) }}">{{ $item->product->product_name }}</a></h4>
-                        <h4><span>{{ $item->quantity }} × </span>${{ $item->product->selling_price - $item->product->discount_price }}</h4>
+                        <h4><a
+                                href="{{ url('/product-details/' . $item->product->id . '/' . $item->product->product_slug) }}">{{ $item->product->product_name }}</a>
+                        </h4>
+                        <h4><span>{{ $item->quantity }} ×
+                            </span>${{ $item->product->selling_price - $item->product->discount_price }}</h4>
                     </div>
                     <div class="shopping-cart-delete">
                         <a href="{{ route('cart.remove', $item->id) }}" class="text-body">
