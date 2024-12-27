@@ -13,6 +13,11 @@
 
     <div class="cart-dropdown-wrap cart-dropdown-hm2">
         <ul>
+        @if($cartItems->isEmpty())
+            <li>
+                <p>Your cart is empty.</p>
+            </li>
+        @else
             @foreach ($cartItems as $item)
                 <li>
                     <div class="shopping-cart-img">
@@ -23,16 +28,16 @@
                         <h4><a
                                 href="{{ url('/product-details/' . $item->product->id . '/' . $item->product->product_slug) }}">{{ $item->product->product_name }}</a>
                         </h4>
-                        <h4><span>{{ $item->quantity }} ×
-                            </span>${{ $item->product->selling_price - $item->product->discount_price }}</h4>
+                        <h4><span>{{ $item->quantity }} × </span>${{ $item->product->selling_price - $item->product->discount_price }}</h4>
                     </div>
                     <div class="shopping-cart-delete">
-                        <a href="{{ route('cart.remove', $item->id) }}" class="text-body">
+                        <a type="submit" id="{{ $item->id }}" onclick="miniCartRemove(this.id)">
                             <i class="fi-rs-cross-small"></i>
                         </a>
                     </div>
                 </li>
             @endforeach
+        @endif
         </ul>
 
         <div class="shopping-cart-footer">

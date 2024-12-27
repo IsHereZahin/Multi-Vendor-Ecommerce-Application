@@ -16,7 +16,7 @@
             <div class="col-lg-12 mb-40">
                 <h1 class="heading-2 mb-10">Your Cart</h1>
                 <div class="d-flex justify-content-between">
-                    <h6 class="text-body">There are <span class="text-brand">{{ count($cartItems) }}</span> products in your cart</h6>
+                    <h6 class="text-body">There are <span class="text-brand" id="cart-count">{{ count($cartItems) }}</span> products in your cart</h6>
                     <h6 class="text-body"><a href="{{ route('cart.clear') }}" class="text-muted"><i class="fi-rs-trash mr-5"></i>Clear Cart</a></h6>
                 </div>
             </div>
@@ -38,11 +38,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($cartItems as $item)
+                            @forelse($cartItems as $item)
                             <tr class="pt-30">
                                 <!-- Product Image Column -->
-                                <td class="image product-thumbnail pt-40">
-                                    <img src="{{ asset($item->product->product_thumbnail) }}" alt="{{ $item->product->product_name }}">
+                                <td class="image product-thumbnail p-2 pt-40">
+                                    <img src="{{ asset($item->product->product_thumbnail) }}" class="p-2" alt="{{ $item->product->product_name }}">
                                 </td>
 
                                 <!-- Product Name and Rating Column -->
@@ -64,34 +64,24 @@
                                 <td class="price" data-title="Price">
                                     @php
                                         $amount = $item->product->selling_price - $item->product->discount_price;
-                                        $subtotal = $amount * $item->quantity;
                                     @endphp
                                     <h4 class="text-brand">${{ $amount }}</h4>
                                 </td>
 
+                                <!-- Quantity Column -->
                                 <td class="text-center detail-info" data-title="Stock">
                                     <div class="detail-extralink mr-15">
                                         <div class="detail-qty border radius">
-                                            <a href="#" class="qty-down" onclick="updateQuantity('down', {{ $item->product->id }}); return false;">
-                                                <i class="fi-rs-angle-small-down"></i>
-                                            </a>
-                                            <input type="text" name="quantity" id="quantity-{{ $item->product->id }}"
-                                                    class="qty-val" value="{{ $item->quantity }}"
-                                                    min="1" data-available-qty="{{ $item->product->product_qty }}" readonly>
-                                            <a href="#" class="qty-up" onclick="updateQuantity('up', {{ $item->product->id }}); return false;">
+                                            <a href="javascript:void(0);" class="qty-up" onclick="incrementQuantity({{ $item->id }});">
                                                 <i class="fi-rs-angle-small-up"></i>
+                                            </a>
+                                            <input type="text" name="quantity" id="quantity-{{ $item->id }}" class="qty-val" value="{{ $item->quantity }}" min="1" readonly>
+                                            <a href="javascript:void(0);" class="qty-down" onclick="decrementQuantity({{ $item->id }});">
+                                                <i class="fi-rs-angle-small-down"></i>
                                             </a>
                                         </div>
                                     </div>
                                 </td>
-
-                                <style>
-                                    .qty-up.disabled, .qty-down.disabled {
-                                        pointer-events: none;
-                                        opacity: 0.5;
-                                        cursor: not-allowed;
-                                    }
-                                </style>
 
                                 <!-- Subtotal Column -->
                                 <td class="price subtotal" data-title="Total" id="subtotal-{{ $item->id }}">
@@ -108,13 +98,18 @@
                                     <span class="text-muted">{{ $item->size ?? '-' }}</span>
                                 </td>
 
+                                <!-- Remove Column -->
                                 <td class="action text-center" data-title="Remove">
-                                    <a href="{{ route('cart.remove', $item->id) }}" class="text-body">
+                                    <a href="javascript:void(0);" onclick="miniCartRemove({{ $item->id }})">
                                         <i class="fi-rs-trash"></i>
                                     </a>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center">Your cart is empty.</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -140,51 +135,46 @@
                 <div class="divider-2 mb-30"></div>
 
                 <div class="border p-md-4 cart-totals ml-30">
-                    <div class="table-responsive">
-                        <table class="table no-border">
-                            <tbody>
-                                <tr>
-                                    <td class="cart_total_label">
-                                        <h6 class="text-muted">Subtotal</h6>
-                                    </td>
-                                    <td class="cart_total_amount">
-                                        <h4 class="text-brand text-end">$12.31</h4>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="col" colspan="2">
-                                        <div class="divider-2 mt-10 mb-10"></div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="cart_total_label">
-                                        <h6 class="text-muted">Shipping</h6>
-                                    </td>
-                                    <td class="cart_total_amount">
-                                        <h5 class="text-heading text-end">Free</h4< /td>
-                                </tr>
-                                <tr>
-                                    <td class="cart_total_label">
-                                        <h6 class="text-muted">Estimate for</h6>
-                                    </td>
-                                    <td class="cart_total_amount">
-                                        <h5 class="text-heading text-end">United Kingdom</h4< /td>
-                                </tr>
-                                <tr>
-                                    <td scope="col" colspan="2">
-                                        <div class="divider-2 mt-10 mb-10"></div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="cart_total_label">
-                                        <h6 class="text-muted">Total</h6>
-                                    </td>
-                                    <td class="cart_total_amount">
-                                        <h4 class="text-brand text-end">$12.31</h4>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="cart-summary">
+                        <div class="cart-item d-flex justify-content-between align-items-center">
+                            <div class="cart-label">
+                                <h6 class="text-muted">Subtotal</h6>
+                            </div>
+                            <div class="cart-amount">
+                                <h4 class="text-brand">$12.31</h4>
+                            </div>
+                        </div>
+
+                        <div class="divider mt-10 mb-10"></div>
+
+                        <div class="cart-item d-flex justify-content-between align-items-center">
+                            <div class="cart-label">
+                                <h6 class="text-muted">Shipping</h6>
+                            </div>
+                            <div class="cart-amount">
+                                <h5 class="text-heading">Free</h5>
+                            </div>
+                        </div>
+
+                        <div class="cart-item d-flex justify-content-between align-items-center">
+                            <div class="cart-label">
+                                <h6 class="text-muted">Estimate for</h6>
+                            </div>
+                            <div class="cart-amount">
+                                <h5 class="text-heading">United Kingdom</h5>
+                            </div>
+                        </div>
+
+                        <div class="divider mt-10 mb-10"></div>
+
+                        <div class="cart-item d-flex justify-content-between align-items-center">
+                            <div class="cart-label">
+                                <h6 class="text-muted">Total</h6>
+                            </div>
+                            <div class="cart-amount">
+                                <h4 class="text-brand">$12.31</h4>
+                            </div>
+                        </div>
                     </div>
                     <a href="#" class="btn mb-20 w-100">Proceed To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
                 </div>

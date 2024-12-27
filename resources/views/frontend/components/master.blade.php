@@ -178,97 +178,191 @@
             });
         }
 
-        function updateQuantity(action, productId) {
-            let quantityInput = document.getElementById('quantity-' + productId);
-            let currentQuantity = parseInt(quantityInput.value) || 1;
-
-            // Fetch available stock dynamically
-            let availableQty = parseInt(quantityInput.getAttribute('data-available-qty')) || 0;
-
-            let upButton = document.querySelector(`#quantity-${productId}`).closest('.detail-qty').querySelector('.qty-up');
-            let downButton = document.querySelector(`#quantity-${productId}`).closest('.detail-qty').querySelector('.qty-down');
-
-            // Adjust the quantity based on the action
-            if (action === 'up') {
-                if (currentQuantity >= availableQty) {
-                    toastr.warning("You cannot add more than the available stock.");
-                    return;
+    // Function to increment the quantity
+    function incrementQuantity(id) {
+        $.ajax({
+            url: '/cart/increment/' + id,
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+            },
+            success: function(response) {
+                if (response.success) {
+                    toastr.success(response.success);
+                    updateCartData();
+                } else {
+                    toastr.error(response.error);
                 }
-                currentQuantity++;
-            } else if (action === 'down') {
-                if (currentQuantity > 1) {
-                    currentQuantity--;
-                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                toastr.error("An error occurred while updating the quantity.");
             }
+        });
+    }
 
-            // Update the input field
-            quantityInput.value = currentQuantity;
-
-            // Disable buttons based on quantity limits
-            upButton.classList.toggle('disabled', currentQuantity >= availableQty);
-            downButton.classList.toggle('disabled', currentQuantity <= 1);
-
-            $.ajax({
-                url: '{{ route("update.quantity") }}',
-                method: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    product_id: productId,
-                    quantity: currentQuantity
-                },
-                success: function(response) {
-                    if (response.success === false) {
-                        toastr.error(response.message);
-                        quantityInput.value = availableQty;
-                    } else {
-                        updateCartData();
-                    }
-                },
-                error: function(error) {
-                    console.error('Error updating quantity:', error);
+    // Function to decrement the quantity
+    function decrementQuantity(id) {
+        $.ajax({
+            url: '/cart/decrement/' + id,
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+            },
+            success: function(response) {
+                if (response.success) {
+                    toastr.success(response.success);
+                    updateCartData();
+                } else {
+                    toastr.error(response.error);
                 }
-            });
-        }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                toastr.error("An error occurred while updating the quantity.");
+            }
+        });
+    }
 
+        // Function to update the cart data
         function updateCartData() {
             $.ajax({
-                url: "{{ route('cart.data') }}",
+                url: "{{ route('cart.data') }}", // Assuming this route provides the updated cart data
                 type: "GET",
                 dataType: "json",
                 success: function(response) {
-                    // Update cart item count
+                    // Update cart item count in mini-cart
                     $('.pro-count').text(response.count);
 
                     // Update cart dropdown content
                     let cartHtml = '';
                     response.cartItems.forEach(item => {
                         let subtotal = (item.product.selling_price - item.product.discount_price) * item.quantity;
+                        let baseUrl = window.location.origin;
                         cartHtml += `
                             <li>
                                 <div class="shopping-cart-img">
-                                    <a href="#"><img alt="${item.product.product_name}" src="${item.product.product_thumbnail}" /></a>
+                                    <a href="#"><img src="${baseUrl}/${item.product.product_thumbnail}" class="p-2" alt="${item.product.product_name}"></a>
                                 </div>
                                 <div class="shopping-cart-title">
                                     <h4><a href="/product-details/${item.product.id}/${item.product.product_slug}">${item.product.product_name}</a></h4>
                                     <h4><span>${item.quantity} × </span>$${(item.product.selling_price - item.product.discount_price)}</h4>
                                 </div>
                                 <div class="shopping-cart-delete">
-                                    <a href="/cart/remove/${item.id}" class="text-body">
+                                    <a href="javascript:void(0);" class="text-body" onclick="miniCartRemove(${item.id})">
                                         <i class="fi-rs-cross-small"></i>
                                     </a>
                                 </div>
                             </li>
                         `;
-                        $(`#subtotal-${item.id}`).html(`<h4 class="text-brand">$${subtotal.toFixed(2)}</h4>`);
                     });
 
                     $('.cart-dropdown-wrap ul').html(cartHtml);
 
+                    // Update cart table content
+                    let cartTableHtml = '';
+                    response.cartItems.forEach(item => {
+                        let amount = item.product.selling_price - item.product.discount_price;
+                        let subtotal = amount * item.quantity;
+                        let baseUrl = window.location.origin;
+                        cartTableHtml += `
+                            <tr class="pt-30">
+                                <!-- Product Image Column -->
+                                <td class="image product-thumbnail p-2 pt-40">
+                                    <img src="${baseUrl}/${item.product.product_thumbnail}" class="p-2" alt="${item.product.product_name}">
+                                </td>
+
+                                <!-- Product Name and Rating Column -->
+                                <td class="product-des product-name">
+                                    <h6 class="mb-5">
+                                        <a class="product-name mb-10 text-heading" href="/product-details/${item.product.id}/${item.product.product_slug}">
+                                            ${item.product.product_name}
+                                        </a>
+                                    </h6>
+                                    <div class="product-rate-cover">
+                                        <div class="product-rate d-inline-block">
+                                            <div class="product-rating" style="width:${item.product.rating * 10}%"></div>
+                                        </div>
+                                        <span class="font-small ml-5 text-muted">(${item.product.rating})</span>
+                                    </div>
+                                </td>
+
+                                <!-- Price Column -->
+                                <td class="price" data-title="Price">
+                                    <h4 class="text-brand">$${amount}</h4>
+                                </td>
+
+                                <!-- Quantity Column -->
+                                <td class="text-center detail-info" data-title="Stock">
+                                    <div class="detail-extralink mr-15">
+                                        <div class="detail-qty border radius">
+                                            <a href="javascript:void(0);" class="qty-up" onclick="incrementQuantity(${item.id});">
+                                                <i class="fi-rs-angle-small-up"></i>
+                                            </a>
+                                            <input type="text" name="quantity" id="quantity-${item.id}" class="qty-val" value="${item.quantity}" min="1" readonly>
+                                            <a href="javascript:void(0);" class="qty-down" onclick="decrementQuantity(${item.id});">
+                                                <i class="fi-rs-angle-small-down"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!-- Subtotal Column -->
+                                <td class="price subtotal" data-title="Total" id="subtotal-${item.id}">
+                                    <h4 class="text-brand">$${subtotal}</h4>
+                                </td>
+
+                                <!-- Color Column -->
+                                <td class="text-center" data-title="Color">
+                                    <span class="text-muted">${item.color ?? '-'}</span>
+                                </td>
+
+                                <!-- Size Column -->
+                                <td class="text-center" data-title="Size">
+                                    <span class="text-muted">${item.size ?? '-'}</span>
+                                </td>
+
+                                <!-- Remove Column -->
+                                <td class="action text-center" data-title="Remove">
+                                    <a href="javascript:void(0);" onclick="miniCartRemove(${item.id})">
+                                        <i class="fi-rs-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                    // Update the cart table with the new HTML content
+                    $('tbody').html(cartTableHtml);
+
+                    // Update the total price
                     $('.shopping-cart-total span').text(`$${response.total}`);
                 },
                 error: function(xhr, status, error) {
                     console.error('Error fetching cart data:', xhr.responseText);
                 }
+            });
+        }
+
+        // Function to remove an item from the mini cart via AJAX
+        function miniCartRemove(itemId) {
+            $.ajax({
+                type: 'GET',
+                url: '/minicart/product/remove/' + itemId,
+                dataType: 'json',
+                success: function(data) {
+                    // Refresh the mini cart view
+                    updateCartData();
+                    if ($.isEmptyObject(data.error)) {
+                        toastr.success(data.success);
+                    } else {
+                        toastr.error(data.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', xhr.responseText);
+                    toastr.error("Something went wrong! Please try again.");
+                },
             });
         }
     </script>

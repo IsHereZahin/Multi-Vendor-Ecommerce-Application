@@ -178,9 +178,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/cart/index', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
     Route::get('/cart/data', [CartController::class, 'getCartData'])->name('cart.data');
-    Route::get('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
+    Route::get('/minicart/product/remove/{id}', [CartController::class, 'removeItem'])->name('minicart.remove');
     Route::get('/cart/clear', [CartController::class, 'clearCart'])->name('cart.clear');
-    Route::post('/update-quantity', [CartController::class, 'updateQuantity'])->name('update.quantity');
+    Route::post('/cart/increment/{id}', [CartController::class, 'CartIncrement'])->name('cart.increment');
+    Route::post('/cart/decrement/{id}', [CartController::class, 'CartDecrement'])->name('cart.decrement');
 });
 
 // web.php

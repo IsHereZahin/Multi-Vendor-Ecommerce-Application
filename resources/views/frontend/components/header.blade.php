@@ -146,7 +146,7 @@
                                             <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
                                                 <ul>
                                                     <li>
-                                                        <a href="{{ route('admin.dashboard') }}"><i class="fi fi-rs-user mr-10"></i>Admin Dashboard</a>
+                                                        <a href="{{ route('admin.dashboard') }}" target="_blank"><i class="fi fi-rs-user mr-10"></i>Admin Dashboard</a>
                                                     </li>
                                                     <li>
                                                         <a href="{{ route('logout') }}"><i class="fi fi-rs-sign-out mr-10"></i>Sign out</a>

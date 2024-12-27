@@ -71,19 +71,23 @@ class CartController extends Controller
         ]);
     }
 
-    // Remove item from cart
     public function removeItem($id)
     {
+        // Locate the cart item for the logged-in user
         $cartItem = Cart::where('id', $id)
-                        ->where('user_id', auth()->id())
-                        ->first();
+            ->where('user_id', auth()->id())
+            ->first();
 
+        // If the item is not found, return an error message
         if (!$cartItem) {
-            return response()->json(['success' => false, 'message' => 'Cart item not found.']);
+            return response()->json(['error' => 'Cart item not found.']);
         }
 
+        // Remove the item from the cart
         $cartItem->delete();
-        return redirect()->back()->with(['success' => true, 'message' => 'Item removed from cart successfully!']);
+
+        // Return a success response
+        return response()->json(['success' => 'Item removed from cart successfully!']);
     }
 
     // Clear cart
@@ -141,4 +145,43 @@ class CartController extends Controller
             ]);
         }
     }
+    /**
+     * Increment the cart item quantity.
+     */
+    public function CartIncrement($id)
+    {
+        $cartItem = Cart::where('id', $id)->first();
+
+        if (!$cartItem) {
+            return response()->json(['error' => 'Cart item not found.'], 404);
+        }
+
+        $product = $cartItem->product;
+
+        if ($cartItem->quantity < $product->product_qty) {
+            $cartItem->increment('quantity');
+            return response()->json(['success' => 'Quantity increased successfully.']);
+        }
+
+        return response()->json(['error' => 'Quantity exceeds available stock.'], 400);
+    }
+    /**
+     * Decrement the cart item quantity.
+     */
+    public function CartDecrement($id)
+    {
+        $cartItem = Cart::where('id', $id)->first();
+
+        if (!$cartItem) {
+            return response()->json(['error' => 'Cart item not found.'], 404);
+        }
+
+        if ($cartItem->quantity > 1) {
+            $cartItem->decrement('quantity');
+            return response()->json(['success' => 'Quantity decreased successfully.']);
+        }
+
+        return response()->json(['error' => 'Quantity cannot be less than 1.'], 400);
+    }
+
 }
