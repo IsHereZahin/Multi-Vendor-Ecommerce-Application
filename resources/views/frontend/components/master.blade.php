@@ -24,8 +24,9 @@
 </head>
 
 <body>
-    <!-- Modal -->
-
+    @php
+        $products = \App\Models\Product::all();
+    @endphp
     @include('frontend.components.header')
 
     <main class="main">
@@ -179,61 +180,62 @@
             });
         }
 
-    // Function to increment the quantity
-    function incrementQuantity(id) {
-        $.ajax({
-            url: '/cart/increment/' + id,
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-            },
-            success: function(response) {
-                if (response.success) {
-                    toastr.success(response.success);
-                    updateCartData();
-                } else {
-                    toastr.error(response.error);
+        // Function to increment the quantity
+        function incrementQuantity(id) {
+            $.ajax({
+                url: '/cart/increment/' + id,
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.success);
+                        updateCartData();
+                    } else {
+                        toastr.error(response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    toastr.error("An error occurred while updating the quantity.");
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                toastr.error("An error occurred while updating the quantity.");
-            }
-        });
-    }
+            });
+        }
 
-    // Function to decrement the quantity
-    function decrementQuantity(id) {
-        $.ajax({
-            url: '/cart/decrement/' + id,
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-            },
-            success: function(response) {
-                if (response.success) {
-                    toastr.success(response.success);
-                    updateCartData();
-                } else {
-                    toastr.error(response.error);
+        // Function to decrement the quantity
+        function decrementQuantity(id) {
+            $.ajax({
+                url: '/cart/decrement/' + id,
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.success);
+                        updateCartData();
+                    } else {
+                        toastr.error(response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    toastr.error("An error occurred while updating the quantity.");
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                toastr.error("An error occurred while updating the quantity.");
-            }
-        });
-    }
+            });
+        }
 
         // Function to update the cart data
         function updateCartData() {
             $.ajax({
-                url: "{{ route('cart.data') }}", // Assuming this route provides the updated cart data
+                url: "{{ route('cart.data') }}",
                 type: "GET",
                 dataType: "json",
                 success: function(response) {
                     // Update cart item count in mini-cart
-                    $('.pro-count').text(response.count);
+                    $('.cart-count').text(response.count);
+                    $('#cart-count').text(response.count);
 
                     // Update cart dropdown content
                     let cartHtml = '';
@@ -365,6 +367,54 @@
                     toastr.error("Something went wrong! Please try again.");
                 },
             });
+        }
+
+        // Toggle wishlist (add or remove item)
+        function toggleWishlist(productId) {
+            $.ajax({
+                type: "POST",
+                url: "/wishlist/toggle/" + productId,
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (response) {
+                    if ($.isEmptyObject(response.error)) {
+                        toastr[response.warning ? 'warning' : 'success'](response.success);
+                        updateWishlistButton(productId, response.isRemoved);
+                        updateWishlistHeader(response.count);
+                    } else {
+                        toastr.error(response.error);
+                    }
+                },
+                error: function () {
+                    toastr.error("Something went wrong. Please try again.");
+                }
+            });
+        }
+
+        // Update all wishlist buttons for a given product
+        function updateWishlistButton(productId, isRemoved) {
+            const buttons = $('[data-product-id="' + productId + '"]');
+
+            buttons.each(function() {
+                const button = $(this);
+
+                if (!isRemoved) {
+                    button.addClass('added-to-wishlist')
+                        .find('i').addClass('text-danger');
+                    button.attr('aria-label', 'Remove from wishlist');
+                } else {
+                    button.removeClass('added-to-wishlist')
+                        .find('i').removeClass('text-danger');
+                    button.attr('aria-label', 'Add to wishlist');
+                }
+            });
+        }
+
+        // Update the wishlist count in the header
+        function updateWishlistHeader(count) {
+            $('.wishlist_button .pro-count').text(count);
+            $('.mb-50 .text-brand').text(count);
         }
     </script>
 </body>

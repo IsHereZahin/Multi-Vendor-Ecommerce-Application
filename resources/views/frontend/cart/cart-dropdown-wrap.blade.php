@@ -7,7 +7,7 @@
                 return ($item->product->selling_price - $item->product->discount_price) * $item->quantity;
             });
         @endphp
-        <span class="pro-count blue">{{ $cartItems->count() }}</span>
+        <span class="pro-count cart-count blue">{{ $cartItems->count() }}</span>
     </a>
     <a href="{{ route('cart.index') }}"><span class="lable">Cart</span></a>
 

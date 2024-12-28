@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\VendorProductController;
+use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\ProfileController;
@@ -170,7 +171,6 @@ Route::middleware(['auth', 'role:vendor'])->group(function () {
             Route::post('/vendor/product/active/approve', 'VendorActiveProductApprove')->name('vendor.active.product.approve');
         });
     });
-
 });
 
 // Add routes for cart
@@ -183,6 +183,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/increment/{id}', [CartController::class, 'CartIncrement'])->name('cart.increment');
     Route::post('/cart/decrement/{id}', [CartController::class, 'CartDecrement'])->name('cart.decrement');
     Route::patch('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
+});
+
+// Wishlist routes
+Route::middleware(['auth'])->group(function () {
+    Route::post('/wishlist/toggle/{productId}', [WishlistController::class, 'toggleWishlist'])->name('wishlist.toggle');
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 });
 
 // web.php

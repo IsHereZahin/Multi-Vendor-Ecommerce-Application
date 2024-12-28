@@ -56,8 +56,21 @@
                                         </a>
                                     </div>
                                     <div class="product-action-1">
-                                        <a aria-label="Add To Wishlist" class="action-btn" href="#"><i
-                                                class="fi-rs-heart"></i></a>
+                                        @php
+                                            $isInWishlist = \App\Models\Wishlist::where('user_id', auth()->id())
+                                                ->pluck('product_id')
+                                                ->contains($product->id);
+                                        @endphp
+
+                                        <a aria-label="{{ $isInWishlist ? 'Remove from wishlist' : 'Add to Wishlist' }}"
+                                        class="action-btn"
+                                        href="javascript:void(0);"
+                                        onclick="toggleWishlist({{ $product->id }})"
+                                        id="wishlist-btn-{{ $product->id }}"
+                                        data-product-id="{{ $product->id }}"> <!-- Add data-product-id -->
+                                        <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
+                                        </a>
+
                                         <a aria-label="Compare" class="action-btn" href="#"><i
                                                 class="fi-rs-shuffle"></i></a>
                                         <!-- Add a unique identifier to each quick view button -->
@@ -357,14 +370,27 @@
                                             </a>
                                         </div>
                                         <div class="product-action-1">
-                                            <a aria-label="Add To Wishlist" class="action-btn" href="#"><i
-                                                    class="fi-rs-heart"></i></a>
+                                            @php
+                                                $isInWishlist = \App\Models\Wishlist::where('user_id', auth()->id())
+                                                    ->pluck('product_id')
+                                                    ->contains($product->id);
+                                            @endphp
+
+                                            <a aria-label="{{ $isInWishlist ? 'Remove from wishlist' : 'Add to Wishlist' }}"
+                                            class="action-btn"
+                                            href="javascript:void(0);"
+                                            onclick="toggleWishlist({{ $product->id }})"
+                                            id="wishlist-btn-{{ $product->id }}"
+                                            data-product-id="{{ $product->id }}"> <!-- Add data-product-id -->
+                                            <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
+                                            </a>
+
                                             <a aria-label="Compare" class="action-btn" href="#"><i
                                                     class="fi-rs-shuffle"></i></a>
                                             <!-- Add a unique identifier to each quick view button -->
                                             <a aria-label="Quick view" class="action-btn quick-view-btn"
                                                 data-bs-toggle="modal"
-                                                data-bs-target="#quickViewModalView{{ $product->id }}"><i
+                                                data-bs-target="#quickViewModal{{ $product->id }}"><i
                                                     class="fi-rs-eye"></i></a>
                                         </div>
                                         <div class="product-badges product-badges-position product-badges-mrg">
@@ -677,15 +703,28 @@
                                                 </a>
                                             </div>
                                             <div class="product-action-1">
+                                                @php
+                                                    $isInWishlist = \App\Models\Wishlist::where('user_id', auth()->id())
+                                                        ->pluck('product_id')
+                                                        ->contains($product->id);
+                                                @endphp
+
+                                                <a aria-label="{{ $isInWishlist ? 'Remove from wishlist' : 'Add to Wishlist' }}"
+                                                class="action-btn"
+                                                href="javascript:void(0);"
+                                                onclick="toggleWishlist({{ $product->id }})"
+                                                id="wishlist-btn-{{ $product->id }}"
+                                                data-product-id="{{ $product->id }}"> <!-- Add data-product-id -->
+                                                <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
+                                                </a>
+
+                                                <a aria-label="Compare" class="action-btn" href="#"><i
+                                                        class="fi-rs-shuffle"></i></a>
                                                 <!-- Add a unique identifier to each quick view button -->
                                                 <a aria-label="Quick view" class="action-btn quick-view-btn"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#quickViewModal{{ $product->id }}"><i
                                                         class="fi-rs-eye"></i></a>
-                                                <a aria-label="Add To Wishlist" class="action-btn small hover-up"
-                                                    href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                                <a aria-label="Compare" class="action-btn small hover-up"
-                                                    href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
                                             </div>
                                             <div class="product-badges product-badges-position product-badges-mrg">
                                                 @php
@@ -779,7 +818,8 @@
                         @foreach ($hotDeals as $product)
                             <article class="row align-items-center hover-up">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">
+                                    <a
+                                        href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">
                                         <img class="default-img" src="{{ asset($product->product_thumbnail) }}"
                                             alt="" />
                                     </a>
@@ -822,7 +862,8 @@
                         @foreach ($featured as $product)
                             <article class="row align-items-center hover-up">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">
+                                    <a
+                                        href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">
                                         <img class="default-img" src="{{ asset($product->product_thumbnail) }}"
                                             alt="" />
                                     </a>
@@ -865,7 +906,8 @@
                         @foreach ($specialOffer as $product)
                             <article class="row align-items-center hover-up">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">
+                                    <a
+                                        href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">
                                         <img class="default-img" src="{{ asset($product->product_thumbnail) }}"
                                             alt="" />
                                     </a>
@@ -908,7 +950,8 @@
                         @foreach ($specialDeals as $product)
                             <article class="row align-items-center hover-up">
                                 <figure class="col-md-4 mb-0">
-                                    <a href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">
+                                    <a
+                                        href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">
                                         <img class="default-img" src="{{ asset($product->product_thumbnail) }}"
                                             alt="" />
                                     </a>
@@ -989,8 +1032,21 @@
                                             </a>
                                         </div>
                                         <div class="product-action-1">
-                                            <a aria-label="Add To Wishlist" class="action-btn" href="#"><i
-                                                    class="fi-rs-heart"></i></a>
+                                            @php
+                                                $isInWishlist = \App\Models\Wishlist::where('user_id', auth()->id())
+                                                    ->pluck('product_id')
+                                                    ->contains($product->id);
+                                            @endphp
+
+                                            <a aria-label="{{ $isInWishlist ? 'Remove from wishlist' : 'Add to Wishlist' }}"
+                                            class="action-btn"
+                                            href="javascript:void(0);"
+                                            onclick="toggleWishlist({{ $product->id }})"
+                                            id="wishlist-btn-{{ $product->id }}"
+                                            data-product-id="{{ $product->id }}"> <!-- Add data-product-id -->
+                                            <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
+                                            </a>
+
                                             <a aria-label="Compare" class="action-btn" href="#"><i
                                                     class="fi-rs-shuffle"></i></a>
                                             <!-- Add a unique identifier to each quick view button -->

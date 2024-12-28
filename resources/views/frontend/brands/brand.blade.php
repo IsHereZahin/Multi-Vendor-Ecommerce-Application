@@ -45,15 +45,30 @@
                                         </a>
                                     </div>
                                     <div class="product-action-1">
-                                        <a aria-label="Add To Wishlist" class="action-btn" href="#"><i
-                                                class="fi-rs-heart"></i></a>
+                                        @php
+                                            $isInWishlist = \App\Models\Wishlist::where('user_id', auth()->id())
+                                                ->pluck('product_id')
+                                                ->contains($product->id);
+                                        @endphp
+
+                                        <a aria-label="{{ $isInWishlist ? 'Remove from wishlist' : 'Add to Wishlist' }}"
+                                        class="action-btn"
+                                        href="javascript:void(0);"
+                                        onclick="toggleWishlist({{ $product->id }})"
+                                        id="wishlist-btn-{{ $product->id }}"
+                                        data-product-id="{{ $product->id }}"> <!-- Add data-product-id -->
+                                        <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
+                                        </a>
+
                                         <a aria-label="Compare" class="action-btn" href="#"><i
                                                 class="fi-rs-shuffle"></i></a>
                                         <!-- Add a unique identifier to each quick view button -->
-                                        <a aria-label="Quick view" class="action-btn quick-view-btn" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal{{ $product->id }}"><i
+                                        <a aria-label="Quick view" class="action-btn quick-view-btn"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#quickViewModalView{{ $product->id }}"><i
                                                 class="fi-rs-eye"></i></a>
                                     </div>
+
                                     <div class="product-badges product-badges-position product-badges-mrg">
                                         @php
                                             $amount = $product->selling_price - $product->discount_price;

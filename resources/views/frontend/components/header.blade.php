@@ -100,15 +100,18 @@
                                         </select>
                                     </form>
                                 </div>
-
-                                <div class="header-action-icon-2">
-                                    <a href="shop-wishlist.html">
+                                <div class="header-action-icon-2 wishlist_button">
+                                    @php
+                                        $wishlist = \App\Models\Wishlist::where('user_id', auth()->id())->get();
+                                        $count = $wishlist->count();
+                                    @endphp
+                                    <a href="{{ route('wishlist.index') }}">
                                         <img class="svgInject" alt="Nest" src="{{ asset('frontend/assets/imgs/theme/icons/icon-heart.svg') }}" />
-                                        <span class="pro-count blue">6</span>
+                                        <span class="pro-count blue">{{ $count }}</span> <!-- This is the initial count -->
                                     </a>
-                                    <a href="shop-wishlist.html"><span class="lable">Wishlist</span></a>
+                                    <a href="{{ route('wishlist.index') }}"><span class="lable">Wishlist</span></a>
                                 </div>
-                                @include('frontend.cart.art-dropdown-wrap')
+                                @include('frontend.cart.cart-dropdown-wrap')
                                 <div class="header-action-icon-2">
                                     @if(auth()->check())
                                         @if(auth()->user()->role === 'user')
@@ -178,7 +181,6 @@
                                         <a href="{{ route('register') }}"><span class="lable ml-0">Register</span></a>
                                     @endif
                                 </div>
-
 
                             </div>
                         </div>

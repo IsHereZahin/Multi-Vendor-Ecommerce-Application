@@ -54,9 +54,9 @@
                                     </h6>
                                     <div class="product-rate-cover">
                                         <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width:{{ $item->product->rating * 10 }}%"></div>
+                                            <div class="product-rating" style="width: 55%"></div>
                                         </div>
-                                        <span class="font-small ml-5 text-muted">({{ $item->product->rating }})</span>
+                                        <span class="font-small ml-5 text-muted">0</span>
                                     </div>
                                 </td>
 
@@ -97,7 +97,7 @@
                                 <!-- Color Column -->
                                 <td data-title="Color d-flax" id="color-cell-{{ $item->id }}">
                                     <div class="d-flex align-items-center">
-                                        <h4 id="color-display-{{ $item->id }}" class="text-muted me-2">{{ $item->color ?? '-' }}</h4>
+                                        <h6 id="color-display-{{ $item->id }}" class="text-brand me-2">{{ $item->color ?? '-' }}</h6>
                                         @if(count($availableColors) > 0) <!-- Only show the edit button if colors are available -->
                                             <a id="color-edit-link-{{ $item->id }}" href="javascript:void(0);" onclick="toggleEditColor({{ $item->id }});">
                                                 <i class="bi bi-pencil text-success"></i> <!-- Bootstrap edit icon with green color -->
@@ -121,7 +121,7 @@
                                 <!-- Size Column -->
                                 <td data-title="Size d-flax" id="size-cell-{{ $item->id }}">
                                     <div class="d-flex align-items-center">
-                                        <h4 id="size-display-{{ $item->id }}" class="text-muted me-2">{{ $item->size ?? '-' }}</h4>
+                                        <h6 id="size-display-{{ $item->id }}" class="text-brand me-2">{{ $item->size ?? '-' }}</h6>
                                         @if(count($availableSizes) > 0) <!-- Only show the edit button if sizes are available -->
                                             <a id="size-edit-link-{{ $item->id }}" href="javascript:void(0);" onclick="toggleEditSize({{ $item->id }});">
                                                 <i class="bi bi-pencil text-success"></i> <!-- Bootstrap edit icon with green color -->
