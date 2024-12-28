@@ -69,7 +69,7 @@
                                 </td>
 
                                 <!-- Quantity Column -->
-                                <td class="text-center detail-info" data-title="Stock">
+                                <td class="detail-info" data-title="Stock">
                                     <div class="detail-extralink mr-15">
                                         <div class="detail-qty border radius">
                                             <a href="javascript:void(0);" class="qty-up" onclick="incrementQuantity({{ $item->id }});">
@@ -88,15 +88,135 @@
                                     <h4 class="text-brand">${{ $item->quantity * ($item->product->selling_price - $item->product->discount_price) }}</h4>
                                 </td>
 
+                                @php
+                                    // Extract colors and sizes for the specific product
+                                    $availableColors = $item->product ? array_filter(explode(',', $item->product->product_color ?? '')) : [];
+                                    $availableSizes = $item->product ? array_filter(explode(',', $item->product->product_size ?? '')) : [];
+                                @endphp
+
                                 <!-- Color Column -->
-                                <td class="text-center" data-title="Color">
-                                    <span class="text-muted">{{ $item->color ?? '-' }}</span>
+                                <td data-title="Color d-flax" id="color-cell-{{ $item->id }}">
+                                    <div class="d-flex align-items-center">
+                                        <h4 id="color-display-{{ $item->id }}" class="text-muted me-2">{{ $item->color ?? '-' }}</h4>
+                                        @if(count($availableColors) > 0) <!-- Only show the edit button if colors are available -->
+                                            <a id="color-edit-link-{{ $item->id }}" href="javascript:void(0);" onclick="toggleEditColor({{ $item->id }});">
+                                                <i class="bi bi-pencil text-success"></i> <!-- Bootstrap edit icon with green color -->
+                                            </a>
+                                        @endif
+                                    </div>
+                                    <form id="color-form-{{ $item->id }}" method="POST" action="{{ route('cart.update', $item->id) }}" style="display: none;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <select name="color" onchange="updateColor({{ $item->id }});">
+                                            <option value="">Select Color</option>
+                                            @foreach ($availableColors as $color)
+                                                <option value="{{ trim($color) }}" {{ $item->color === trim($color) ? 'selected' : '' }}>
+                                                    {{ ucfirst(trim($color)) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </form>
                                 </td>
 
                                 <!-- Size Column -->
-                                <td class="text-center" data-title="Size">
-                                    <span class="text-muted">{{ $item->size ?? '-' }}</span>
+                                <td data-title="Size d-flax" id="size-cell-{{ $item->id }}">
+                                    <div class="d-flex align-items-center">
+                                        <h4 id="size-display-{{ $item->id }}" class="text-muted me-2">{{ $item->size ?? '-' }}</h4>
+                                        @if(count($availableSizes) > 0) <!-- Only show the edit button if sizes are available -->
+                                            <a id="size-edit-link-{{ $item->id }}" href="javascript:void(0);" onclick="toggleEditSize({{ $item->id }});">
+                                                <i class="bi bi-pencil text-success"></i> <!-- Bootstrap edit icon with green color -->
+                                            </a>
+                                        @endif
+                                    </div>
+                                    <form id="size-form-{{ $item->id }}" method="POST" action="{{ route('cart.update', $item->id) }}" style="display: none;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <select name="size" onchange="updateSize({{ $item->id }});">
+                                            <option value="">Select Size</option>
+                                            @foreach ($availableSizes as $size)
+                                                <option value="{{ trim($size) }}" {{ $item->size === trim($size) ? 'selected' : '' }}>
+                                                    {{ ucfirst(trim($size)) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </form>
                                 </td>
+
+                                <script>
+                                    // Function to toggle the color edit form visibility
+                                    function toggleEditColor(itemId) {
+                                        const displaySpan = document.getElementById(`color-display-${itemId}`);
+                                        const editLink = document.getElementById(`color-edit-link-${itemId}`);
+                                        const form = document.getElementById(`color-form-${itemId}`);
+
+                                        if (form.style.display === "none") {
+                                            form.style.display = "block";
+                                            displaySpan.style.display = "none";
+                                            editLink.innerHTML = '<i class="bi bi-x text-danger"></i>';
+                                        } else {
+                                            form.style.display = "none";
+                                            displaySpan.style.display = "block";
+                                            editLink.innerHTML = '<i class="bi bi-pencil text-success"></i>';
+                                        }
+                                    }
+
+                                    // Function to toggle the size edit form visibility
+                                    function toggleEditSize(itemId) {
+                                        const displaySpan = document.getElementById(`size-display-${itemId}`);
+                                        const editLink = document.getElementById(`size-edit-link-${itemId}`);
+                                        const form = document.getElementById(`size-form-${itemId}`);
+
+                                        if (form.style.display === "none") {
+                                            form.style.display = "block";
+                                            displaySpan.style.display = "none";
+                                            editLink.innerHTML = '<i class="bi bi-x text-danger"></i>';
+                                        } else {
+                                            form.style.display = "none";
+                                            displaySpan.style.display = "block";
+                                            editLink.innerHTML = '<i class="bi bi-pencil text-success"></i>';
+                                        }
+                                    }
+
+                                    // AJAX function to update color without page reload
+                                    function updateColor(itemId) {
+                                        const form = document.getElementById(`color-form-${itemId}`);
+                                        const formData = new FormData(form);
+
+                                        fetch(form.action, {
+                                            method: 'POST',
+                                            body: formData,
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                const displaySpan = document.getElementById(`color-display-${itemId}`);
+                                                displaySpan.innerText = data.color;
+                                                toggleEditColor(itemId);
+                                            }
+                                        })
+                                        .catch(error => console.error('Error:', error));
+                                    }
+
+                                    // AJAX function to update size without page reload
+                                    function updateSize(itemId) {
+                                        const form = document.getElementById(`size-form-${itemId}`);
+                                        const formData = new FormData(form);
+
+                                        fetch(form.action, {
+                                            method: 'POST',
+                                            body: formData,
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                const displaySpan = document.getElementById(`size-display-${itemId}`);
+                                                displaySpan.innerText = data.size;
+                                                toggleEditSize(itemId);
+                                            }
+                                        })
+                                        .catch(error => console.error('Error:', error));
+                                    }
+                                </script>
 
                                 <!-- Remove Column -->
                                 <td class="action text-center" data-title="Remove">
@@ -140,8 +260,14 @@
                             <div class="cart-label">
                                 <h6 class="text-muted">Subtotal</h6>
                             </div>
-                            <div class="cart-amount">
-                                <h4 class="text-brand">$12.31</h4>
+                                @php
+                                    $cartItems = \App\Models\Cart::where('user_id', auth()->id())->get();
+                                    $total = $cartItems->sum(function ($item) {
+                                        return ($item->product->selling_price - $item->product->discount_price) * $item->quantity;
+                                    });
+                                @endphp
+                            <div class="shopping-cart-total">
+                                <h4>Total <span>${{ number_format($total, 2) }}</span></h4>
                             </div>
                         </div>
 

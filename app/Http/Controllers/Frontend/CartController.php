@@ -184,4 +184,34 @@ class CartController extends Controller
         return response()->json(['error' => 'Quantity cannot be less than 1.'], 400);
     }
 
+    public function update(Request $request, $id)
+    {
+        $cartItem = Cart::findOrFail($id);
+
+        $updated = false;
+
+        if ($request->has('color')) {
+            $cartItem->update([
+                'color' => $request->input('color'),
+            ]);
+            $updated = true;
+        }
+
+        if ($request->has('size')) {
+            $cartItem->update([
+                'size' => $request->input('size'),
+            ]);
+            $updated = true;
+        }
+
+        if ($updated) {
+            return response()->json([
+                'success' => true,
+                'color' => $cartItem->color,
+                'size' => $cartItem->size,
+            ]);
+        }
+
+        return response()->json(['success' => false]);
+    }
 }

@@ -182,6 +182,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/cart/clear', [CartController::class, 'clearCart'])->name('cart.clear');
     Route::post('/cart/increment/{id}', [CartController::class, 'CartIncrement'])->name('cart.increment');
     Route::post('/cart/decrement/{id}', [CartController::class, 'CartDecrement'])->name('cart.decrement');
+    Route::patch('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
 });
 
 // web.php
