@@ -59,16 +59,28 @@
                                                 {{ $item->product->product_qty > 0 ? 'In Stock' : 'Out of Stock' }}
                                             </span>
                                         </td>
-                                        <td class="text-right">
-                                            <button class="btn btn-sm">Add to cart</button>
-                                            {{-- <div class="add-cart">
-                                                <a class="add" href="javascript:void(0);"
-                                                    onclick="quickAddToCart({{ $item->product_id }})">
-                                                    <i class="fi-rs-shopping-cart mr-5"></i>Add
+                                        <td class="text-right" data-title="Cart">
+                                            @if($item->product->product_qty > 0)
+                                                <a class="add btn btn-sm" href="javascript:void(0);" onclick="wishToCart({{ $item->product->id }})">
+                                                    Add To Cart
                                                 </a>
-                                            </div> --}}
+                                            @else
+                                                @if($item->product->vendor->email)
+                                                    <a class="contact btn btn-sm btn-secondary" href="mailto:{{ $item->product->vendor->email }}">
+                                                        Contact Email
+                                                    </a>
+                                                @elseif($item->product->vendor->phone)
+                                                    <a class="contact btn btn-sm btn-secondary" href="tel:{{ $item->product->vendor->phone }}">
+                                                        Contact Phone
+                                                    </a>
+                                                @else
+                                                    <button class="contact btn btn-sm btn-secondary" disabled style="cursor: not-allowed; background-color: #d6d6d6; border-color: #d6d6d6; color: #a1a1a1;">
+                                                        Unavailable
+                                                    </button>
+                                                @endif
+                                            @endif
                                         </td>
-                                        <td class="action text-center" data-title="Wishlist">
+                                        <td class="action" data-title="Wishlist">
                                             @php
                                                 $isInWishlist = \App\Models\Wishlist::where('user_id', auth()->id())
                                                     ->pluck('product_id')

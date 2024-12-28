@@ -180,6 +180,35 @@
             });
         }
 
+        function wishToCart(productId) {
+            var data = {
+                product_id: productId,
+                quantity: 1,
+                size: '',
+                color: '',
+                _token: '{{ csrf_token() }}'
+            };
+
+            $.ajax({
+                url: '/cart/add',
+                type: 'POST',
+                data: data,
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        $('.cart-count').text(response.count);
+
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', xhr.responseText);
+                    toastr.error("Something went wrong! Make sure you are logged in.");
+                }
+            });
+        }
+
         // Function to increment the quantity
         function incrementQuantity(id) {
             $.ajax({

@@ -44,7 +44,7 @@ class CartController extends Controller
             return response()->json(['success' => true, 'message' => 'Item quantity updated in cart!']);
         } else {
             // If no such item exists, create a new cart entry
-            $cart = Cart::create([
+            Cart::create([
                 'user_id' => auth()->id(),
                 'product_id' => $validated['product_id'],
                 'quantity' => $validated['quantity'],
@@ -52,7 +52,13 @@ class CartController extends Controller
                 'color' => $validated['color'],
             ]);
 
-            return response()->json(['success' => true, 'message' => 'Item added to cart successfully!']);
+            $cartCount = Cart::where('user_id', auth()->id())->count();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Item added to cart successfully!',
+                'count' => $cartCount
+            ]);
         }
     }
 
