@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Backend\BannerController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\CouponController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SubCategoryController;
@@ -139,6 +140,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::delete('/banner/delete/{id}', 'DeleteBanner')->name('delete.banner');
     });
 
+    Route::controller(CouponController::class)->group(function () {
+        Route::get('all/coupon', 'AllCoupon')->name('all.coupon');
+        Route::get('add/coupon', 'AddCoupon')->name('add.coupon');
+        Route::post('store/coupon', 'StoreCoupon')->name('store.coupon');
+        Route::get('/coupons/edit/{id}', 'EditCoupon')->name('edit.coupon');
+        Route::put('/coupons/update/{id}', 'UpdateCoupon')->name('update.coupon');
+        Route::delete('/coupons/delete/{id}', 'DeleteCoupon')->name('delete.coupon');
+    });
 });
 
 // Vendor routes
