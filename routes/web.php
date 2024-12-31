@@ -9,6 +9,8 @@ use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\VendorProductController;
+use App\Http\Controllers\Backend\ShippingAreaController;
+
 use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\CartController;
@@ -144,9 +146,31 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('all/coupon', 'AllCoupon')->name('all.coupon');
         Route::get('add/coupon', 'AddCoupon')->name('add.coupon');
         Route::post('store/coupon', 'StoreCoupon')->name('store.coupon');
-        Route::get('/coupons/edit/{id}', 'EditCoupon')->name('edit.coupon');
-        Route::put('/coupons/update/{id}', 'UpdateCoupon')->name('update.coupon');
-        Route::delete('/coupons/delete/{id}', 'DeleteCoupon')->name('delete.coupon');
+        Route::get('/coupon/edit/{id}', 'EditCoupon')->name('edit.coupon');
+        Route::put('/coupon/update/{id}', 'UpdateCoupon')->name('update.coupon');
+        Route::delete('/coupon/delete/{id}', 'DeleteCoupon')->name('delete.coupon');
+    });
+
+    // Shipping Area Routes
+    Route::controller(ShippingAreaController::class)->group(function () {
+        // Division routes
+        Route::get('all/division', 'AllDivision')->name('all.division');
+        Route::post('store/division', 'StoreDivision')->name('store.division');
+        Route::put('/division/update/{id}','UpdateDivision')->name('update.division');
+        Route::delete('division/delete/{id}', 'DeleteDivision')->name('delete.division');
+
+        // District routes
+        Route::get('all/district', 'AllDistricts')->name('all.district');
+        Route::post('store/district', 'StoreDistrict')->name('store.district');
+        Route::put('/district/update/{id}', 'UpdateDistrict')->name('update.district');
+        Route::delete('/district/delete/{id}', 'DeleteDistrict')->name('delete.district');
+
+        // State routes
+        Route::get('all/state', 'AllState')->name('all.state');
+        Route::get('/get-districts/{division_id}','getDistricts');
+        Route::post('store/state', 'StoreState')->name('store.state');
+        Route::put('/state/update/{id}', 'UpdateState')->name('update.state');
+        Route::delete('/state/delete/{id}', 'DeleteState')->name('delete.state');
     });
 });
 

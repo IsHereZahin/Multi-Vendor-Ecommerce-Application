@@ -102,7 +102,7 @@
 					</ul>
 				</li>
 
-				<li class="menu-label">UI Elements</li>
+				<li class="menu-label">Vendor</li>
 
 				<li>
 					<a href="javascript:;" class="has-arrow">
@@ -116,6 +116,20 @@
 						<li> <a href="{{ route('active.vendor') }}"><i class="bx bx-right-arrow-alt"></i>Active Vendor</a>
 					</ul>
 				</li>
+
+                <li class="menu-label">Shipping Area</li>
+                <li>
+                    <a href="javascript:;" class="has-arrow">
+                        <div class="parent-icon"><i class='bx bx-location-plus'></i></div>
+                        <div class="menu-title">Shipping Area</div>
+                    </a>
+                    <ul>
+                        <li> <a href="{{ route('all.division') }}"><i class="bx bx-right-arrow-alt"></i>Division</a></li>
+                        <li> <a href="{{ route('all.district') }}"><i class="bx bx-right-arrow-alt"></i>District</a></li>
+                        <li> <a href="{{ route('all.state') }}"><i class="bx bx-right-arrow-alt"></i>State</a></li>
+                    </ul>
+                </li>
+
 				<li>
 					<a class="has-arrow" href="javascript:;">
 						<div class="parent-icon"><i class='bx bx-bookmark-heart'></i>
