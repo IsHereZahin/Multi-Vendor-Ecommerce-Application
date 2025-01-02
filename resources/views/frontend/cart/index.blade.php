@@ -302,7 +302,7 @@
                             id="couponDiscountSection">
                             <span class="text-muted fs-5">
                                 Discount (<span class="couponCode">{{ session('coupon')['code'] ?? 'N/A' }}</span>)
-                                <a href="{{ route('coupon.remove') }}" class="text-danger ms-2"
+                                <a href="javascript:void(0);" class="text-danger ms-2"
                                     onclick="removeCoupon()">
                                     <i class="fi-rs-trash"></i>
                                 </a>

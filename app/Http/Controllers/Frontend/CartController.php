@@ -98,19 +98,12 @@ class CartController extends Controller
     // Remove Coupon from Cart
     public function CouponRemove()
     {
-        // Forget the coupon session
+        // Forget the coupon and return updated cart data
         Session::forget('coupon');
 
-        // Calculate updated cart total
-        $cartItems = Cart::where('user_id', auth()->id())->get();
-        $cartTotal = $cartItems->sum(function ($item) {
-            return ($item->product->selling_price - $item->product->discount_price) * $item->quantity;
-        });
-
         return response()->json([
-            'cartTotal' => $cartTotal,
-            'validity' => false,
-            'message' => 'Coupon removed successfully.',
+            'cartItems' => Cart::where('user_id', auth()->id())->get(),
+            'count' => Cart::where('user_id', auth()->id())->count(),
         ]);
     }
 

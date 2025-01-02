@@ -511,12 +511,21 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    updateCartSection(response);
-                    toastr.success('Coupon removed successfully!', 'Success');
+                    // Update the cart data
+                    updateCartData(response);
+
+                    $('#couponSuccessMessage').hide();
+                    $('#couponDiscountSection').hide();
+
+                    $('.couponCode').text('N/A');
+                    $('#summaryDiscountPercent').text('0.00%');
+                    $('#summaryDiscountAmount').text('-$0.00');
+
+                    toastr.warning('Coupon removed successfully!');
                 },
                 error: function(xhr, status, error) {
                     console.error('Error removing coupon:', xhr.responseText);
-                    toastr.error('Something went wrong. Please try again.', 'Error');
+                    toastr.error('Something went wrong. Please try again.');
                 }
             });
         }

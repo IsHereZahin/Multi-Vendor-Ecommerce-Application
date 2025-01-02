@@ -218,7 +218,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/cart/decrement/{id}', 'CartDecrement')->name('cart.decrement');
         Route::patch('/cart/{id}', 'update')->name('cart.update');
         Route::post('/coupon-apply', 'CouponApply')->name('coupon.apply');
-        Route::get('/coupon-remove', 'CouponRemove')->name('coupon.remove');
+        Route::post('/coupon-remove', 'CouponRemove')->name('coupon.remove');
     });
 
     Route::controller(WishlistController::class)->group(function () {
