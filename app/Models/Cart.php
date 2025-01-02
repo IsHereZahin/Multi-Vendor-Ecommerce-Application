@@ -9,10 +9,8 @@ class Cart extends Model
 {
     use HasFactory;
 
-    // Table name (optional, if it deviates from convention)
     protected $table = 'carts';
 
-    // Mass-assignable attributes
     protected $fillable = [
         'product_id',
         'user_id',
@@ -20,40 +18,24 @@ class Cart extends Model
         'color',
         'size',
     ];
-
-    /**
-     * Relationships
-     */
-
-    // A cart item belongs to a product
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
 
-    // A cart item belongs to a user
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
-    /**
-     * Accessors & Mutators
-     */
-
-    // Example accessor for formatted quantity
-    public function getFormattedQuantityAttribute()
+    public function getTotal()
     {
-        return $this->quantity . ' pcs';
-    }
-
-    /**
-     * Scopes
-     */
-
-    // Scope to filter cart items by user
-    public function scopeForUser($query, $userId)
-    {
-        return $query->where('user_id', $userId);
+        return $this->with('product')
+            ->where('user_id', auth()->id())
+            ->get()
+            ->sum(function ($cartItem) {
+                $product = $cartItem->product;
+                $productPrice = $product->discount_price ? $product->discount_price : $product->selling_price;
+                return $productPrice * $cartItem->quantity;
+            });
     }
 }

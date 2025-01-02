@@ -206,26 +206,26 @@ Route::middleware(['auth', 'role:vendor'])->group(function () {
     });
 });
 
-// Add routes for cart
+// Cart and Wishlist Routes
 Route::middleware('auth')->group(function () {
-    Route::get('/cart/index', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
-    Route::get('/cart/data', [CartController::class, 'getCartData'])->name('cart.data');
-    Route::get('/minicart/product/remove/{id}', [CartController::class, 'removeItem'])->name('minicart.remove');
-    Route::get('/cart/clear', [CartController::class, 'clearCart'])->name('cart.clear');
-    Route::post('/cart/increment/{id}', [CartController::class, 'CartIncrement'])->name('cart.increment');
-    Route::post('/cart/decrement/{id}', [CartController::class, 'CartDecrement'])->name('cart.decrement');
-    Route::patch('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
-});
+    Route::controller(CartController::class)->group(function () {
+        Route::get('/cart/index', 'index')->name('cart.index');
+        Route::post('/cart/add', 'addToCart')->name('cart.add');
+        Route::get('/cart/data', 'getCartData')->name('cart.data');
+        Route::get('/minicart/product/remove/{id}', 'removeItem')->name('minicart.remove');
+        Route::get('/cart/clear', 'clearCart')->name('cart.clear');
+        Route::post('/cart/increment/{id}', 'CartIncrement')->name('cart.increment');
+        Route::post('/cart/decrement/{id}', 'CartDecrement')->name('cart.decrement');
+        Route::patch('/cart/{id}', 'update')->name('cart.update');
+        Route::post('/coupon-apply', 'CouponApply')->name('coupon.apply');
+        Route::get('/coupon-remove', 'CouponRemove')->name('coupon.remove');
+    });
 
-// Wishlist routes
-Route::middleware(['auth'])->group(function () {
-    Route::post('/wishlist/toggle/{productId}', [WishlistController::class, 'toggleWishlist'])->name('wishlist.toggle');
-    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::controller(WishlistController::class)->group(function () {
+        Route::post('/wishlist/toggle/{productId}', 'toggleWishlist')->name('wishlist.toggle');
+        Route::get('/wishlist', 'index')->name('wishlist.index');
+    });
 });
-
-// web.php
-Route::post('/cart/updateQuantity', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -17,8 +17,8 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/plugins/animate.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/main.css?v=5.3') }}" />
-     <!-- Toaster -->
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
+    <!-- Toaster -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
     <!-- Toaster   -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
@@ -66,23 +66,23 @@
     <!-- Toaster -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
-     @if(Session::has('message'))
-     var type = "{{ Session::get('alert-type','info') }}"
-     switch(type){
-        case 'info':
-        toastr.info(" {{ Session::get('message') }} ");
-        break;
-        case 'success':
-        toastr.success(" {{ Session::get('message') }} ");
-        break;
-        case 'warning':
-        toastr.warning(" {{ Session::get('message') }} ");
-        break;
-        case 'error':
-        toastr.error(" {{ Session::get('message') }} ");
-        break;
-     }
-     @endif
+        @if (Session::has('message'))
+            var type = "{{ Session::get('alert-type', 'info') }}"
+            switch (type) {
+                case 'info':
+                    toastr.info(" {{ Session::get('message') }} ");
+                    break;
+                case 'success':
+                    toastr.success(" {{ Session::get('message') }} ");
+                    break;
+                case 'warning':
+                    toastr.warning(" {{ Session::get('message') }} ");
+                    break;
+                case 'error':
+                    toastr.error(" {{ Session::get('message') }} ");
+                    break;
+            }
+        @endif
     </script>
     <script>
         function addToCart(button, productId) {
@@ -121,7 +121,7 @@
                 type: "POST",
                 data: data,
                 dataType: "json",
-                success: function (response) {
+                success: function(response) {
                     if (response.success) {
                         toastr.success(response.message);
                         updateCartData();
@@ -130,7 +130,7 @@
                     }
                     button.disabled = false;
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     console.error('Error:', xhr.responseText);
                     toastr.error("Something went wrong! Make sure you are logged in.");
                     button.disabled = false;
@@ -165,7 +165,7 @@
                 type: "POST",
                 data: data,
                 dataType: "json",
-                success: function (response) {
+                success: function(response) {
                     if (response.success) {
                         toastr.success(response.message);
                         updateCartData();
@@ -173,7 +173,7 @@
                         toastr.error(response.message);
                     }
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     console.error('Error:', xhr.responseText);
                     toastr.error("Something went wrong! Make sure you are logged in.");
                 }
@@ -193,7 +193,7 @@
                 url: '/cart/add',
                 type: 'POST',
                 data: data,
-                success: function (response) {
+                success: function(response) {
                     if (response.success) {
                         toastr.success(response.message);
                         $('.cart-count').text(response.count);
@@ -202,7 +202,7 @@
                         toastr.error(response.message);
                     }
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     console.error('Error:', xhr.responseText);
                     toastr.error("Something went wrong! Make sure you are logged in.");
                 }
@@ -266,10 +266,24 @@
                     $('.cart-count').text(response.count);
                     $('#cart-count').text(response.count);
 
-                    // Update cart dropdown content
+                    // Handle empty cart case
+                    if (response.cartItems.length === 0) {
+                        $('.cart-dropdown-wrap ul').html('<li>Your cart is empty.</li>');
+                        $('tbody').html(
+                            '<tr><td colspan="8" class="text-center">Your cart is empty.</td></tr>');
+                        $('#subtotal').text('$0.00');
+                        $('#dropdown-total').text('$0.00');
+                        $('#summaryDiscountAmount').text('$0.00');
+                        $('.finalTotal').text('$0.00');
+                        $('#couponSection').html('');
+                        return;
+                    }
+
+                    // Update mini-cart dropdown content
                     let cartHtml = '';
                     response.cartItems.forEach(item => {
-                        let subtotal = (item.product.selling_price - item.product.discount_price) * item.quantity;
+                        let subtotal = (item.product.selling_price - item.product.discount_price) * item
+                            .quantity;
                         let baseUrl = window.location.origin;
                         cartHtml += `
                             <li>
@@ -281,17 +295,16 @@
                                     <h4><span>${item.quantity} × </span>$${(item.product.selling_price - item.product.discount_price)}</h4>
                                 </div>
                                 <div class="shopping-cart-delete">
-                                    <a href="javascript:void(0);" class="text-body" onclick="miniCartRemove(${item.id})">
+                                    <a href="javascript:void(0);" class="text-body" onclick="CartRemove(${item.id})">
                                         <i class="fi-rs-cross-small"></i>
                                     </a>
                                 </div>
                             </li>
                         `;
                     });
-
                     $('.cart-dropdown-wrap ul').html(cartHtml);
 
-                    // Update cart table content
+                    // Update main cart table content
                     let cartTableHtml = '';
                     response.cartItems.forEach(item => {
                         let amount = item.product.selling_price - item.product.discount_price;
@@ -299,33 +312,20 @@
                         let baseUrl = window.location.origin;
                         cartTableHtml += `
                             <tr class="pt-30">
-                                <!-- Product Image Column -->
                                 <td class="image product-thumbnail p-2 pt-40">
                                     <img src="${baseUrl}/${item.product.product_thumbnail}" class="p-2" alt="${item.product.product_name}">
                                 </td>
-
-                                <!-- Product Name and Rating Column -->
                                 <td class="product-des product-name">
                                     <h6 class="mb-5">
                                         <a class="product-name mb-10 text-heading" href="/product-details/${item.product.id}/${item.product.product_slug}">
                                             ${item.product.product_name}
                                         </a>
                                     </h6>
-                                    <div class="product-rate-cover">
-                                        <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width:${item.product.rating * 10}%"></div>
-                                        </div>
-                                        <span class="font-small ml-5 text-muted">(${item.product.rating})</span>
-                                    </div>
                                 </td>
-
-                                <!-- Price Column -->
                                 <td class="price" data-title="Price">
                                     <h4 class="text-brand">$${amount}</h4>
                                 </td>
-
-                                <!-- Quantity Column -->
-                                <td class="text-center detail-info" data-title="Stock">
+                                <td class="detail-info" data-title="Stock">
                                     <div class="detail-extralink mr-15">
                                         <div class="detail-qty border radius">
                                             <a href="javascript:void(0);" class="qty-up" onclick="incrementQuantity(${item.id});">
@@ -338,37 +338,52 @@
                                         </div>
                                     </div>
                                 </td>
-
-                                <!-- Subtotal Column -->
                                 <td class="price subtotal" data-title="Total" id="subtotal-${item.id}">
                                     <h4 class="text-brand">$${subtotal}</h4>
                                 </td>
-
-                                <!-- Color Column -->
                                 <td class="text-center" data-title="Color">
                                     <span class="text-muted">${item.color ?? '-'}</span>
                                 </td>
-
-                                <!-- Size Column -->
                                 <td class="text-center" data-title="Size">
                                     <span class="text-muted">${item.size ?? '-'}</span>
                                 </td>
-
-                                <!-- Remove Column -->
                                 <td class="action text-center" data-title="Remove">
-                                    <a href="javascript:void(0);" onclick="miniCartRemove(${item.id})">
+                                    <a href="javascript:void(0);" onclick="CartRemove(${item.id})">
                                         <i class="fi-rs-trash"></i>
                                     </a>
                                 </td>
                             </tr>
                         `;
                     });
-
-                    // Update the cart table with the new HTML content
                     $('tbody').html(cartTableHtml);
 
-                    // Update the total price
-                    $('.shopping-cart-total span').text(`$${response.total}`);
+                    // Update total price in cart table and dropdown
+                    $('#subtotal').text(`$${response.total}`);
+                    $('#dropdown-total').text(`$${response.total}`);
+
+                    // If has coupon
+                    let couponHtml = `
+                        <form action="#" class="d-flex align-items-center gap-2">
+                            <div class="input-group flex-grow-1 mr-2">
+                                <input type="text" class="form-control coupon font-medium" id="coupon_name" placeholder="Enter Your Coupon">
+                            </div>
+                            <button type="button" onclick="applyCoupon()" class="btn btn-success d-flex align-items-center">
+                                <i class="bi bi-check-circle mr-2"></i> Apply
+                            </button>
+                        </form>
+                    `;
+                    $('#couponSection').html(couponHtml);
+
+                    // If a coupon exists in the session, apply it
+                    if (response.coupon) {
+                        $('#coupon_name').val(response.coupon.code); // Pre-fill coupon code
+                        applyCoupon();
+                    } else {
+                        // If no coupon exists, finalTotal = subtotal
+                        let finalTotal = response.total;
+                        $('.finalTotal').text(`$${finalTotal}`);
+                    }
+
                 },
                 error: function(xhr, status, error) {
                     console.error('Error fetching cart data:', xhr.responseText);
@@ -376,8 +391,49 @@
             });
         }
 
+        function applyCoupon() {
+            let couponName = $('#coupon_name').val();
+            $.ajax({
+                url: "/coupon-apply",
+                type: "POST",
+                data: {
+                    coupon_name: couponName,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.validity) {
+                        updateCartSection(response);
+                        toastr.success(response.message, 'Success');
+                    } else {
+                        toastr.error(response.message, 'Error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error applying coupon:', xhr.responseText);
+                    toastr.error('Something went wrong. Please try again.', 'Error');
+                }
+            });
+        }
+
+        function updateCartSection(response) {
+            $('#subtotal').text('$' + response.cartTotal.toFixed(2));
+
+            if (response.discount_amount > 0) {
+                $('#couponDiscountSection').show();
+                $('#summaryDiscountAmount').text('-$' + response.discount_amount.toFixed(2));
+                $('#summaryDiscountPercent').text('-' + response.discount_percent + '%');
+                $('#discountAmount').text('-$' + response.discount_amount.toFixed(2));
+                $('#totalAmount').text('$' + response.total_amount.toFixed(2));
+                $('.couponCode').text(response.coupon_code);
+            } else {
+                $('#couponDiscountSection').hide();
+            }
+
+            $('.finalTotal').text('$' + response.total_amount.toFixed(2));
+        }
+
         // Function to remove an item from the mini cart via AJAX
-        function miniCartRemove(itemId) {
+        function CartRemove(itemId) {
             $.ajax({
                 type: 'GET',
                 url: '/minicart/product/remove/' + itemId,
@@ -406,7 +462,7 @@
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content'),
                 },
-                success: function (response) {
+                success: function(response) {
                     if ($.isEmptyObject(response.error)) {
                         toastr[response.warning ? 'warning' : 'success'](response.success);
                         updateWishlistButton(productId, response.isRemoved);
@@ -415,7 +471,7 @@
                         toastr.error(response.error);
                     }
                 },
-                error: function () {
+                error: function() {
                     toastr.error("Something went wrong. Please try again.");
                 }
             });
@@ -445,6 +501,26 @@
             $('.wishlist_button .pro-count').text(count);
             $('.mb-50 .text-brand').text(count);
         }
+
+        // Remove Coupon Function
+        function removeCoupon() {
+            $.ajax({
+                url: '/coupon-remove',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    updateCartSection(response);
+                    toastr.success('Coupon removed successfully!', 'Success');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error removing coupon:', xhr.responseText);
+                    toastr.error('Something went wrong. Please try again.', 'Error');
+                }
+            });
+        }
     </script>
 </body>
+
 </html>
