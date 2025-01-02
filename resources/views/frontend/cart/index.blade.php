@@ -328,7 +328,7 @@
                             </span>
                         </div>
 
-                        <a href="#" class="btn btn-primary w-100 fs-5">
+                        <a href="{{ route('checkout') }}" class="btn btn-primary w-100 fs-5">
                             Proceed to Checkout <i class="fi-rs-sign-out ml-2"></i>
                         </a>
                     </div>

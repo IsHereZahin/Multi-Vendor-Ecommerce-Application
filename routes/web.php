@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('frontend.index');
-});
+})->name('home');
 
 // Product View Details Route
 Route::get('/product-details/{id}/{slug}', [IndexController::class, 'ProductDetails'])->name('product.details');
@@ -219,6 +219,9 @@ Route::middleware('auth')->group(function () {
         Route::patch('/cart/{id}', 'update')->name('cart.update');
         Route::post('/coupon-apply', 'CouponApply')->name('coupon.apply');
         Route::post('/coupon-remove', 'CouponRemove')->name('coupon.remove');
+
+    // Check-Out route
+    Route::get('/checkout', 'checkout')->name('checkout');
     });
 
     Route::controller(WishlistController::class)->group(function () {
