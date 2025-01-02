@@ -416,8 +416,18 @@
         }
 
         function updateCartSection(response) {
+            // Reset previous coupon data
+            $('#couponDiscountSection').hide();
+            $('#summaryDiscountAmount').text('$0.00');
+            $('#summaryDiscountPercent').text('-0%');
+            $('#discountAmount').text('$0.00');
+            $('#totalAmount').text('$' + response.cartTotal.toFixed(2));  // Show initial total without coupon
+            $('.couponCode').text('N/A');
+
+            // Update subtotal
             $('#subtotal').text('$' + response.cartTotal.toFixed(2));
 
+            // Show discount if it exists
             if (response.discount_amount > 0) {
                 $('#couponDiscountSection').show();
                 $('#summaryDiscountAmount').text('-$' + response.discount_amount.toFixed(2));
@@ -425,10 +435,9 @@
                 $('#discountAmount').text('-$' + response.discount_amount.toFixed(2));
                 $('#totalAmount').text('$' + response.total_amount.toFixed(2));
                 $('.couponCode').text(response.coupon_code);
-            } else {
-                $('#couponDiscountSection').hide();
             }
 
+            // Update final total (with or without discount)
             $('.finalTotal').text('$' + response.total_amount.toFixed(2));
         }
 

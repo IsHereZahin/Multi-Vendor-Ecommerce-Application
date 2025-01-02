@@ -258,7 +258,7 @@
         <div class="row mt-5">
             <!-- Left Column: Coupon Section -->
             <div class="col-lg-5">
-                <div class="coupon-section p-4 border rounded shadow-sm">
+                <div class="coupon-section p-4">
                     <h4 class="mb-4 font-weight-bold">Apply Coupon</h4>
                     <p class="mb-3 text-muted font-lg">Have a Promo Code?</p>
                     <form action="#" class="d-flex align-items-center gap-2">
@@ -269,7 +269,7 @@
                         </div>
                         <!-- Apply Button -->
                         <button type="button" onclick="applyCoupon()" class="btn btn-success d-flex align-items-center">
-                            <i class="bi bi-check-circle mr-2"></i> Apply
+                            <i class="fi-rs-label mr-10"></i> Apply
                         </button>
                     </form>
 
@@ -288,7 +288,7 @@
             <!-- Right Column: Cart Summary -->
             <div class="col-lg-7">
                 <div class="card border shadow-sm">
-                    <div class="card-body">
+                    <div class="card-body p-4">
                         <h5 class="card-title mb-4 fs-4">Order Summary</h5>
 
                         <!-- Subtotal Section -->
