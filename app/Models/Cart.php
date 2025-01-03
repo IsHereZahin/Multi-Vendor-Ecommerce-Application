@@ -20,13 +20,14 @@ class Cart extends Model
     ];
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Product::class);
     }
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
     public function getTotal()
     {
         return $this->with('product')

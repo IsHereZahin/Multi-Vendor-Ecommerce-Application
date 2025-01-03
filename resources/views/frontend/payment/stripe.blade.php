@@ -129,6 +129,15 @@
                             <label for="card-element">
                                 Credit or Debit Card
                             </label>
+                            <input type="hidden" name="name" value="{{ $shippingDetails['shipping_name'] }}">
+                            <input type="hidden" name="email" value="{{ $shippingDetails['shipping_email'] }}">
+                            <input type="hidden" name="phone" value="{{ $shippingDetails['shipping_phone'] }}">
+                            <input type="hidden" name="post_code" value="{{ $shippingDetails['shipping_post_code'] }}">
+                            <input type="hidden" name="division_id" value="{{ $shippingDetails['shipping_division'] }}">
+                            <input type="hidden" name="district_id" value="{{ $shippingDetails['shipping_district'] }}">
+                            <input type="hidden" name="state_id" value="{{ $shippingDetails['shipping_state'] }}">
+                            <input type="hidden" name="address" value="{{ $shippingDetails['shipping_full_address'] }}">
+                            <input type="hidden" name="notes" value="{{ $shippingDetails['shipping_notes'] }}">
                             <div id="card-element">
                                 <!-- A Stripe Element will be inserted here. -->
                             </div>
@@ -150,7 +159,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Initialize Stripe
-            var stripe = Stripe('pk_test_51Qd87wEaVIXahkGH7n836x40faXeyayjGiRoBu4MdLBFBmOClQVooRbLXJytz2cNcWtldToK5FFDROSGhgCOurDT007c2J8oNT'); // Publishable key
+            var stripe = Stripe("{{ env('STRIPE_PUBLIC_KEY') }}"); // Use the public key from .env
             var elements = stripe.elements();
 
             // Custom styling for the card element

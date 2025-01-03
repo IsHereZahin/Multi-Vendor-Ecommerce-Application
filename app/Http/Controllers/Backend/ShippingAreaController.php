@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Cart;
 use App\Models\ShipDistrict;
 use App\Models\ShipDivision;
 use App\Models\ShipState;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 
 class ShippingAreaController extends Controller
 {
