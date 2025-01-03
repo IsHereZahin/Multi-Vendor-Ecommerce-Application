@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\ShipDistrict;
 use App\Models\ShipDivision;
 use App\Models\ShipState;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class ShippingAreaController extends Controller
 {
@@ -201,5 +203,11 @@ class ShippingAreaController extends Controller
             'message' => 'State deleted successfully',
             'alert-type' => 'success',
         ]);
+    }
+
+    public function getStates($district_id)
+    {
+        $states = ShipState::where('district_id', $district_id)->get();
+        return response()->json(['states' => $states]);
     }
 }

@@ -14,7 +14,9 @@ use App\Http\Controllers\Backend\ShippingAreaController;
 use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\User\StripeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
 use App\Http\Middleware\RedirectIfAuthenticated;
@@ -167,7 +169,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         // State routes
         Route::get('all/state', 'AllState')->name('all.state');
-        Route::get('/get-districts/{division_id}','getDistricts');
         Route::post('store/state', 'StoreState')->name('store.state');
         Route::put('/state/update/{id}', 'UpdateState')->name('update.state');
         Route::delete('/state/delete/{id}', 'DeleteState')->name('delete.state');
@@ -188,7 +189,7 @@ Route::middleware(['auth', 'role:vendor'])->group(function () {
     Route::post('/vendor/profile/update', [VendorController::class, 'VendorProfileUpdate'])->name('vendor.profile.update');
 
     Route::middleware(['status:active'])->group(function () {
-        // Product All Route
+        // Vendor Manage Route
         Route::controller(VendorProductController::class)->group(function(){
             Route::get('/vendor/all/product' , 'VendorAllProduct')->name('vendor.all.product');
             Route::get('/vendor/add/product' , 'VendorAddProduct')->name('vendor.add.product');
@@ -219,14 +220,28 @@ Route::middleware('auth')->group(function () {
         Route::patch('/cart/{id}', 'update')->name('cart.update');
         Route::post('/coupon-apply', 'CouponApply')->name('coupon.apply');
         Route::post('/coupon-remove', 'CouponRemove')->name('coupon.remove');
-
-    // Check-Out route
-    Route::get('/checkout', 'checkout')->name('checkout');
     });
 
     Route::controller(WishlistController::class)->group(function () {
         Route::post('/wishlist/toggle/{productId}', 'toggleWishlist')->name('wishlist.toggle');
         Route::get('/wishlist', 'index')->name('wishlist.index');
+    });
+
+    // Get shipping address
+    Route::controller(ShippingAreaController::class)->group(function () {
+        Route::get('/get-districts/{division_id}', 'getDistricts');
+        Route::get('/get-states/{district_id}', 'getStates');
+    });
+
+    // Check-Out route
+    Route::controller(CheckoutController::class)->group(function () {
+        Route::get('/checkout', 'checkout')->name('checkout');
+        Route::post('/checkout/store', 'CheckoutStore')->name('checkout.store');
+    });
+
+    // Check-Out route
+    Route::controller(StripeController::class)->group(function () {
+        Route::post('/stripe/order', 'StripeOrder')->name('stripe.order');
     });
 });
 

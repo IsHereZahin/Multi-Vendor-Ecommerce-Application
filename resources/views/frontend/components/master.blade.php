@@ -65,6 +65,10 @@
 
     <!-- Toaster -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- Stripe -->
+    <script src="https://js.stripe.com/v3/"></script>
+
     <script>
         @if (Session::has('message'))
             var type = "{{ Session::get('alert-type', 'info') }}"

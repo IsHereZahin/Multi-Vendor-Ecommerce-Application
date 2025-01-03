@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Cart;
 use App\Models\Coupon;
+use App\Models\ShipDivision;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
@@ -310,42 +311,5 @@ class CartController extends Controller
         }
 
         return response()->json(['success' => false]);
-    }
-
-    // Check Out Module
-    public function checkout(Request $request)
-    {
-        // Check if the cart is empty
-        $cartItems = Cart::where('user_id', auth()->id())->get();
-
-        if ($cartItems->isEmpty()) {
-            session()->flash('message', 'Your cart is empty. Please add at least one item to checkout.');
-            session()->flash('alert-type', 'info');
-            return redirect()->route('home');
-        }
-
-        // Check if a color and size are selected for items that require them
-        foreach ($cartItems as $cartItem) {
-            if (($cartItem->product->product_color && !$cartItem->color) || ($cartItem->product->product_size && !$cartItem->size)) {
-                session()->flash('message', 'Please select a color and size for all applicable items.');
-                session()->flash('alert-type', 'error');
-                return redirect()->route('cart.index');
-            }
-        }
-
-        // Calculate the total amount
-        $total = $cartItems->sum(function ($item) {
-            return ($item->product->selling_price - $item->product->discount_price) * $item->quantity;
-        });
-
-        $finalTotal = $total;
-
-        // Apply the coupon discount if a valid coupon is present in the session
-        if (Session::has('coupon')) {
-            $coupon = session('coupon');
-            $finalTotal = $total - (($total * $coupon['discount']) / 100);
-        }
-
-        return view('frontend.cart.checkout', compact('cartItems', 'total', 'finalTotal'));
     }
 }
