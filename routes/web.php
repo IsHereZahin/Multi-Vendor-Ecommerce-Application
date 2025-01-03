@@ -16,7 +16,7 @@ use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\User\StripeController;
+use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
 use App\Http\Middleware\RedirectIfAuthenticated;
@@ -74,12 +74,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/inactive/vendor', [AdminController::class, 'InactiveVendor'])->name('inactive.vendor');
     Route::get('/inactive/vendor/details/{id}', [AdminController::class, 'InactiveVendorDetails'])->name('inactive.vendor.details');
     Route::post('/active/vendor/approve', [AdminController::class, 'ActiveVendorApprove'])->name('active.vendor.approve');
-    Route::get('/active/vendor' , [AdminController::class, 'ActiveVendor'])->name('active.vendor');
-    Route::get('/active/vendor/details/{id}' , [AdminController::class, 'ActiveVendorDetails'])->name('active.vendor.details');
-    Route::post('/inactive/vendor/approve' , [AdminController::class, 'InActiveVendorApprove'])->name('inactive.vendor.approve');
+    Route::get('/active/vendor', [AdminController::class, 'ActiveVendor'])->name('active.vendor');
+    Route::get('/active/vendor/details/{id}', [AdminController::class, 'ActiveVendorDetails'])->name('active.vendor.details');
+    Route::post('/inactive/vendor/approve', [AdminController::class, 'InActiveVendorApprove'])->name('inactive.vendor.approve');
 
     // Brand routes
-    Route::controller(BrandController::class)->group(function() {
+    Route::controller(BrandController::class)->group(function () {
         Route::get('all/brand', 'AllBrand')->name('all.brand');
         Route::get('add/brand', 'AddBrand')->name('add.brand');
         Route::post('store/brand', 'StoreBrand')->name('store.brand');
@@ -89,7 +89,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     });
 
     // Category routes
-    Route::controller(CategoryController::class)->group(function() {
+    Route::controller(CategoryController::class)->group(function () {
         Route::get('all/category', 'AllCategory')->name('all.category');
         Route::get('add/category', 'AddCategory')->name('add.category');
         Route::post('store/category', 'StoreCategory')->name('store.category');
@@ -99,24 +99,24 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     });
 
     // Sub Category routes
-    Route::controller(SubCategoryController::class)->group(function() {
+    Route::controller(SubCategoryController::class)->group(function () {
         Route::get('all/subcategory', 'AllSubCategory')->name('all.subcategory');
         Route::get('add/subcategory', 'AddSubCategory')->name('add.subcategory');
         Route::post('store/subcategory', 'StoreSubCategory')->name('store.subcategory');
         Route::get('/edit/subcategory/{id}', 'EditSubCategory')->name('edit.subcategory');
         Route::put('/subcategory/{id}', 'UpdateSubCategory')->name('update.subcategory');
         Route::delete('/subcategory/delete/{id}', 'DeleteSubCategory')->name('delete.subcategory');
-        Route::get('/get-subcategories/{categoryId}' , 'getSubcategories')->name('get.Subcategories');
+        Route::get('/get-subcategories/{categoryId}', 'getSubcategories')->name('get.Subcategories');
     });
 
-     // Product All Route
-    Route::controller(ProductController::class)->group(function(){
-        Route::get('/all/product' , 'AllProduct')->name('all.product');
-        Route::get('/add/product' , 'AddProduct')->name('add.product');
-        Route::post('/store/product' , 'StoreProduct')->name('store.product');
-        Route::get('/product/edit/{id}' , 'EditProduct')->name('edit.product');
-        Route::post('/product/update/{id}' , 'updateProduct')->name('update.product');
-        Route::get('/product/delete/{id}' , 'DeleteProduct')->name('delete.product');
+    // Product All Route
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('/all/product', 'AllProduct')->name('all.product');
+        Route::get('/add/product', 'AddProduct')->name('add.product');
+        Route::post('/store/product', 'StoreProduct')->name('store.product');
+        Route::get('/product/edit/{id}', 'EditProduct')->name('edit.product');
+        Route::post('/product/update/{id}', 'updateProduct')->name('update.product');
+        Route::get('/product/delete/{id}', 'DeleteProduct')->name('delete.product');
 
         // Improved route naming conventions
         Route::post('/product/inactive/approve', 'InactiveProductApprove')->name('inactive.product.approve');
@@ -125,7 +125,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 
     // Home Slider routes
-    Route::controller(SliderController::class)->group(function() {
+    Route::controller(SliderController::class)->group(function () {
         Route::get('all/slider', 'AllSlider')->name('all.slider');
         Route::get('add/slider', 'AddSlider')->name('add.slider');
         Route::post('store/slider', 'StoreSlider')->name('store.slider');
@@ -135,7 +135,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     });
 
     // Banner routes
-    Route::controller(BannerController::class)->group(function() {
+    Route::controller(BannerController::class)->group(function () {
         Route::get('all/banner', 'AllBanner')->name('all.banner');
         Route::get('add/banner', 'AddBanner')->name('add.banner');
         Route::post('store/banner', 'StoreBanner')->name('store.banner');
@@ -158,7 +158,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         // Division routes
         Route::get('all/division', 'AllDivision')->name('all.division');
         Route::post('store/division', 'StoreDivision')->name('store.division');
-        Route::put('/division/update/{id}','UpdateDivision')->name('update.division');
+        Route::put('/division/update/{id}', 'UpdateDivision')->name('update.division');
         Route::delete('division/delete/{id}', 'DeleteDivision')->name('delete.division');
 
         // District routes
@@ -190,15 +190,15 @@ Route::middleware(['auth', 'role:vendor'])->group(function () {
 
     Route::middleware(['status:active'])->group(function () {
         // Vendor Manage Route
-        Route::controller(VendorProductController::class)->group(function(){
-            Route::get('/vendor/all/product' , 'VendorAllProduct')->name('vendor.all.product');
-            Route::get('/vendor/add/product' , 'VendorAddProduct')->name('vendor.add.product');
-            Route::post('/vendor/store/product' , 'VendorStoreProduct')->name('vendor.store.product');
-            Route::get('/vendor/product/edit/{id}' , 'VendorEditProduct')->name('vendor.edit.product');
-            Route::post('/vendor/product/update/{id}' , 'VendorUpdateProduct')->name('vendor.update.product');
-            Route::get('/vendor/product/delete/{id}' , 'VendorDeleteProduct')->name('vendor.delete.product');
+        Route::controller(VendorProductController::class)->group(function () {
+            Route::get('/vendor/all/product', 'VendorAllProduct')->name('vendor.all.product');
+            Route::get('/vendor/add/product', 'VendorAddProduct')->name('vendor.add.product');
+            Route::post('/vendor/store/product', 'VendorStoreProduct')->name('vendor.store.product');
+            Route::get('/vendor/product/edit/{id}', 'VendorEditProduct')->name('vendor.edit.product');
+            Route::post('/vendor/product/update/{id}', 'VendorUpdateProduct')->name('vendor.update.product');
+            Route::get('/vendor/product/delete/{id}', 'VendorDeleteProduct')->name('vendor.delete.product');
 
-            Route::get('/vendor/subcategory/ajax/{category_id}' , 'VendorGetSubCategory')->name('vendor.get.subcategory');
+            Route::get('/vendor/subcategory/ajax/{category_id}', 'VendorGetSubCategory')->name('vendor.get.subcategory');
 
             // Improved route naming conventions
             Route::post('/vendor/product/inactive/approve', 'VendorInactiveProductApprove')->name('vendor.inactive.product.approve');
@@ -240,8 +240,9 @@ Route::middleware('auth')->group(function () {
     });
 
     // Check-Out route
-    Route::controller(StripeController::class)->group(function () {
+    Route::controller(PaymentController::class)->group(function () {
         Route::post('/stripe/order', 'StripeOrder')->name('stripe.order');
+        Route::post('/cash-on-delivery/order', 'cashOnDeliveryOrder')->name('cash.on.delivery.order');
     });
 });
 
@@ -251,4 +252,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
