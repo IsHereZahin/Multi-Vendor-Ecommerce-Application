@@ -117,6 +117,18 @@
 					</ul>
 				</li>
 
+				<li class="menu-label">Order</li>
+
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class='bx bx-cart'></i>
+						</div>
+						<div class="menu-title">Order Manage</div>
+					</a>
+					<ul>
+					</ul>
+				</li>
+
                 <li class="menu-label">Shipping Area</li>
                 <li>
                     <a href="javascript:;" class="has-arrow">
