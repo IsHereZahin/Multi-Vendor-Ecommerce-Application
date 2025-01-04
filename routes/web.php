@@ -11,7 +11,7 @@ use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\VendorProductController;
 use App\Http\Controllers\Backend\ShippingAreaController;
-
+use App\Http\Controllers\Backend\VendorOrderController;
 use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\CartController;
@@ -188,6 +188,8 @@ Route::get('/vendor/login', [VendorController::class, 'VendorLogin'])->name('ven
 Route::get('/become/vendor', [VendorController::class, 'BecomeVendor'])->name('become.vendor');
 Route::post('/vendor/register', [VendorController::class, 'VendorRegister'])->name('vendor.register');
 
+
+// Vendor routes
 Route::middleware(['auth', 'role:vendor'])->group(function () {
     Route::get('/vendor/dashboard', [VendorController::class, 'VendorDashboard'])->name('vendor.dashboard');
     Route::get('/vendor/logout', [VendorController::class, 'VendorLogout'])->name('vendor.logout');
@@ -212,6 +214,11 @@ Route::middleware(['auth', 'role:vendor'])->group(function () {
             Route::post('/vendor/product/inactive/approve', 'VendorInactiveProductApprove')->name('vendor.inactive.product.approve');
             Route::post('/vendor/product/active/approve', 'VendorActiveProductApprove')->name('vendor.active.product.approve');
         });
+    });
+
+    // Vendor Order Route
+    Route::controller(VendorOrderController::class)->group(function () {
+        Route::get('/vendor/order/pending', 'VendorPendingOrder')->name('vendor.pending.order');
     });
 });
 
