@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderMail;
 use Carbon\Carbon;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class PaymentController extends Controller
@@ -91,6 +94,25 @@ class PaymentController extends Controller
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
+
+        // Start Send Email
+
+        $invoice = Order::findOrFail($order_id);
+
+        $data = [
+
+            'invoice_no' => $invoice->invoice_no,
+            'amount' => $finalTotal,
+            'name' => $invoice->name,
+            'email' => $invoice->email,
+            'payment_method' => $invoice->payment_method,
+            'shipping_address' => $invoice->address,
+
+        ];
+
+        Mail::to($request->email)->send(new OrderMail($data));
+
+        // End Send Email
 
         foreach ($cartItems as $item) {
             OrderItem::insert([
@@ -182,6 +204,25 @@ class PaymentController extends Controller
             'updated_at' => Carbon::now(),
         ]);
 
+        // Start Send Email
+
+        $invoice = Order::findOrFail($order_id);
+
+        $data = [
+
+            'invoice_no' => $invoice->invoice_no,
+            'amount' => $finalTotal,
+            'name' => $invoice->name,
+            'email' => $invoice->email,
+            'payment_method' => 'Cash On Delivery',
+            'shipping_address' => $invoice->address,
+
+        ];
+
+        Mail::to($request->email)->send(new OrderMail($data));
+
+        // End Send Email
+
         foreach ($cartItems as $item) {
             OrderItem::insert([
                 'order_id' => $order_id,
@@ -211,6 +252,4 @@ class PaymentController extends Controller
 
         return redirect()->route('home');
     }
-
-
 }

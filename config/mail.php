@@ -8,8 +8,9 @@ return [
     |--------------------------------------------------------------------------
     |
     | This option controls the default mailer that is used to send any email
-    | messages sent by your application. Alternative mailers may be setup
-    | and used as needed; however, this mailer will be used by default.
+    | messages sent by your application. You may set this to any of the
+    | mailers defined in the "mailers" array below. A "log" mailer is
+    | available to log email messages instead of sending them.
     |
     */
 
@@ -25,19 +26,18 @@ return [
     | you and you are free to add your own as your application requires.
     |
     | Laravel supports a variety of mail "transport" drivers to be used while
-    | sending an e-mail. You will specify which one you are using for your
+    | sending an email. You will specify which one you are using for your
     | mailers below. You are free to add additional mailers as required.
     |
-    | Supported: "smtp", "sendmail", "mailgun", "ses", "ses-v2",
-    |            "postmark", "log", "array", "failover", "roundrobin"
+    | Supported: "smtp", "sendmail", "mailgun", "ses",
+    |            "postmark", "log", "array", "failover"
     |
     */
 
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'url' => env('MAIL_URL'),
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
+            'host' => env('MAIL_HOST', 'smtp.mailtrap.io'),
             'port' => env('MAIL_PORT', 587),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'username' => env('MAIL_USERNAME'),
@@ -50,24 +50,17 @@ return [
             'transport' => 'ses',
         ],
 
-        'postmark' => [
-            'transport' => 'postmark',
-            // 'message_stream_id' => null,
-            // 'client' => [
-            //     'timeout' => 5,
-            // ],
-        ],
-
         'mailgun' => [
             'transport' => 'mailgun',
-            // 'client' => [
-            //     'timeout' => 5,
-            // ],
+        ],
+
+        'postmark' => [
+            'transport' => 'postmark',
         ],
 
         'sendmail' => [
             'transport' => 'sendmail',
-            'path' => env('MAIL_SENDMAIL_PATH', '/usr/sbin/sendmail -bs -i'),
+            'path' => env('MAIL_SENDMAIL_PATH', '/usr/sbin/sendmail -bs'),
         ],
 
         'log' => [
@@ -86,14 +79,6 @@ return [
                 'log',
             ],
         ],
-
-        'roundrobin' => [
-            'transport' => 'roundrobin',
-            'mailers' => [
-                'ses',
-                'postmark',
-            ],
-        ],
     ],
 
     /*
@@ -103,7 +88,7 @@ return [
     |
     | You may wish for all e-mails sent by your application to be sent from
     | the same address. Here, you may specify a name and address that is
-    | used globally for all e-mails that are sent by your application.
+    | used globally for all e-mails sent by your application.
     |
     */
 
