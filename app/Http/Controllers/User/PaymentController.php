@@ -115,6 +115,12 @@ class PaymentController extends Controller
         // End Send Email
 
         foreach ($cartItems as $item) {
+            $item_finalPrice = $item->product->selling_price;
+
+            if ($item->product->discount_price) {
+                $item_finalPrice -= $item->product->discount_price;
+            }
+
             OrderItem::insert([
                 'order_id' => $order_id,
                 'product_id' => $item->product->id,
@@ -122,7 +128,7 @@ class PaymentController extends Controller
                 'color' => $item->color ?? null,
                 'size' => $item->size ?? null,
                 'qty' => $item->quantity,
-                'price' => $item->product->selling_price,
+                'price' => $item_finalPrice,
                 'created_at' => Carbon::now(),
             ]);
         }
@@ -224,6 +230,12 @@ class PaymentController extends Controller
         // End Send Email
 
         foreach ($cartItems as $item) {
+            $item_finalPrice = $item->product->selling_price;
+
+            if ($item->product->discount_price) {
+                $item_finalPrice -= $item->product->discount_price;
+            }
+
             OrderItem::insert([
                 'order_id' => $order_id,
                 'product_id' => $item->product->id,
@@ -231,7 +243,7 @@ class PaymentController extends Controller
                 'color' => $item->color ?? null,
                 'size' => $item->size ?? null,
                 'qty' => $item->quantity,
-                'price' => $item->product->selling_price,
+                'price' => $item_finalPrice,
                 'created_at' => Carbon::now(),
             ]);
         }

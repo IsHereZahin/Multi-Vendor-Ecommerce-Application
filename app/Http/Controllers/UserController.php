@@ -24,6 +24,20 @@ class UserController extends Controller
         return view('user.orders', compact('orders'));
     }
 
+    public function UserOrderDetails($invoice_id)
+    {
+        $order = Order::with(['orderItems', 'orderItems.product', 'state', 'district', 'division'])
+        ->where('invoice_no', $invoice_id)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if (!$order) {
+            return redirect()->route('user.orders')->with('alert-type', 'error')->with('message', 'Order not found!');
+        }
+
+        return view('user.order_details', compact('order'));
+    }
+
     public function UserTrackOrders()
     {
         return view('user.track-orders');

@@ -33,7 +33,7 @@
                             <td>{{ $order->payment_method }}</td>
                             <td>${{ number_format($order->amount, 2) }}</td>
                             <td>
-                                <a href="" class="btn btn-primary btn-sm">
+                                <a href="{{ route('user.order.details', $order->invoice_no) }}" class="btn btn-primary btn-sm">
                                     <i class="bi bi-eye"></i> View
                                 </a>
                                 <a href="" class="btn btn-secondary btn-sm">
