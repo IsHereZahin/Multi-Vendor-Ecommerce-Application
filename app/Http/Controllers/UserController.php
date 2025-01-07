@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,30 @@ class UserController extends Controller
     {
         $id = Auth::user()->id;
         $userdata = User::find($id);
-        return view('user.user_dashboard', compact('id', 'userdata'));
+        return view('user.dashboard', compact('id', 'userdata'));
+    }
+
+    public function UserOrders()
+    {
+        $id = Auth::user()->id;
+        $orders = Order::where('user_id', $id)->latest()->get();
+        return view('user.orders', compact('orders'));
+    }
+
+    public function UserTrackOrders()
+    {
+        return view('user.track-orders');
+    }
+
+    public function UserAccountDetails()
+    {
+        $userdata = auth()->user();
+        return view('user.account-details', compact('userdata'));
+    }
+
+    public function UserChangePassword()
+    {
+        return view('user.change-password');
     }
 
     public function UserProfileUpdate(Request $request)

@@ -56,9 +56,18 @@ Route::get('/brand/{id}', [App\Http\Controllers\Frontend\BrandController::class,
 
 // User routes
 Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/dashboard', [UserController::class, 'UserDashboard'])->name('dashboard');
-    Route::post('/user/profile/update', [UserController::class, 'UserProfileUpdate'])->name('user.profile.update');
-    Route::post('/user/password/update', [UserController::class, 'UserPasswordUpdate'])->name('user.password.update');
+    Route::controller(UserController::class)->group(function () {
+        // Dashboard and Profile Update Routes
+        Route::get('/dashboard', 'UserDashboard')->name('dashboard');
+        Route::post('/user/profile/update', 'UserProfileUpdate')->name('user.profile.update');
+        Route::post('/user/password/update', 'UserPasswordUpdate')->name('user.password.update');
+
+        // Additional User Routes
+        Route::get('/orders', 'UserOrders')->name('user.orders');
+        Route::get('/track-orders', 'UserTrackOrders')->name('user.track.orders');
+        Route::get('/account-details', 'UserAccountDetails')->name('user.account.details');
+        Route::get('/change-password', 'UserChangePassword')->name('user.change.password');
+    });
 });
 
 // Admin routes
