@@ -80,25 +80,30 @@ class UserController extends Controller
         // Validation
         $request->validate([
             'old_password' => ['required'],
-            'new_password' => ['required','string','min:8', 'confirmed'],
+            'new_password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
         // Match Password
         if (!Hash::check($request->old_password, auth::user()->password)) {
-            return back()->with("error", "Old Password Doesn't Match!!!");
+            return back()->with('alert-type', 'error')->with('message', "Old Password Doesn't Match!!!");
+        }
+
+        // If the new password is same as the old one, don't update
+        if ($request->old_password == $request->new_password) {
+            return back()->with('alert-type', 'warning')->with('message', "New Password cannot be the same as the old password!");
         }
 
         // Update Password
-        User::whereId(auth()->user()->id)->update([
+        $updateStatus = User::whereId(auth()->user()->id)->update([
             'password' => Hash::make($request->new_password)
         ]);
 
-        $notification = array(
-            'alert-type' =>'success',
-            'message' => 'Profile Updated Successfully!'
-        );
-
-        return back()->with($notification, "status", "Password Updated Successfully");
+        // Check if password was updated successfully
+        if ($updateStatus) {
+            return back()->with('alert-type', 'success')->with('message', 'Password Updated Successfully!');
+        } else {
+            return back()->with('alert-type', 'error')->with('message', 'Failed to update the password. Please try again.');
+        }
     }
 
     /**
