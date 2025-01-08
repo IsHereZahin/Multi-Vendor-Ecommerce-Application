@@ -120,15 +120,55 @@
             </ul>
         </li>
 
+        @php
+        use App\Models\Order;
+
+        $counts = [
+            'pending' => Order::where('status', 'pending')->count(),
+            'confirm' => Order::where('status', 'confirm')->count(),
+            'processing' => Order::where('status', 'processing')->count(),
+            'picked' => Order::where('status', 'picked')->count(),
+            'shipped' => Order::where('status', 'shipped')->count(),
+            'delivered' => Order::where('status', 'delivered')->count(),
+            'completed' => Order::where('status', 'completed')->count(),
+            'returned' => Order::where('status', 'returned')->count(),
+            'canceled' => Order::where('status', 'canceled')->count(),
+        ];
+        @endphp
+
         <li class="menu-label">Order</li>
         <li>
             <a href="javascript:;" class="has-arrow">
-                <div class="parent-icon"><i class='bx bx-cart'></i>
-                </div>
+                <div class="parent-icon"><i class='bx bx-cart'></i></div>
                 <div class="menu-title">Order Manage</div>
             </a>
             <ul>
-                <li> <a href="{{ route('pending.order') }}"><i class="bx bx-right-arrow-alt"></i>Pending Order</a>
+                <li><a href="{{ route('admin.orders.by.status', ['status' => 'pending']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Pending Orders <span>({{ $counts['pending'] }})</span></a>
+                </li>
+                <li><a href="{{ route('admin.orders.by.status', ['status' => 'confirm']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Confirmed Orders <span>({{ $counts['confirm'] }})</span></a>
+                </li>
+                <li><a href="{{ route('admin.orders.by.status', ['status' => 'processing']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Processing Orders <span>({{ $counts['processing'] }})</span></a>
+                </li>
+                <li><a href="{{ route('admin.orders.by.status', ['status' => 'picked']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Picked Orders <span>({{ $counts['picked'] }})</span></a>
+                </li>
+                <li><a href="{{ route('admin.orders.by.status', ['status' => 'shipped']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Shipped Orders <span>({{ $counts['shipped'] }})</span></a>
+                </li>
+                <li><a href="{{ route('admin.orders.by.status', ['status' => 'delivered']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Delivered Orders <span>({{ $counts['delivered'] }})</span></a>
+                </li>
+                <li><a href="{{ route('admin.orders.by.status', ['status' => 'completed']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Completed Orders <span>({{ $counts['completed'] }})</span></a>
+                </li>
+                <li><a href="{{ route('admin.orders.by.status', ['status' => 'returned']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Returned Orders <span>({{ $counts['returned'] }})</span></a>
+                </li>
+                <li><a href="{{ route('admin.orders.by.status', ['status' => 'canceled']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Canceled Orders <span>({{ $counts['canceled'] }})</span></a>
                 </li>
             </ul>
         </li>

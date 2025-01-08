@@ -26,7 +26,7 @@
                 </div>
                 <hr>
                 <div class="card-body">
-                    <table class="table" style="background:#F4F6FA; font-weight: 600;">
+                    <table class="table" style="font-weight: 600;">
                         <tr>
                             <th>Shipping Name:</th>
                             <td>{{ $order->name }}</td>
@@ -76,7 +76,7 @@
                 </div>
                 <hr>
                 <div class="card-body">
-                    <table class="table" style="background:#F4F6FA; font-weight: 600;">
+                    <table class="table" style="font-weight: 600;">
                         <tr>
                             <th>Name:</th>
                             <td>{{ $order->user->name }}</td>
@@ -102,20 +102,76 @@
                             <td>${{ $order->amount }}</td>
                         </tr>
                         <tr>
-                            <th>Order Status:</th>
-                            <td>
-                                <span class="badge bg-danger" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th></th>
+                            <th>Order Status and Date-Time:</th>
                             <td>
                                 @if($order->status == 'pending')
-                                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmOrderModal">Confirm Order</button>
+                                    <span class="badge bg-warning" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+                                    <span class="text-muted">{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y, H:i') }}</span>
                                 @elseif($order->status == 'confirm')
-                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#processingOrderModal">Processing Order</button>
+                                    <span class="badge bg-primary" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+                                    <span class="text-muted">{{ $order->confirmed_date ? \Carbon\Carbon::parse($order->confirmed_date)->format('d M Y, H:i') : 'Not confirmed yet' }}</span>
                                 @elseif($order->status == 'processing')
-                                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#deliveredOrderModal">Delivered Order</button>
+                                    <span class="badge bg-info" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+                                    <span class="text-muted">{{ $order->processing_date ? \Carbon\Carbon::parse($order->processing_date)->format('d M Y, H:i') : 'Not processed yet' }}</span>
+                                @elseif($order->status == 'picked')
+                                    <span class="badge bg-secondary" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+                                    <span class="text-muted">{{ $order->picked_date ? \Carbon\Carbon::parse($order->picked_date)->format('d M Y, H:i') : 'Not picked yet' }}</span>
+                                @elseif($order->status == 'shipped')
+                                    <span class="badge bg-success" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+                                    <span class="text-muted">{{ $order->shipped_date ? \Carbon\Carbon::parse($order->shipped_date)->format('d M Y, H:i') : 'Not shipped yet' }}</span>
+                                @elseif($order->status == 'delivered')
+                                    <span class="badge bg-dark" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+                                    <span class="text-muted">{{ $order->delivered_date ? \Carbon\Carbon::parse($order->delivered_date)->format('d M Y, H:i') : 'Not delivered yet' }}</span>
+                                @elseif($order->status == 'canceled')
+                                    <span class="badge bg-danger" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+                                    <span class="text-muted">{{ $order->canceled_date ? \Carbon\Carbon::parse($order->canceled_date)->format('d M Y, H:i') : 'Not canceled yet' }}</span>
+                                @elseif($order->status == 'returned')
+                                    <span class="badge bg-warning text-dark" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+                                    <span class="text-muted">{{ $order->returned_date ? \Carbon\Carbon::parse($order->returned_date)->format('d M Y, H:i') : 'Not returned yet' }}</span>
+                                @endif
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Action:</th>
+                            <td>
+                                @if($order->status == 'pending')
+                                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#orderActionModal"
+                                        data-status="confirm"
+                                        data-message="Are you sure you want to confirm this order?"
+                                        data-action="{{ route('admin.confirmed.order', $order->id) }}">Confirm Order</button>
+                                @elseif($order->status == 'confirm')
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderActionModal"
+                                        data-status="processing"
+                                        data-message="Are you sure you want to mark this order as processing?"
+                                        data-action="{{ route('admin.processing.order', $order->id) }}">Processing Order</button>
+                                @elseif($order->status == 'processing')
+                                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#orderActionModal"
+                                        data-status="picked"
+                                        data-message="Are you sure you want to mark this order as picked?"
+                                        data-action="{{ route('admin.picked.order', $order->id) }}">Picked Order</button>
+                                @elseif($order->status == 'picked')
+                                    <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#orderActionModal"
+                                        data-status="shipped"
+                                        data-message="Are you sure you want to mark this order as shipped?"
+                                        data-action="{{ route('admin.shipped.order', $order->id) }}">Shipped Order</button>
+                                @elseif($order->status == 'shipped')
+                                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#orderActionModal"
+                                        data-status="delivered"
+                                        data-message="Are you sure you want to mark this order as delivered?"
+                                        data-action="{{ route('admin.delivered.order', $order->id) }}">Delivered Order</button>
+                                @elseif($order->status == 'delivered')
+                                    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#orderActionModal"
+                                        data-status="completed"
+                                        data-message="Are you sure you want to complete this order?"
+                                        data-action="{{ route('admin.completed.order', $order->id) }}">Complete Order</button>
+                                @elseif($order->status == 'canceled')
+                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#orderActionModal"
+                                        data-status="returned"
+                                        data-message="Are you sure you want to return this order?"
+                                        data-action="{{ route('admin.returned.order', $order->id) }}">Return Order</button>
+                                @elseif($order->status == 'returned')
+                                    <button class="btn btn-warning text-dark" disabled>Returned</button>
                                 @endif
                             </td>
                         </tr>
@@ -163,62 +219,48 @@
         </div>
     </div>
 
-    <!-- Modals for Order Actions -->
-    <div class="modal fade" id="confirmOrderModal" tabindex="-1" aria-labelledby="confirmOrderModalLabel" aria-hidden="true">
+    <!-- Modal for Order Actions -->
+    <div class="modal fade" id="orderActionModal" tabindex="-1" aria-labelledby="orderActionModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmOrderModalLabel">Confirm Order</h5>
+                    <h5 class="modal-title" id="orderActionModalLabel">Order Action</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    Are you sure you want to confirm this order?
+                <div class="modal-body" id="orderActionMessage">
+                    Are you sure you want to perform this action on the order?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a href="" class="btn btn-primary">Confirm</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal for Processing Order -->
-    <div class="modal fade" id="processingOrderModal" tabindex="-1" aria-labelledby="processingOrderModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="processingOrderModalLabel">Processing Order</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to mark this order as processing?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a href="" class="btn btn-primary">Process</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal for Delivered Order -->
-    <div class="modal fade" id="deliveredOrderModal" tabindex="-1" aria-labelledby="deliveredOrderModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deliveredOrderModalLabel">Delivered Order</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to mark this order as delivered?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a href="" class="btn btn-primary">Delivered</a>
+                    <a href="#" id="orderActionLink" class="btn btn-primary">Confirm Action</a>
                 </div>
             </div>
         </div>
     </div>
 
 </div>
+
+<script>
+    // Get the modal elements and buttons
+    const orderActionModal = document.getElementById('orderActionModal');
+    const orderActionLink = document.getElementById('orderActionLink');
+    const orderActionMessage = document.getElementById('orderActionMessage');
+
+    // Add event listener to each button
+    orderActionModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+
+        // Get data from the clicked button
+        const status = button.getAttribute('data-status');
+        const message = button.getAttribute('data-message');
+        const actionUrl = button.getAttribute('data-action');
+
+        // Set modal content dynamically
+        orderActionModal.querySelector('.modal-title').textContent = `${status.charAt(0).toUpperCase() + status.slice(1)} Order`;
+        orderActionMessage.textContent = message;
+        orderActionLink.setAttribute('href', actionUrl);
+        orderActionLink.textContent = `Confirm ${status.charAt(0).toUpperCase() + status.slice(1)}`;
+    });
+</script>
+
 @endsection
