@@ -65,6 +65,7 @@ Route::middleware(['auth', 'role:user'])->group(function () {
         // Additional User Routes
         Route::get('/orders', 'UserOrders')->name('user.orders');
         Route::get('/order/{invoice_id}', 'UserOrderDetails')->name('user.order.details');
+        Route::get('/download-invoice/{orderId}', 'DownloadInvoice')->name('order.downloadInvoice');
         Route::get('/track-orders', 'UserTrackOrders')->name('user.track.orders');
         Route::get('/account-details', 'UserAccountDetails')->name('user.account.details');
         Route::get('/change-password', 'UserChangePassword')->name('user.change.password');

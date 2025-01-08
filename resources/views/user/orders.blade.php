@@ -36,7 +36,7 @@
                                 <a href="{{ route('user.order.details', $order->invoice_no) }}" class="btn btn-primary btn-sm">
                                     <i class="bi bi-eye"></i> View
                                 </a>
-                                <a href="" class="btn btn-secondary btn-sm">
+                                <a href="{{ route('order.downloadInvoice', $order->id) }}" class="btn btn-secondary btn-sm">
                                     <i class="bi bi-file-earmark-text"></i> Invoice
                                 </a>
                             </td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +37,31 @@ class UserController extends Controller
         }
 
         return view('user.order_details', compact('order'));
+    }
+
+    public function DownloadInvoice($order_id)
+    {
+        $order = Order::with('division', 'district', 'state', 'user')
+        ->where('id', $order_id)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        $orderItem = OrderItem::with('product')
+        ->where('order_id', $order_id)
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        $pdfContent = view('user.invoice', compact('order', 'orderItem'))->render();
+
+        $pdf = new \Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'format' => 'A4',
+            'tempDir' => public_path(),
+            'chroot' => public_path(),
+        ]);
+
+        $pdf->WriteHTML($pdfContent);
+        return $pdf->Output('invoice.pdf', 'D');
     }
 
     public function UserTrackOrders()

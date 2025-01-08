@@ -29,4 +29,9 @@ class Order extends Model
     {
         return $this->belongsTo(ShipDivision::class, 'division_id');
     }
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
