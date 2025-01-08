@@ -15,7 +15,7 @@
 
         <!-- Header -->
         <div style="background-color: #2d3748; padding: 20px; color: #fff; text-align: center;">
-            <img src="{{ asset('frontend/assets/imgs/theme/favicon.svg') }}" alt="Easy Shop Logo"
+            <img src="{{ asset('frontend/assets/imgs/theme/favicon.svg') }}" alt="Nest Mart Logo"
                 style="width: 80px; margin-bottom: 15px;">
             <h2 style="font-size: 24px; margin: 0;">Thank You for Your Order!</h2>
         </div>
@@ -25,8 +25,8 @@
             <!-- Greeting with Larger Name -->
             <h1 style="color: #4a5568; font-size: 26px; margin-bottom: 5px;">Hello {{ $order['name'] }}!</h1>
             <!-- Email below name in smaller font -->
-            <p style="color: #4a5568; font-size: 14px; margin-bottom: 20px;">Your email: <strong>{{ $order['email']
-                    }}</strong></p>
+            <p style="color: #4a5568; font-size: 14px; margin-bottom: 20px;">Your email:
+                <strong>{{ $order['email'] }}</strong></p>
 
             <p style="color: #2d3748;">We’ve received your order and are currently processing it. Below are your order
                 details:</p>
@@ -35,12 +35,12 @@
             <div style="background-color: #edf2f7; padding: 15px; border-radius: 6px; margin-top: 20px;">
                 <p style="margin: 5px 0; color: #4a5568;"><strong>Invoice Number:</strong> {{ $order['invoice_no'] }}
                 </p>
-                <p style="margin: 5px 0; color: #4a5568;"><strong>Amount:</strong> ${{ number_format($order['amount'],
-                    2) }}</p>
-                <p style="margin: 5px 0; color: #4a5568;"><strong>Payment Method:</strong> {{ $order['payment_method']
-                    }}</p>
-                <p style="margin: 5px 0; color: #4a5568;"><strong>Shipping Address:</strong> {{
-                    $order['shipping_address'] }}</p>
+                <p style="margin: 5px 0; color: #4a5568;"><strong>Amount:</strong>
+                    ${{ number_format($order['amount'], 2) }}</p>
+                <p style="margin: 5px 0; color: #4a5568;"><strong>Payment Method:</strong>
+                    {{ $order['payment_method'] }}</p>
+                <p style="margin: 5px 0; color: #4a5568;"><strong>Shipping Address:</strong>
+                    {{ $order['shipping_address'] }}</p>
             </div>
 
             <!-- Action Button -->
@@ -52,7 +52,7 @@
         <!-- Footer -->
         <div style="background-color: #f1f5f9; text-align: center; padding: 15px; font-size: 12px; color: #718096;">
             <p>If you have any questions, please contact our support team.</p>
-            <p>© 2025 Easy Shop. All rights reserved.</p>
+            <p>© 2025 Nest Mart. All rights reserved.</p>
         </div>
     </div>
 

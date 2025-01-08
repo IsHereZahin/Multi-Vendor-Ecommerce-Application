@@ -153,7 +153,7 @@
 
             <!-- Footer -->
             <div style="text-align: center; color: #718096; font-size: 13px;">
-                <p style="margin: 0;">&copy; {{ date('d F Y') }} Easy Shop. All rights reserved.</p>
+                <p style="margin: 0;">&copy; {{ date('d F Y') }} Nest Mart. All rights reserved.</p>
             </div>
         </div>
     </div>

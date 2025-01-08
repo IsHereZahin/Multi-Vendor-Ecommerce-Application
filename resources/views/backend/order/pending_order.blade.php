@@ -45,7 +45,7 @@
                                     <td> <span class="badge rounded-pill bg-success"> {{ $item->status }}</span></td>
 
                                     <td>
-                                        <a href=" " class="btn btn-info" title="Details"><i class="fa fa-eye"></i>Info</a>
+                                        <a href="{{ route('admin.order.details', $item->id) }}" class="btn btn-info" title="Details"><i class="fa fa-eye"></i>Info</a>
 
                                     </td>
                                 </tr>

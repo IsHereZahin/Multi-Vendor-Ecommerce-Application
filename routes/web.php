@@ -66,6 +66,7 @@ Route::middleware(['auth', 'role:user'])->group(function () {
         Route::get('/orders', 'UserOrders')->name('user.orders');
         Route::get('/order/{invoice_id}', 'UserOrderDetails')->name('user.order.details');
         Route::get('/download-invoice/{orderId}', 'DownloadInvoice')->name('order.downloadInvoice');
+        Route::get('/order-return/{orderId}', 'OrderReturn')->name('user.return.order');
         Route::get('/track-orders', 'UserTrackOrders')->name('user.track.orders');
         Route::get('/account-details', 'UserAccountDetails')->name('user.account.details');
         Route::get('/change-password', 'UserChangePassword')->name('user.change.password');
@@ -135,7 +136,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/product/active/approve', 'ActiveProductApprove')->name('active.product.approve');
     });
 
-
     // Home Slider routes
     Route::controller(SliderController::class)->group(function () {
         Route::get('all/slider', 'AllSlider')->name('all.slider');
@@ -156,6 +156,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::delete('/banner/delete/{id}', 'DeleteBanner')->name('delete.banner');
     });
 
+    // Coupon routes
     Route::controller(CouponController::class)->group(function () {
         Route::get('all/coupon', 'AllCoupon')->name('all.coupon');
         Route::get('add/coupon', 'AddCoupon')->name('add.coupon');
@@ -189,9 +190,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Order routes
     Route::controller(OrderController::class)->group(function () {
         Route::get('/pending/order', 'PendingOrder')->name('pending.order');
+        Route::get('/admin/order/details/{id}', 'AdminOrderDetails')->name('admin.order.details');
     });
-
-    // Coupon routes
 });
 
 // Vendor routes

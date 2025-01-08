@@ -38,7 +38,7 @@
                             <p><strong>Status:</strong>
                                 <span
                                     class="badge
-                                @if ($order->status == 'pending') bg-warning @elseif($order->status == 'completed') bg-success @elseif($order->status == 'canceled') bg-danger
+                                @if ($order->status == 'pending') bg-warning @elseif($order->status == 'completed') bg-success @elseif($order->status == 'canceled') bg-danger @elseif ($order->status == 'delivered') bg-info
                                 @else bg-secondary @endif">
                                     {{ ucfirst($order->status) }}
                                 </span>
@@ -105,7 +105,7 @@
                         <!-- Show coupon message if the order total is less than the original amount -->
                         <p class="text-warning">
                             You may have used a coupon code, as your total is less than the expected amount of
-                            ${{ number_format($orderTotal, 2) }}. 🛍️
+                            ${{ number_format($orderTotal, 2) }}. 🎍️
                         </p>
                     </div>
                 @endif
@@ -114,6 +114,34 @@
                 <div class="mt-4">
                     <a href="{{ route('user.orders') }}" class="btn btn-primary">Back to Orders</a>
                 </div>
+
+                <!-- Section: Return Order Form -->
+                @if ($order->status == 'delivered')
+                    <div class="return-order-section mt-4">
+                        <h6 class="fw-bold">Return Order</h6>
+                        <form action="{{ route('user.return.order', $order->id) }}" method="POST" class="needs-validation"
+                            validate>
+                            @csrf
+                            <!-- Return Reason Field -->
+                            <div class="form-group mb-3">
+                                <label for="return_reason" class="form-label">Reason for Return:</label>
+                                <textarea name="return_reason" id="return_reason" class="form-control" style="min-height: 150px;" rows="3"
+                                    placeholder="Enter the reason for return..." required></textarea>
+                                <div class="invalid-feedback">
+                                    Please provide a reason for your return.
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button type="submit" class="btn btn-danger d-flex align-items-center">
+                                    <i class="bi bi-arrow-repeat me-2"></i> Submit Return Request
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                @endif
+
             </div>
         </div>
     </div>
