@@ -17,6 +17,18 @@
 
     <hr/>
 
+    <!-- Return Request Section -->
+    @if ($order->return_reason)
+        <div class="alert alert-warning">
+            <strong>Return Request:</strong> This order has a return request. Reason: {{ $order->return_reason }}
+        </div>
+        @if ($order->return_date)
+            <div class="alert alert-success">
+                <strong>Return Accepted:</strong> The return request was accepted on {{ $order->return_date }}.
+            </div>
+        @endif
+    @endif
+
     <div class="row row-cols-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2">
         <!-- Shipping Details Section -->
         <div class="col">
@@ -101,80 +113,86 @@
                             <th>Order Amount:</th>
                             <td>${{ $order->amount }}</td>
                         </tr>
-                        <tr>
-                            <th>Order Status and Date-Time:</th>
-                            <td>
-                                @if($order->status == 'pending')
-                                    <span class="badge bg-warning" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
-                                    <span class="text-muted">{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y, H:i') }}</span>
-                                @elseif($order->status == 'confirm')
-                                    <span class="badge bg-primary" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
-                                    <span class="text-muted">{{ $order->confirmed_date ? \Carbon\Carbon::parse($order->confirmed_date)->format('d M Y, H:i') : 'Not confirmed yet' }}</span>
-                                @elseif($order->status == 'processing')
-                                    <span class="badge bg-info" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
-                                    <span class="text-muted">{{ $order->processing_date ? \Carbon\Carbon::parse($order->processing_date)->format('d M Y, H:i') : 'Not processed yet' }}</span>
-                                @elseif($order->status == 'picked')
-                                    <span class="badge bg-secondary" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
-                                    <span class="text-muted">{{ $order->picked_date ? \Carbon\Carbon::parse($order->picked_date)->format('d M Y, H:i') : 'Not picked yet' }}</span>
-                                @elseif($order->status == 'shipped')
-                                    <span class="badge bg-success" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
-                                    <span class="text-muted">{{ $order->shipped_date ? \Carbon\Carbon::parse($order->shipped_date)->format('d M Y, H:i') : 'Not shipped yet' }}</span>
-                                @elseif($order->status == 'delivered')
-                                    <span class="badge bg-dark" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
-                                    <span class="text-muted">{{ $order->delivered_date ? \Carbon\Carbon::parse($order->delivered_date)->format('d M Y, H:i') : 'Not delivered yet' }}</span>
-                                @elseif($order->status == 'canceled')
-                                    <span class="badge bg-danger" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
-                                    <span class="text-muted">{{ $order->canceled_date ? \Carbon\Carbon::parse($order->canceled_date)->format('d M Y, H:i') : 'Not canceled yet' }}</span>
-                                @elseif($order->status == 'returned')
-                                    <span class="badge bg-warning text-dark" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
-                                    <span class="text-muted">{{ $order->returned_date ? \Carbon\Carbon::parse($order->returned_date)->format('d M Y, H:i') : 'Not returned yet' }}</span>
-                                @endif
-                            </td>
-                        </tr>
+<tr>
+    <th>Order Status and Date-Time:</th>
+    <td>
+        @if($order->status == 'pending')
+            <span class="badge bg-warning" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+            <span class="text-muted">{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y, H:i') }}</span>
+        @elseif($order->status == 'confirm')
+            <span class="badge bg-primary" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+            <span class="text-muted">{{ $order->confirmed_date ? \Carbon\Carbon::parse($order->confirmed_date)->format('d M Y, H:i') : 'Not confirmed yet' }}</span>
+        @elseif($order->status == 'processing')
+            <span class="badge bg-info" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+            <span class="text-muted">{{ $order->processing_date ? \Carbon\Carbon::parse($order->processing_date)->format('d M Y, H:i') : 'Not processed yet' }}</span>
+        @elseif($order->status == 'picked')
+            <span class="badge bg-secondary" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+            <span class="text-muted">{{ $order->picked_date ? \Carbon\Carbon::parse($order->picked_date)->format('d M Y, H:i') : 'Not picked yet' }}</span>
+        @elseif($order->status == 'shipped')
+            <span class="badge bg-success" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+            <span class="text-muted">{{ $order->shipped_date ? \Carbon\Carbon::parse($order->shipped_date)->format('d M Y, H:i') : 'Not shipped yet' }}</span>
+        @elseif($order->status == 'delivered')
+            <span class="badge bg-dark" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+            <span class="text-muted">{{ $order->delivered_date ? \Carbon\Carbon::parse($order->delivered_date)->format('d M Y, H:i') : 'Not delivered yet' }}</span>
+        @elseif($order->status == 'canceled')
+            <span class="badge bg-danger" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+            <span class="text-muted">{{ $order->canceled_date ? \Carbon\Carbon::parse($order->canceled_date)->format('d M Y, H:i') : 'Not canceled yet' }}</span>
+        @elseif($order->status == 'returned')
+            <span class="badge bg-warning text-dark" style="font-size: 15px;">{{ ucfirst($order->status) }}</span>
+            <span class="text-muted">{{ $order->returned_date ? \Carbon\Carbon::parse($order->returned_date)->format('d M Y, H:i') : 'Not returned yet' }}</span>
+        @endif
+    </td>
+</tr>
 
-                        <tr>
-                            <th>Action:</th>
-                            <td>
-                                @if($order->status == 'pending')
-                                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#orderActionModal"
-                                        data-status="confirm"
-                                        data-message="Are you sure you want to confirm this order?"
-                                        data-action="{{ route('admin.confirmed.order', $order->id) }}">Confirm Order</button>
-                                @elseif($order->status == 'confirm')
-                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderActionModal"
-                                        data-status="processing"
-                                        data-message="Are you sure you want to mark this order as processing?"
-                                        data-action="{{ route('admin.processing.order', $order->id) }}">Processing Order</button>
-                                @elseif($order->status == 'processing')
-                                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#orderActionModal"
-                                        data-status="picked"
-                                        data-message="Are you sure you want to mark this order as picked?"
-                                        data-action="{{ route('admin.picked.order', $order->id) }}">Picked Order</button>
-                                @elseif($order->status == 'picked')
-                                    <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#orderActionModal"
-                                        data-status="shipped"
-                                        data-message="Are you sure you want to mark this order as shipped?"
-                                        data-action="{{ route('admin.shipped.order', $order->id) }}">Shipped Order</button>
-                                @elseif($order->status == 'shipped')
-                                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#orderActionModal"
-                                        data-status="delivered"
-                                        data-message="Are you sure you want to mark this order as delivered?"
-                                        data-action="{{ route('admin.delivered.order', $order->id) }}">Delivered Order</button>
-                                @elseif($order->status == 'delivered')
-                                    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#orderActionModal"
-                                        data-status="completed"
-                                        data-message="Are you sure you want to complete this order?"
-                                        data-action="{{ route('admin.completed.order', $order->id) }}">Complete Order</button>
-                                @elseif($order->status == 'canceled')
-                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#orderActionModal"
-                                        data-status="returned"
-                                        data-message="Are you sure you want to return this order?"
-                                        data-action="{{ route('admin.returned.order', $order->id) }}">Return Order</button>
-                                @elseif($order->status == 'returned')
-                                    <button class="btn btn-warning text-dark" disabled>Returned</button>
-                                @endif
-                            </td>
-                        </tr>
+<tr>
+    <th>Action:</th>
+    <td>
+        @if ($order->return_reason)
+            <form action="{{ route('admin.return.accept', $order->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to confirm this return request?');">
+                @csrf
+                <button type="submit" class="btn btn-success" data-status="confirm"
+                    data-message="Are you sure you want to confirm this return request?">Accept Return</button>
+            </form>
+        @elseif($order->status == 'pending')
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#orderActionModal"
+                data-status="confirm"
+                data-message="Are you sure you want to confirm this order?"
+                data-action="{{ route('admin.confirmed.order', $order->id) }}">Confirm Order</button>
+        @elseif($order->status == 'confirm')
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderActionModal"
+                data-status="processing"
+                data-message="Are you sure you want to mark this order as processing?"
+                data-action="{{ route('admin.processing.order', $order->id) }}">Processing Order</button>
+        @elseif($order->status == 'processing')
+            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#orderActionModal"
+                data-status="picked"
+                data-message="Are you sure you want to mark this order as picked?"
+                data-action="{{ route('admin.picked.order', $order->id) }}">Picked Order</button>
+        @elseif($order->status == 'picked')
+            <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#orderActionModal"
+                data-status="shipped"
+                data-message="Are you sure you want to mark this order as shipped?"
+                data-action="{{ route('admin.shipped.order', $order->id) }}">Shipped Order</button>
+        @elseif($order->status == 'shipped')
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#orderActionModal"
+                data-status="delivered"
+                data-message="Are you sure you want to mark this order as delivered?"
+                data-action="{{ route('admin.delivered.order', $order->id) }}">Delivered Order</button>
+        @elseif($order->status == 'delivered')
+            <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#orderActionModal"
+                data-status="completed"
+                data-message="Are you sure you want to complete this order?"
+                data-action="{{ route('admin.completed.order', $order->id) }}">Complete Order</button>
+        @elseif($order->status == 'canceled')
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#orderActionModal"
+                data-status="returned"
+                data-message="Are you sure you want to return this order?"
+                data-action="{{ route('admin.returned.order', $order->id) }}">Return Order</button>
+        @elseif($order->status == 'returned')
+            <button class="btn btn-warning text-dark" disabled>Returned</button>
+        @endif
+    </td>
+</tr>
                     </table>
                 </div>
             </div>

@@ -121,19 +121,20 @@
         </li>
 
         @php
-        use App\Models\Order;
+            use App\Models\Order;
 
-        $counts = [
-            'pending' => Order::where('status', 'pending')->count(),
-            'confirm' => Order::where('status', 'confirm')->count(),
-            'processing' => Order::where('status', 'processing')->count(),
-            'picked' => Order::where('status', 'picked')->count(),
-            'shipped' => Order::where('status', 'shipped')->count(),
-            'delivered' => Order::where('status', 'delivered')->count(),
-            'completed' => Order::where('status', 'completed')->count(),
-            'returned' => Order::where('status', 'returned')->count(),
-            'canceled' => Order::where('status', 'canceled')->count(),
-        ];
+            $counts = [
+                'pending' => Order::where('status', 'pending')->count(),
+                'confirm' => Order::where('status', 'confirm')->count(),
+                'processing' => Order::where('status', 'processing')->count(),
+                'picked' => Order::where('status', 'picked')->count(),
+                'shipped' => Order::where('status', 'shipped')->count(),
+                'delivered' => Order::where('status', 'delivered')->count(),
+                'completed' => Order::where('status', 'completed')->count(),
+                'returned' => Order::where('status', 'returned')->count(),
+                'canceled' => Order::where('status', 'canceled')->count(),
+                'return_requests' => Order::whereNotNull('return_reason')->whereIn('status', ['delivered', 'returned'])->count(),
+            ];
         @endphp
 
         <li class="menu-label">Order</li>
@@ -169,6 +170,9 @@
                 </li>
                 <li><a href="{{ route('admin.orders.by.status', ['status' => 'canceled']) }}">
                     <i class="bx bx-right-arrow-alt"></i>Canceled Orders <span>({{ $counts['canceled'] }})</span></a>
+                </li>
+                <li><a href="{{ route('admin.orders.by.status', ['status' => 'return_requests']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Return Requests <span>({{ $counts['return_requests'] }})</span></a>
                 </li>
             </ul>
         </li>

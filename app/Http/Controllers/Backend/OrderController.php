@@ -9,14 +9,22 @@ use Illuminate\Support\Carbon;
 
 class OrderController extends Controller
 {
-    public function OrdersByStatus($status)
+    public function OrdersByStatus($status = null)
     {
-        $validStatuses = ['pending', 'confirm', 'processing', 'picked', 'shipped', 'delivered', 'completed', 'returned', 'canceled'];
+        $validStatuses = ['pending', 'confirm', 'processing', 'picked', 'shipped', 'delivered', 'completed', 'returned', 'canceled', 'return_requests'];
 
-        if (!in_array($status, $validStatuses)) {
-            return redirect()->route('dashboard')->with('error', 'Invalid order status.');
+        // If an invalid status is provided, redirect with an error
+        if ($status && !in_array($status, $validStatuses)) {
+            return redirect()->route('admin.dashboard')->with('error', 'Invalid order status.');
         }
-        $orders = Order::where('status', $status)->orderBy('id', 'DESC')->get();
+
+        // Filter based on status
+        $orders = Order::when($status === 'return_requests', function ($query) {
+            $query->whereNotNull('return_reason')->where('status', 'delivered')
+                ->orWhere('status', 'returned');
+        })->when($status && $status !== 'return_requests', function ($query) use ($status) {
+            $query->where('status', $status);
+        })->orderBy('id', 'DESC')->get();
 
         return view('backend.order.orders_by_status', compact('orders', 'status'));
     }
@@ -129,6 +137,15 @@ class OrderController extends Controller
         return redirect()->route('admin.orders.by.status', ['status' => 'shipped'])
         ->with('alert-type', 'error')
         ->with('message', 'Order must be shipped before being marked as delivered.');
+    }
+
+    public function acceptReturn(Order $order)
+    {
+        $order->status = 'returned';
+        $order->return_date = now();
+        $order->save();
+
+        return redirect()->back()->with('success', 'Return request accepted.');
     }
 
     ////////////////////////////////////// User //////////////////////////////////

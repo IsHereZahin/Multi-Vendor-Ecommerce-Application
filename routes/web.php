@@ -189,7 +189,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Order routes
     Route::controller(OrderController::class)->group(function () {
-        Route::get('/orders/{status}', [OrderController::class, 'OrdersByStatus'])->name('admin.orders.by.status');
+        Route::get('/orders/{status}', 'OrdersByStatus')->name('admin.orders.by.status');
         Route::get('/admin/order/details/{id}', 'AdminOrderDetails')->name('admin.order.details');
 
         // status updates
@@ -198,9 +198,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/picked/order/{id}', 'AdminPickedOrder')->name('admin.picked.order');
         Route::get('/admin/shipped/order/{id}', 'AdminShippedOrder')->name('admin.shipped.order');
         Route::get('/admin/delivered/order/{id}', 'AdminDeliveredOrder')->name('admin.delivered.order');
-        Route::get('/admin/completed/order/{id}', 'AdminCompletedOrder')->name('admin.completed.order');
-        Route::get('/admin/canceled/order/{id}', 'AdminCanceledOrder')->name('admin.canceled.order');
-        Route::get('/admin/returned/order/{id}', 'AdminReturnedOrder')->name('admin.returned.order');
+        Route::post('admin/orders/{order}/return-accept', 'acceptReturn')->name('admin.return.accept');
     });
 });
 
