@@ -18,11 +18,57 @@ class UserController extends Controller
         return view('user.dashboard', compact('id', 'userdata'));
     }
 
-    public function UserOrders()
+    public function UserOrders($status = null)
     {
         $id = Auth::user()->id;
-        $orders = Order::where('user_id', $id)->latest()->get();
-        return view('user.orders', compact('orders'));
+
+        // Filter orders by status if provided, otherwise fetch all
+        if ($status === 'returns') {
+            // Show orders that have 'return_reason' and 'returned' status
+            $orders = Order::where('user_id', $id)
+                ->where('status', 'returned')
+                ->whereNotNull('return_reason')
+                ->latest()
+                ->get();
+        } elseif ($status === 'return_requests') {
+            // Show orders that have 'return_reason' and 'delivered' status
+            $orders = Order::where('user_id', $id)
+                ->where('status', 'delivered')
+                ->whereNotNull('return_reason')
+                ->latest()
+                ->get();
+        } elseif ($status === 'pending') {
+            // Include 'pending', 'confirm', 'processing', 'picked', and 'shipped' statuses in the "pending" category
+            $orders = Order::where('user_id', $id)
+                ->whereIn('status', ['pending', 'confirm', 'processing', 'picked', 'shipped'])
+                ->latest()
+                ->get();
+        } else {
+            // Fetch orders based on the provided status, or all if no status is specified
+            $orders = Order::where('user_id', $id)
+                ->when($status, function ($query) use ($status) {
+                    $query->where('status', $status);
+                })
+                ->latest()
+                ->get();
+        }
+
+        return view('user.orders', compact('orders', 'status'));
+    }
+
+    public function returnOrder(Request $request, $id)
+    {
+        $order = Order::where('id', $id)->where('user_id', Auth::id())->first();
+
+        if (!$order || $order->status != 'delivered') {
+            return redirect()->route('user.orders')->with('alert-type', 'error')->with('message', 'Invalid order!');
+        }
+
+        $order->update([
+            'return_reason' => $request->return_reason,
+        ]);
+
+        return redirect()->route('user.orders')->with('alert-type', 'success')->with('message', 'Return request submitted successfully!');
     }
 
     public function UserOrderDetails($invoice_id)

@@ -130,4 +130,28 @@ class OrderController extends Controller
         ->with('alert-type', 'error')
         ->with('message', 'Order must be shipped before being marked as delivered.');
     }
+
+    ////////////////////////////////////// User //////////////////////////////////
+    public function cancelOrder($id)
+    {
+        $order = Order::find($id);
+
+        if (!$order) {
+            return redirect()->route('user.orders')->with('alert-type', 'error')->with('message', 'Order not found!');
+        }
+
+        if ($order->user_id !== auth()->id()) {
+            return redirect()->route('user.orders')->with('alert-type', 'error')->with('message', 'Unauthorized action!');
+        }
+
+        if (!in_array($order->status, ['pending', 'processing', 'picked'])) {
+            return redirect()->route('user.orders')->with('alert-type', 'error')->with('message', 'Order cannot be canceled!');
+        }
+
+        $order->status = 'canceled';
+        $order->cancel_date = now();
+        $order->save();
+
+        return redirect()->route('user.orders')->with('alert-type', 'success')->with('message', 'Order canceled successfully!');
+    }
 }
