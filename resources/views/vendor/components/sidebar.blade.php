@@ -1,7 +1,56 @@
 @php
 	$id = Auth::user()->id;
-	$verdorId = App\Models\User::find($id);
-	$status = $verdorId->status;
+    $vendor = App\Models\User::find($id);
+    $verdorId = $vendor;
+	$status = $vendor->status;
+    $status = $vendor->status;
+
+    use App\Models\OrderItem;
+
+    // Fetch order counts specific to the authenticated vendor
+    $counts = [
+        'pending' => OrderItem::where('vendor_id', $id)
+            ->whereHas('order', function ($query) {
+                $query->where('status', 'pending');
+            })->count(),
+        'confirm' => OrderItem::where('vendor_id', $id)
+            ->whereHas('order', function ($query) {
+                $query->where('status', 'confirm');
+            })->count(),
+        'processing' => OrderItem::where('vendor_id', $id)
+            ->whereHas('order', function ($query) {
+                $query->where('status', 'processing');
+            })->count(),
+        'picked' => OrderItem::where('vendor_id', $id)
+            ->whereHas('order', function ($query) {
+                $query->where('status', 'picked');
+            })->count(),
+        'shipped' => OrderItem::where('vendor_id', $id)
+            ->whereHas('order', function ($query) {
+                $query->where('status', 'shipped');
+            })->count(),
+        'delivered' => OrderItem::where('vendor_id', $id)
+            ->whereHas('order', function ($query) {
+                $query->where('status', 'delivered');
+            })->count(),
+        'completed' => OrderItem::where('vendor_id', $id)
+            ->whereHas('order', function ($query) {
+                $query->where('status', 'completed');
+            })->count(),
+        'returned' => OrderItem::where('vendor_id', $id)
+            ->whereHas('order', function ($query) {
+                $query->whereNotNull('return_date');
+            })->count(),
+        'canceled' => OrderItem::where('vendor_id', $id)
+            ->whereHas('order', function ($query) {
+                $query->where('status', 'canceled');
+            })->count(),
+        'return_requests' => OrderItem::where('vendor_id', $id)
+            ->whereHas('order', function ($query) {
+                $query->whereNotNull('return_reason')
+                    ->whereNull('return_date');
+            })->count(),
+    ];
 @endphp
 
 <!--sidebar wrapper -->
@@ -39,21 +88,45 @@
 			</ul>
 		</li>
 
-        {{-- Order --}}
-		<li class="menu-label">Order</li>
-		<li>
-			<a href="javascript:;" class="has-arrow">
-				<div class="parent-icon"><i class='bx bx-cart'></i>
-				</div>
-				<div class="menu-title">Order Manage</div>
-			</a>
-			<ul>
-				<li> <a href="{{ route('vendor.pending.order') }}"><i class="bx bx-right-arrow-alt"></i>Pending Order</a>
-				</li>
-			</ul>
-		</li>
-        @else
-
+        <li class="menu-label">Order</li>
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class='bx bx-cart'></i></div>
+                <div class="menu-title">Order Manage</div>
+            </a>
+            <ul>
+                <li><a href="{{ route('vendor.orders.by.status', ['status' => 'pending']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Pending Orders <span>({{ $counts['pending'] }})</span></a>
+                </li>
+                <li><a href="{{ route('vendor.orders.by.status', ['status' => 'confirm']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Confirmed Orders <span>({{ $counts['confirm'] }})</span></a>
+                </li>
+                <li><a href="{{ route('vendor.orders.by.status', ['status' => 'processing']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Processing Orders <span>({{ $counts['processing'] }})</span></a>
+                </li>
+                <li><a href="{{ route('vendor.orders.by.status', ['status' => 'picked']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Picked Orders <span>({{ $counts['picked'] }})</span></a>
+                </li>
+                <li><a href="{{ route('vendor.orders.by.status', ['status' => 'shipped']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Shipped Orders <span>({{ $counts['shipped'] }})</span></a>
+                </li>
+                <li><a href="{{ route('vendor.orders.by.status', ['status' => 'delivered']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Delivered Orders <span>({{ $counts['delivered'] }})</span></a>
+                </li>
+                <li><a href="{{ route('vendor.orders.by.status', ['status' => 'completed']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Completed Orders <span>({{ $counts['completed'] }})</span></a>
+                </li>
+                <li><a href="{{ route('vendor.orders.by.status', ['status' => 'returned']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Returned Orders <span>({{ $counts['returned'] }})</span></a>
+                </li>
+                <li><a href="{{ route('vendor.orders.by.status', ['status' => 'canceled']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Canceled Orders <span>({{ $counts['canceled'] }})</span></a>
+                </li>
+                <li><a href="{{ route('vendor.orders.by.status', ['status' => 'return_requests']) }}">
+                    <i class="bx bx-right-arrow-alt"></i>Return Requests <span>({{ $counts['return_requests'] }})</span></a>
+                </li>
+            </ul>
+        </li>
         @endif
 		<li class="menu-label">Charts</li>
 		<li>

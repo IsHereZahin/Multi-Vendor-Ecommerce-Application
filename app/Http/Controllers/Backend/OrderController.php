@@ -9,7 +9,7 @@ use Illuminate\Support\Carbon;
 
 class OrderController extends Controller
 {
-    public function OrdersByStatus($status = null)
+    public function AdminOrdersByStatus($status = null)
     {
         $validStatuses = ['pending', 'confirm', 'processing', 'picked', 'shipped', 'delivered', 'completed', 'returned', 'canceled', 'return_requests'];
 

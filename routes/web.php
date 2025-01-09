@@ -192,7 +192,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Order routes
     Route::controller(OrderController::class)->group(function () {
-        Route::get('/orders/{status}', 'OrdersByStatus')->name('admin.orders.by.status');
+        Route::get('/orders/{status}', 'AdminOrdersByStatus')->name('admin.orders.by.status');
         Route::get('/admin/order/details/{id}', 'AdminOrderDetails')->name('admin.order.details');
 
         // status updates
@@ -240,7 +240,8 @@ Route::middleware(['auth', 'role:vendor'])->group(function () {
 
     // Vendor Order Route
     Route::controller(VendorOrderController::class)->group(function () {
-        Route::get('/vendor/order/pending', 'VendorPendingOrder')->name('vendor.pending.order');
+        Route::get('/orders/{status}', 'vendorOrdersByStatus')->name('vendor.orders.by.status');
+        Route::get('/vendor/order/details/{id}', 'VendorOrderDetails')->name('vendor.order.details');
     });
 });
 
