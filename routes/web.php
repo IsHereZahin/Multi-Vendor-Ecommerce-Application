@@ -66,7 +66,10 @@ Route::middleware(['auth', 'role:user'])->group(function () {
         Route::get('/user/orders/{status?}', 'UserOrders')->name('user.orders');
         Route::get('/order/{invoice_id}', 'UserOrderDetails')->name('user.order.details');
         Route::get('/download-invoice/{orderId}', 'DownloadInvoice')->name('order.downloadInvoice');
+
+        Route::post('/user/order/cancel/{id}','cancelOrder')->name('user.cancel.order');
         Route::post('/order/return/{id}', 'returnOrder')->name('user.return.order');
+
         Route::get('/track-orders', 'UserTrackOrders')->name('user.track.orders');
         Route::get('/account-details', 'UserAccountDetails')->name('user.account.details');
         Route::get('/change-password', 'UserChangePassword')->name('user.change.password');
@@ -277,10 +280,6 @@ Route::middleware('auth')->group(function () {
     Route::controller(PaymentController::class)->group(function () {
         Route::post('/stripe/order', 'StripeOrder')->name('stripe.order');
         Route::post('/cash-on-delivery/order', 'cashOnDeliveryOrder')->name('cash.on.delivery.order');
-    });
-
-    Route::middleware(['auth'])->group(function () {
-        Route::post('/user/order/cancel/{id}', [OrderController::class, 'cancelOrder'])->name('user.cancel.order');
     });
 });
 

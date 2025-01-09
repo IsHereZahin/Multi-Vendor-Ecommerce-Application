@@ -18,7 +18,7 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="orderActionsMenu">
                         <!-- Cancel Order Option -->
-                        @if (in_array($order->status, ['pending', 'processing', 'picked']))
+                        @if (in_array($order->status, ['pending','confirm' ,'processing', 'picked']))
                             <li>
                                 <button class="dropdown-item text-danger" data-bs-toggle="modal"
                                     data-bs-target="#cancelOrderModal">
@@ -137,11 +137,35 @@
                             <p><strong>Order Date:</strong> {{ $order->order_date }}</p>
                             <!-- Highlighting status with different colors -->
                             <p><strong>Status:</strong>
-                                <span
-                                    class="badge
-                                @if ($order->status == 'pending') bg-warning @elseif($order->status == 'completed') bg-success @elseif($order->status == 'canceled') bg-danger @elseif ($order->status == 'delivered') bg-info
-                                @else bg-secondary @endif">
+                                <span class="badge
+                                        @if ($order->status == 'pending') bg-warning
+                                        @elseif($order->status == 'completed') bg-success
+                                        @elseif($order->status == 'canceled') bg-danger
+                                        @elseif($order->status == 'delivered') bg-info
+                                        @else bg-secondary
+                                        @endif">
                                     {{ ucfirst($order->status) }}
+                                </span>
+                                <span style="background: #20c997; color: white; padding: 2px;">
+                                    @php
+                                        // Dynamically get the date field based on the status
+                                        $dateField = match ($order->status) {
+                                            'pending' => null,
+                                            'confirm' => $order->confirmed_date,
+                                            'processing' => $order->processing_date,
+                                            'picked' => $order->picked_date,
+                                            'shipped' => $order->shipped_date,
+                                            'delivered' => $order->delivered_date,
+                                            'canceled' => $order->cancel_date,
+                                            'returned' => $order->return_date,
+                                            default => null,
+                                        };
+                                    @endphp
+
+                                    {{-- Show the date if available --}}
+                                    @if ($dateField)
+                                        <small>{{ $dateField }}</small>
+                                    @endif
                                 </span>
                             </p>
                         </div>

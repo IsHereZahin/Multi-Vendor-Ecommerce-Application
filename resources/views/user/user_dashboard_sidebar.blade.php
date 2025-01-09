@@ -15,10 +15,10 @@
 
                 // Count orders based on their status and return_reason
                 $pendingCount = $orders->whereIn('status', ['pending', 'confirm', 'processing', 'picked', 'shipped'])->count();
-                $canceledCount = $orders->where('status', 'canceled')->count();
-                $deliveredCount = $orders->where('status', 'delivered')->count();
-                $returnRequestsCount = $orders->where('status', 'delivered')->whereNotNull('return_reason')->count(); // Delivered orders with return reason
-                $returnsCount = $orders->where('status', 'returned')->whereNotNull('return_reason')->count(); // Returned orders with return reason
+                $canceledCount = $orders->where('status', 'canceled')->whereNotNull('cancel_date')->count();
+                $deliveredCount = $orders->where('status', 'delivered')->whereNull('return_reason')->whereNull('return_date')->count();
+                $returnRequestsCount = $orders->whereNotNull('return_reason')->whereNull('return_date')->count();
+                $returnsCount = $orders->whereNotNull('return_date')->count();
                 $isOrdersActive = request()->routeIs('user.orders') || request()->routeIs('user.orders.*');
             @endphp
 

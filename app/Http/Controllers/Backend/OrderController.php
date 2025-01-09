@@ -20,9 +20,14 @@ class OrderController extends Controller
 
         // Filter based on status
         $orders = Order::when($status === 'return_requests', function ($query) {
-            $query->whereNotNull('return_reason')->where('status', 'delivered')
-                ->orWhere('status', 'returned');
-        })->when($status && $status !== 'return_requests', function ($query) use ($status) {
+            // Orders with return_reason but no return_date (Return Requests)
+            $query->whereNotNull('return_reason')
+                ->whereNull('return_date');
+        })->when($status === 'returned', function ($query) {
+            // Orders with a return_date (Returned Orders)
+            $query->whereNotNull('return_date');
+        })->when($status && !in_array($status, ['return_requests', 'returned']), function ($query) use ($status) {
+            // Other statuses
             $query->where('status', $status);
         })->orderBy('id', 'DESC')->get();
 
@@ -146,29 +151,5 @@ class OrderController extends Controller
         $order->save();
 
         return redirect()->back()->with('success', 'Return request accepted.');
-    }
-
-    ////////////////////////////////////// User //////////////////////////////////
-    public function cancelOrder($id)
-    {
-        $order = Order::find($id);
-
-        if (!$order) {
-            return redirect()->route('user.orders')->with('alert-type', 'error')->with('message', 'Order not found!');
-        }
-
-        if ($order->user_id !== auth()->id()) {
-            return redirect()->route('user.orders')->with('alert-type', 'error')->with('message', 'Unauthorized action!');
-        }
-
-        if (!in_array($order->status, ['pending', 'processing', 'picked'])) {
-            return redirect()->route('user.orders')->with('alert-type', 'error')->with('message', 'Order cannot be canceled!');
-        }
-
-        $order->status = 'canceled';
-        $order->cancel_date = now();
-        $order->save();
-
-        return redirect()->route('user.orders')->with('alert-type', 'success')->with('message', 'Order canceled successfully!');
     }
 }

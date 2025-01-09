@@ -131,9 +131,11 @@
                 'shipped' => Order::where('status', 'shipped')->count(),
                 'delivered' => Order::where('status', 'delivered')->count(),
                 'completed' => Order::where('status', 'completed')->count(),
-                'returned' => Order::where('status', 'returned')->count(),
+                'returned' => Order::whereNotNull('return_date')->count(),
                 'canceled' => Order::where('status', 'canceled')->count(),
-                'return_requests' => Order::whereNotNull('return_reason')->whereIn('status', ['delivered', 'returned'])->count(),
+                'return_requests' => Order::whereNotNull('return_reason')
+                                        ->whereNull('return_date')
+                                        ->count(),
             ];
         @endphp
 

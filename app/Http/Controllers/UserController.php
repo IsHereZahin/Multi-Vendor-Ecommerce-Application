@@ -24,17 +24,24 @@ class UserController extends Controller
 
         // Filter orders by status if provided, otherwise fetch all
         if ($status === 'returns') {
-            // Show orders that have 'return_reason' and 'returned' status
+            // Show orders that have 'return_date' (Completed returns)
             $orders = Order::where('user_id', $id)
-                ->where('status', 'returned')
-                ->whereNotNull('return_reason')
+                ->whereNotNull('return_date')
                 ->latest()
                 ->get();
         } elseif ($status === 'return_requests') {
-            // Show orders that have 'return_reason' and 'delivered' status
+            // Show orders that have 'return_reason' but no 'return_date'
+            $orders = Order::where('user_id', $id)
+                ->whereNotNull('return_reason')
+                ->whereNull('return_date')
+                ->latest()
+                ->get();
+        } elseif ($status === 'delivered') {
+            // Show orders that have 'delivered' status, and both 'return_reason' and 'return_date' (Completed return)
             $orders = Order::where('user_id', $id)
                 ->where('status', 'delivered')
-                ->whereNotNull('return_reason')
+                ->whereNull('return_reason')
+                ->whereNull('return_date')
                 ->latest()
                 ->get();
         } elseif ($status === 'pending') {
@@ -69,6 +76,29 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('user.orders')->with('alert-type', 'success')->with('message', 'Return request submitted successfully!');
+    }
+
+    public function cancelOrder($id)
+    {
+        $order = Order::find($id);
+
+        if (!$order) {
+            return redirect()->route('user.orders')->with('alert-type', 'error')->with('message', 'Order not found!');
+        }
+
+        if ($order->user_id !== auth()->id()) {
+            return redirect()->route('user.orders')->with('alert-type', 'error')->with('message', 'Unauthorized action!');
+        }
+
+        if (!in_array($order->status, ['pending','confirm' ,'processing', 'picked'])) {
+            return redirect()->route('user.orders')->with('alert-type', 'error')->with('message', 'Order cannot be canceled!');
+        }
+
+        $order->status = 'canceled';
+        $order->cancel_date = now();
+        $order->save();
+
+        return redirect()->route('user.orders')->with('alert-type', 'success')->with('message', 'Order canceled successfully!');
     }
 
     public function UserOrderDetails($invoice_id)
@@ -190,61 +220,5 @@ class UserController extends Controller
         } else {
             return back()->with('alert-type', 'error')->with('message', 'Failed to update the password. Please try again.');
         }
-    }
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
