@@ -192,7 +192,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Order routes
     Route::controller(OrderController::class)->group(function () {
-        Route::get('/orders/{status}', 'AdminOrdersByStatus')->name('admin.orders.by.status');
+        Route::get('/admin/orders/{status}', 'AdminOrdersByStatus')->name('admin.orders.by.status');
         Route::get('/admin/order/details/{id}', 'AdminOrderDetails')->name('admin.order.details');
 
         // status updates
@@ -202,6 +202,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/shipped/order/{id}', 'AdminShippedOrder')->name('admin.shipped.order');
         Route::get('/admin/delivered/order/{id}', 'AdminDeliveredOrder')->name('admin.delivered.order');
         Route::post('admin/orders/{order}/return-accept', 'acceptReturn')->name('admin.return.accept');
+
+        // Order Report
+        Route::get('/admin/order/report', 'AdminOrderReport')->name('admin.order.report');
     });
 });
 
@@ -240,7 +243,7 @@ Route::middleware(['auth', 'role:vendor'])->group(function () {
 
     // Vendor Order Route
     Route::controller(VendorOrderController::class)->group(function () {
-        Route::get('/orders/{status}', 'vendorOrdersByStatus')->name('vendor.orders.by.status');
+        Route::get('/vendor/orders/{status}', 'vendorOrdersByStatus')->name('vendor.orders.by.status');
         Route::get('/vendor/order/details/{id}', 'VendorOrderDetails')->name('vendor.order.details');
     });
 });

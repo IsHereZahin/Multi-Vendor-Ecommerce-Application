@@ -124,6 +124,7 @@
             use App\Models\Order;
 
             $counts = [
+                'orders' => Order::count(),
                 'pending' => Order::where('status', 'pending')->count(),
                 'confirm' => Order::where('status', 'confirm')->count(),
                 'processing' => Order::where('status', 'processing')->count(),
@@ -146,6 +147,9 @@
                 <div class="menu-title">Order Manage</div>
             </a>
             <ul>
+                <li><a href="{{ route('admin.order.report') }}">
+                    <i class="bx bx-right-arrow-alt"></i>Orders Report<span>({{ $counts['orders'] }})</span></a>
+                </li>
                 <li><a href="{{ route('admin.orders.by.status', ['status' => 'pending']) }}">
                     <i class="bx bx-right-arrow-alt"></i>Pending Orders <span>({{ $counts['pending'] }})</span></a>
                 </li>

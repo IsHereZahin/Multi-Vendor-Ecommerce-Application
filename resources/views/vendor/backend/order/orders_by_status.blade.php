@@ -45,7 +45,21 @@
                                     <td>${{ $item->amount }}</td>
                                     <td>{{ $item->payment_method }}</td>
                                     <td>
-                                        <span class="badge rounded-pill bg-success">{{ ucfirst($item->status) }}</span>
+                                        <div
+                                            class="badge rounded-pill w-100
+                                            @if($item->status == 'pending') bg-warning text-dark
+                                            @elseif($item->status == 'confirm') bg-primary text-white
+                                            @elseif($item->status == 'processing') bg-info text-dark
+                                            @elseif($item->status == 'picked') bg-secondary text-white
+                                            @elseif($item->status == 'shipped') bg-light text-dark
+                                            @elseif($item->status == 'delivered') bg-success text-white
+                                            @elseif($item->status == 'completed') bg-dark text-white
+                                            @elseif($item->status == 'returned') bg-danger text-white
+                                            @elseif($item->status == 'canceled') bg-light-danger text-danger
+                                            @else bg-light text-dark
+                                            @endif">
+                                            {{ ucfirst($item->status) }}
+                                        </div>
                                     </td>
                                     <td>
                                         <a href="{{ route('vendor.order.details', $item->id) }}" class="btn btn-info" title="Details">

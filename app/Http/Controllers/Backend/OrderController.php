@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -37,7 +40,7 @@ class OrderController extends Controller
     public function AdminOrderDetails($id)
     {
         $order = Order::with(['orderItems', 'orderItems.product', 'state', 'district', 'division'])
-        ->where('id', $id)
+            ->where('id', $id)
             ->first();
 
         if (!$order) {
@@ -58,13 +61,13 @@ class OrderController extends Controller
             $order->save();
 
             return redirect()->route('admin.orders.by.status', ['status' => 'confirm'])
-            ->with('alert-type', 'success')
-            ->with('message', 'Order confirmed successfully!');
+                ->with('alert-type', 'success')
+                ->with('message', 'Order confirmed successfully!');
         }
 
         return redirect()->route('admin.orders.by.status', ['status' => 'pending'])
-        ->with('alert-type', 'error')
-        ->with('message', 'Order is already confirmed or processed.');
+            ->with('alert-type', 'error')
+            ->with('message', 'Order is already confirmed or processed.');
     }
 
     public function AdminProcessingOrder($id)
@@ -78,13 +81,13 @@ class OrderController extends Controller
             $order->save();
 
             return redirect()->route('admin.orders.by.status', ['status' => 'processing'])
-            ->with('alert-type', 'success')
-            ->with('message', 'Order marked as processing successfully!');
+                ->with('alert-type', 'success')
+                ->with('message', 'Order marked as processing successfully!');
         }
 
         return redirect()->route('admin.orders.by.status', ['status' => 'confirm'])
-        ->with('alert-type', 'error')
-        ->with('message', 'Order must be confirmed before processing.');
+            ->with('alert-type', 'error')
+            ->with('message', 'Order must be confirmed before processing.');
     }
 
     public function AdminPickedOrder($id)
@@ -97,13 +100,13 @@ class OrderController extends Controller
             $order->save();
 
             return redirect()->route('admin.orders.by.status', ['status' => 'picked'])
-            ->with('alert-type', 'success')
-            ->with('message', 'Order marked as picked successfully!');
+                ->with('alert-type', 'success')
+                ->with('message', 'Order marked as picked successfully!');
         }
 
         return redirect()->route('admin.orders.by.status', ['status' => 'processing'])
-        ->with('alert-type', 'error')
-        ->with('message', 'Order must be in processing status before being marked as picked.');
+            ->with('alert-type', 'error')
+            ->with('message', 'Order must be in processing status before being marked as picked.');
     }
 
     public function AdminShippedOrder($id)
@@ -116,13 +119,13 @@ class OrderController extends Controller
             $order->save();
 
             return redirect()->route('admin.orders.by.status', ['status' => 'shipped'])
-            ->with('alert-type', 'success')
-            ->with('message', 'Order marked as shipped successfully!');
+                ->with('alert-type', 'success')
+                ->with('message', 'Order marked as shipped successfully!');
         }
 
         return redirect()->route('admin.orders.by.status', ['status' => 'picked'])
-        ->with('alert-type', 'error')
-        ->with('message', 'Order must be picked before being marked as shipped.');
+            ->with('alert-type', 'error')
+            ->with('message', 'Order must be picked before being marked as shipped.');
     }
 
     public function AdminDeliveredOrder($id)
@@ -135,13 +138,13 @@ class OrderController extends Controller
             $order->save();
 
             return redirect()->route('admin.orders.by.status', ['status' => 'delivered'])
-            ->with('alert-type', 'success')
-            ->with('message', 'Order marked as delivered successfully!');
+                ->with('alert-type', 'success')
+                ->with('message', 'Order marked as delivered successfully!');
         }
 
         return redirect()->route('admin.orders.by.status', ['status' => 'shipped'])
-        ->with('alert-type', 'error')
-        ->with('message', 'Order must be shipped before being marked as delivered.');
+            ->with('alert-type', 'error')
+            ->with('message', 'Order must be shipped before being marked as delivered.');
     }
 
     public function acceptReturn(Order $order)
@@ -151,5 +154,83 @@ class OrderController extends Controller
         $order->save();
 
         return redirect()->back()->with('success', 'Return request accepted.');
+    }
+
+    // ----------------------------------------------------------------  Order Report ----------------------------------------------------------------
+    public function AdminOrderReport(Request $request)
+    {
+        // Retrieve input filters from the request
+        $orderDate = $request->input('order_date');
+        $orderMonth = $request->input('order_month');
+        $orderYear = $request->input('order_year');
+        $statusOption = $request->input('status');
+        $userId = $request->input('user');
+        $vendorId = $request->input('vendor');
+
+        // Convert order_date format from YYYY-MM-DD to DD Month YYYY for the filter if needed
+        if ($orderDate) {
+            $orderDateFormatted = \Carbon\Carbon::createFromFormat('Y-m-d', $orderDate)->format('d F Y');
+        } else {
+            $orderDateFormatted = null;
+        }
+
+        // Fetch users who have orders
+        $users = User::whereHas('orders')->get();
+
+        // Fetch vendors who have orders
+        $vendors = User::where('role', 'vendor')
+                ->whereIn('id', OrderItem::whereHas('order', function ($query) {$query->distinct();})
+                ->pluck('vendor_id'))->get();
+
+        // All order query
+        $orders = Order::query();
+
+        // Apply filters based on request parameters
+        if ($orderMonth) {
+            $orders->where('order_month', $orderMonth);
+        }
+
+        if ($orderYear) {
+            $orders->where('order_year', $orderYear);
+        }
+
+        if ($statusOption) {
+            $orders->where('status', $statusOption);
+        }
+
+        if ($userId) {
+            $orders->where('user_id', $userId);
+        }
+
+        if ($vendorId) {
+            // Apply vendor filter through the orderItems relationship
+            $orders->whereHas('orderItems', function ($query) use ($vendorId) {
+                $query->where('vendor_id', $vendorId);
+            });
+        }
+
+        if ($orderDateFormatted) {
+            // Filter by the order_date (DD Month YYYY)
+            $orders->where('order_date', $orderDateFormatted);
+        }
+
+        // Fetch the filtered orders
+        $orders = $orders->get();
+
+        // Get distinct months and years from the orders table
+        $months = Order::selectRaw('order_month')->distinct()->pluck('order_month');
+        $years = Order::selectRaw('order_year')->distinct()->pluck('order_year');
+        $statusOptions = Order::selectRaw('status')->distinct()->pluck('status');
+
+        // Calculate totals
+        $totalOrders = $orders->count();
+        $totalIncome = $orders->whereNotIn('status', ['returned', 'canceled'])->sum('amount');
+        $totalUsers = $orders->pluck('user_id')->unique()->count();
+        $totalReturns = $orders->whereIn('status', ['returned', 'canceled'])->count();
+
+        // Return the view with data
+        return view('backend.order.order_report',
+            compact( 'orders', 'vendors', 'users', 'totalOrders', 'totalIncome', 'totalUsers', 'totalReturns', 'months', 'years', 'statusOptions')
+        );
     }
 }

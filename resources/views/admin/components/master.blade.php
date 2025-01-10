@@ -117,7 +117,9 @@
     <script>
         CKEDITOR.replace('mytextarea');
     </script>
-
+	{{-- <script src="assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
+	<script src="assets/plugins/datatable/js/dataTables.bootstrap5.min.js"></script>
+	<script src="assets/js/dashboard-eCommerce.js"></script> --}}
 </body>
 
 </html>
