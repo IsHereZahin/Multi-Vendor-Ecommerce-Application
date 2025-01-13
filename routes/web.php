@@ -11,6 +11,7 @@ use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\VendorProductController;
 use App\Http\Controllers\Backend\ShippingAreaController;
+use App\Http\Controllers\Backend\UserManageController;
 use App\Http\Controllers\Backend\VendorOrderController;
 use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\Frontend\IndexController;
@@ -79,20 +80,30 @@ Route::middleware(['auth', 'role:user'])->group(function () {
 // Admin routes
 Route::get('/admin/login', [AdminController::class, 'AdminLogin'])->name('admin.login')->middleware(RedirectIfAuthenticated::class);
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])->name('admin.dashboard');
-    Route::get('/admin/logout', [AdminController::class, 'AdminLogout'])->name('admin.logout');
-    Route::get('/admin/profile', [AdminController::class, 'AdminProfile'])->name('admin.profile');
-    Route::get('/admin/change/password', [AdminController::class, 'AdminChangePassword'])->name('admin.change.password');
-    Route::post('/admin/password/update', [AdminController::class, 'AdminPasswordUpdate'])->name('admin.password.update');
-    Route::post('/admin/profile/update', [AdminController::class, 'AdminProfileUpdate'])->name('admin.profile.update');
 
-    // Active InActive Validation Routes
-    Route::get('/inactive/vendor', [AdminController::class, 'InactiveVendor'])->name('inactive.vendor');
-    Route::get('/inactive/vendor/details/{id}', [AdminController::class, 'InactiveVendorDetails'])->name('inactive.vendor.details');
-    Route::post('/active/vendor/approve', [AdminController::class, 'ActiveVendorApprove'])->name('active.vendor.approve');
-    Route::get('/active/vendor', [AdminController::class, 'ActiveVendor'])->name('active.vendor');
-    Route::get('/active/vendor/details/{id}', [AdminController::class, 'ActiveVendorDetails'])->name('active.vendor.details');
-    Route::post('/inactive/vendor/approve', [AdminController::class, 'InActiveVendorApprove'])->name('inactive.vendor.approve');
+    // Admin routes
+    Route::controller(AdminController::class)->group(function () {
+        Route::get('/admin/dashboard', 'AdminDashboard')->name('admin.dashboard');
+        Route::get('/admin/logout', 'AdminLogout')->name('admin.logout');
+        Route::get('/admin/profile', 'AdminProfile')->name('admin.profile');
+        Route::get('/admin/change/password', 'AdminChangePassword')->name('admin.change.password');
+        Route::post('/admin/password/update', 'AdminPasswordUpdate')->name('admin.password.update');
+        Route::post('/admin/profile/update', 'AdminProfileUpdate')->name('admin.profile.update');
+    });
+
+    // Users manage routes
+    Route::controller(UserManageController::class)->group(function () {
+        // Active InActive Validation Routes
+        Route::get('/inactive/vendor', 'InactiveVendor')->name('inactive.vendor');
+        Route::get('/inactive/vendor/details/{id}', 'InactiveVendorDetails')->name('inactive.vendor.details');
+        Route::post('/active/vendor/approve', 'ActiveVendorApprove')->name('active.vendor.approve');
+        Route::get('/active/vendor', 'ActiveVendor')->name('active.vendor');
+        Route::get('/active/vendor/details/{id}', 'ActiveVendorDetails')->name('active.vendor.details');
+        Route::post('/inactive/vendor/approve', 'InActiveVendorApprove')->name('inactive.vendor.approve');
+
+        // User routes
+        Route::get('all/users', 'AllUsers')->name('all.users');
+    });
 
     // Brand routes
     Route::controller(BrandController::class)->group(function () {

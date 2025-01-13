@@ -104,22 +104,6 @@
             </ul>
         </li>
 
-        <li class="menu-label">Vendor</li>
-
-        <li>
-            <a href="javascript:;" class="has-arrow">
-                <div class="parent-icon"><i class='bx bx-cart'></i>
-                </div>
-                <div class="menu-title">Vendor Manage</div>
-            </a>
-            <ul>
-                <li> <a href="{{ route('inactive.vendor') }}"><i class="bx bx-right-arrow-alt"></i>Inactive
-                        Vendor</a>
-                </li>
-                <li> <a href="{{ route('active.vendor') }}"><i class="bx bx-right-arrow-alt"></i>Active Vendor</a>
-            </ul>
-        </li>
-
         @php
             use App\Models\Order;
 
@@ -196,56 +180,54 @@
             </ul>
         </li>
 
+
+<li class="menu-label">HRM</li>
+<li>
+    <a href="javascript:;" class="has-arrow">
+        <div class="parent-icon"><i class="bx bx-group"></i></div>
+        <div class="menu-title">User Management</div>
+    </a>
+    <ul>
+        <!-- Vendor User Section -->
         <li>
             <a class="has-arrow" href="javascript:;">
-                <div class="parent-icon"><i class='bx bx-bookmark-heart'></i>
-                </div>
-                <div class="menu-title">Components</div>
+                <i class="bx bx-right-arrow-alt"></i>Vendor Users
             </a>
             <ul>
-                <li> <a href="component-alerts.html"><i class="bx bx-right-arrow-alt"></i>Alerts</a>
+                <li>
+                    <a href="{{ route('inactive.vendor') }}">
+                        <i class="bx bx-right-arrow-alt"></i>Inactive Vendors
+                    </a>
                 </li>
-            </ul>
-        </li>
-        <li>
-            <a class="has-arrow" href="javascript:;">
-                <div class="parent-icon"><i class="bx bx-repeat"></i>
-                </div>
-                <div class="menu-title">Content</div>
-            </a>
-            <ul>
-                <li> <a href="content-grid-system.html"><i class="bx bx-right-arrow-alt"></i>Grid System</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <a class="has-arrow" href="javascript:;">
-                <div class="parent-icon"> <i class="bx bx-donate-blood"></i>
-                </div>
-                <div class="menu-title">Icons</div>
-            </a>
-            <ul>
-                <li> <a href="icons-line-icons.html"><i class="bx bx-right-arrow-alt"></i>Line Icons</a>
+                <li>
+                    <a href="{{ route('active.vendor') }}">
+                        <i class="bx bx-right-arrow-alt"></i>Active Vendors
+                    </a>
                 </li>
             </ul>
         </li>
 
-        <li class="menu-label">Charts & Maps</li>
+        <!-- General User Section -->
         <li>
             <a class="has-arrow" href="javascript:;">
-                <div class="parent-icon"><i class="bx bx-line-chart"></i>
-                </div>
-                <div class="menu-title">Charts</div>
+                <i class="bx bx-right-arrow-alt"></i>General Users
             </a>
             <ul>
-                <li> <a href="charts-apex-chart.html"><i class="bx bx-right-arrow-alt"></i>Apex</a>
+                <li>
+                    <a href="{{ route('all.users') }}">
+                        <i class="bx bx-right-arrow-alt"></i>All Users
+                    </a>
                 </li>
-                <li> <a href="charts-chartjs.html"><i class="bx bx-right-arrow-alt"></i>Chartjs</a>
-                </li>
-                <li> <a href="charts-highcharts.html"><i class="bx bx-right-arrow-alt"></i>Highcharts</a>
-                </li>
+                {{-- <li>
+                    <a href="{{ route('active.user') }}">
+                        <i class="bx bx-right-arrow-alt"></i>Active Users
+                    </a>
+                </li> --}}
             </ul>
         </li>
+    </ul>
+</li>
+
 
         <li>
             <a href="https://themeforest.net/user/codervent" target="_blank">

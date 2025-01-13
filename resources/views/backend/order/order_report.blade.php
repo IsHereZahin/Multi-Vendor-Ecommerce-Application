@@ -19,191 +19,158 @@
     </div>
     <!-- End Breadcrumb -->
 
-    <!-- Filters Section -->
-    <div class="card">
-        <div class="card-body">
-            <form method="GET" action="{{ route('admin.order.report') }}">
-                <div class="row">
-                    <!-- Order Date -->
-                    <div class="col-md-2">
-                        <label for="order_date">Order Date</label>
-                        <input type="date" class="form-control" name="order_date" id="order_date"
-                            value="{{ request('order_date') }}" placeholder="Select Order Date">
-                    </div>
-
-                    <!-- Order Month -->
-                    <div class="col-md-2">
-                        <label for="order_month">Order Month</label>
-                        <select class="form-control" name="order_month" id="order_month">
-                            <option value="">Select Month</option>
-                            @foreach ($months as $month)
-                                <option value="{{ $month }}"
-                                    {{ request('order_month') == $month ? 'selected' : '' }}>
-                                    {{ $month }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- Order Year -->
-                    <div class="col-md-2">
-                        <label for="order_year">Order Year</label>
-                        <select class="form-control" name="order_year" id="order_year">
-                            <option value="">Select Year</option>
-                            @foreach ($years as $year)
-                                <option value="{{ $year }}" {{ request('order_year') == $year ? 'selected' : '' }}>
-                                    {{ $year }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- Status -->
-                    <div class="col-md-2">
-                        <label for="status">Status</label>
-                        <select class="form-control" name="status" id="status">
-                            <option value="">Select Status</option>
-                            @foreach ($statusOptions as $statusOption)
-                                <option value="{{ $statusOption }}"
-                                    {{ request('status') == $statusOption ? 'selected' : '' }}>
-                                    {{ ucfirst($statusOption) }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- User -->
-                    <div class="col-md-2">
-                        <label for="user">User</label>
-                        <select class="form-control" name="user" id="user">
-                            <option value="">Select User</option>
-                            @foreach ($users as $user)
-                                <option value="{{ $user->id }}" {{ request('user') == $user->id ? 'selected' : '' }}>
-                                    {{ $user->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- Vendor Filter -->
-                    <div class="col-md-2">
-                        <label for="vendor">Vendor</label>
-                        <select class="form-control" name="vendor" id="vendor">
-                            <option value="">Select Vendor</option>
-                            @foreach ($vendors as $vendor)
-                                <option value="{{ $vendor->id }}"
-                                    {{ request('vendor') == $vendor->id ? 'selected' : '' }}>
-                                    {{ $vendor->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-
-                    <!-- Apply Filters -->
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary mt-4">Apply Filters</button>
-                    </div>
-                </div>
-            </form>
-
-            <!-- Reset Filters -->
-            <form method="GET" action="{{ route('admin.order.report') }}" class="mt-3">
-                <button type="submit" class="btn btn-secondary">Reset Filters</button>
-            </form>
-        </div>
-    </div>
-
     <div class="page-content">
+
+        <!-- Toggle Filters Button -->
+        <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-primary" id="toggleFilterButton">
+                Show Filters
+            </button>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="card" id="filterSection" style="display: none;">
+            <div class="card-body">
+                <form method="GET" action="{{ route('admin.order.report') }}">
+                    <div class="row">
+                        <!-- Order Date -->
+                        <div class="col-md-2">
+                            <label for="order_date">Order Date</label>
+                            <input type="date" class="form-control" name="order_date" id="order_date"
+                                value="{{ request('order_date') }}" placeholder="Select Order Date">
+                        </div>
+                        <!-- Order Month -->
+                        <div class="col-md-2">
+                            <label for="order_month">Order Month</label>
+                            <select class="form-control" name="order_month" id="order_month">
+                                <option value="">Select Month</option>
+                                @foreach ($months as $month)
+                                    <option value="{{ $month }}"
+                                        {{ request('order_month') == $month ? 'selected' : '' }}>
+                                        {{ $month }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <!-- Order Year -->
+                        <div class="col-md-2">
+                            <label for="order_year">Order Year</label>
+                            <select class="form-control" name="order_year" id="order_year">
+                                <option value="">Select Year</option>
+                                @foreach ($years as $year)
+                                    <option value="{{ $year }}"
+                                        {{ request('order_year') == $year ? 'selected' : '' }}>
+                                        {{ $year }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <!-- Status -->
+                        <div class="col-md-2">
+                            <label for="status">Status</label>
+                            <select class="form-control" name="status" id="status">
+                                <option value="">Select Status</option>
+                                @foreach ($statusOptions as $statusOption)
+                                    <option value="{{ $statusOption }}"
+                                        {{ request('status') == $statusOption ? 'selected' : '' }}>
+                                        {{ ucfirst($statusOption) }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <!-- User -->
+                        <div class="col-md-2">
+                            <label for="user">User</label>
+                            <select class="form-control" name="user" id="user">
+                                <option value="">Select User</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}"
+                                        {{ request('user') == $user->id ? 'selected' : '' }}>
+                                        {{ $user->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <!-- Vendor Filter -->
+                        <div class="col-md-2">
+                            <label for="vendor">Vendor</label>
+                            <select class="form-control" name="vendor" id="vendor">
+                                <option value="">Select Vendor</option>
+                                @foreach ($vendors as $vendor)
+                                    <option value="{{ $vendor->id }}"
+                                        {{ request('vendor') == $vendor->id ? 'selected' : '' }}>
+                                        {{ $vendor->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <!-- Apply Filters -->
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary mt-4">Apply Filters</button>
+                        </div>
+                    </div>
+                </form>
+                <!-- Reset Filters -->
+                <form method="GET" action="{{ route('admin.order.report') }}" class="mt-3">
+                    <button type="submit" class="btn btn-secondary">Reset Filters</button>
+                </form>
+            </div>
+        </div>
+
         <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
 
             <!-- Total Orders Card -->
             <div class="col">
-                <div class="card radius-10 bg-gradient-deepblue">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <h5 class="mb-0 text-white">{{ $totalOrders }}</h5>
-                            <div class="ms-auto">
-                                <i class='bx bx-cart fs-3 text-white'></i>
-                            </div>
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <div class="icon-box mb-3">
+                            <i class='bx bx-cart fs-2 text-primary'></i>
                         </div>
-                        <div class="progress my-3 bg-light-transparent" style="height:3px;">
-                            <div class="progress-bar bg-white" role="progressbar" style="width: 55%" aria-valuenow="25"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="d-flex align-items-center text-white">
-                            <p class="mb-0">Total Orders</p>
-                            <p class="mb-0 ms-auto">+4.2%<span><i class='bx bx-up-arrow-alt'></i></span></p>
-                        </div>
+                        <h5 class="card-title mb-1">Total Orders</h5>
+                        <h4 class="card-text">{{ $totalOrders }}</h4>
                     </div>
                 </div>
             </div>
 
             <!-- Total Revenue Card -->
             <div class="col">
-                <div class="card radius-10 bg-gradient-orange">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <h5 class="mb-0 text-white">${{ number_format($totalIncome, 2) }}</h5>
-                            <div class="ms-auto">
-                                <i class='bx bx-dollar fs-3 text-white'></i>
-                            </div>
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <div class="icon-box mb-3">
+                            <i class='bx bx-dollar fs-2 text-warning'></i>
                         </div>
-                        <div class="progress my-3 bg-light-transparent" style="height:3px;">
-                            <div class="progress-bar bg-white" role="progressbar" style="width: 55%" aria-valuenow="25"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="d-flex align-items-center text-white">
-                            <p class="mb-0">Total Revenue</p>
-                            <p class="mb-0 ms-auto">+1.2%<span><i class='bx bx-up-arrow-alt'></i></span></p>
-                        </div>
+                        <h5 class="card-title mb-1">Total Revenue</h5>
+                        <h4 class="card-text">${{ number_format($totalIncome, 2) }}</h4>
                     </div>
                 </div>
             </div>
 
             <!-- Total Users Card -->
             <div class="col">
-                <div class="card radius-10 bg-gradient-ohhappiness">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <h5 class="mb-0 text-white">{{ $totalUsers }}</h5>
-                            <div class="ms-auto">
-                                <i class='bx bx-group fs-3 text-white'></i>
-                            </div>
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <div class="icon-box mb-3">
+                            <i class='bx bx-group fs-2 text-success'></i>
                         </div>
-                        <div class="progress my-3 bg-light-transparent" style="height:3px;">
-                            <div class="progress-bar bg-white" role="progressbar" style="width: 55%" aria-valuenow="25"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="d-flex align-items-center text-white">
-                            <p class="mb-0">Users</p>
-                            <p class="mb-0 ms-auto">+5.2%<span><i class='bx bx-up-arrow-alt'></i></span></p>
-                        </div>
+                        <h5 class="card-title mb-1">Users</h5>
+                        <h4 class="card-text">{{ $totalUsers }}</h4>
                     </div>
                 </div>
             </div>
 
             <!-- Total Returns and Cancellations Card -->
             <div class="col">
-                <div class="card radius-10 bg-gradient-ibiza">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <h5 class="mb-0 text-white">{{ $totalReturns }}</h5>
-                            <div class="ms-auto">
-                                <i class='bx bx-envelope fs-3 text-white'></i>
-                            </div>
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <div class="icon-box mb-3">
+                            <i class='bx bx-envelope fs-2 text-danger'></i>
                         </div>
-                        <div class="progress my-3 bg-light-transparent" style="height:3px;">
-                            <div class="progress-bar bg-white" role="progressbar" style="width: 55%" aria-valuenow="25"
-                                aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="d-flex align-items-center text-white">
-                            <p class="mb-0">Return and cancel</p>
-                            <p class="mb-0 ms-auto">+2.2%<span><i class='bx bx-up-arrow-alt'></i></span></p>
-                        </div>
+                        <h5 class="card-title mb-1">Return & Cancel</h5>
+                        <h4 class="card-text">{{ $totalReturns }}</h4>
                     </div>
                 </div>
             </div>
+
         </div><!--end row-->
 
         <hr />
@@ -260,4 +227,12 @@
             </div>
         </div>
     </div>
+    <script>
+        document.getElementById('toggleFilterButton').addEventListener('click', function() {
+            const filterSection = document.getElementById('filterSection');
+            const isHidden = filterSection.style.display === 'none';
+            filterSection.style.display = isHidden ? 'block' : 'none';
+            this.textContent = isHidden ? 'Hide Filters' : 'Show Filters';
+        });
+    </script>
 @endsection
