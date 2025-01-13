@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\VendorProductController;
 use App\Http\Controllers\Backend\ShippingAreaController;
 use App\Http\Controllers\Backend\UserManageController;
 use App\Http\Controllers\Backend\VendorOrderController;
+use App\Http\Controllers\Backend\BlogController;
 use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\CartController;
@@ -108,7 +109,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Blog routes
     Route::prefix('admin/blog/categories')->name('admin.blog.category.')->controller(BlogCategoryController::class)->group(function () {
+        // Blog Category Routes
         Route::get('/', 'index')->name('index');
+        Route::post('store', 'store')->name('store');
+        Route::put('update/{id}', 'update')->name('update');
+        Route::delete('delete/{id}', 'destroy')->name('delete');
+    });
+
+    Route::prefix('admin/blog')->name('admin.blog.')->controller(BlogController::class)->group(function () {
+        // Blog Routes
+        Route::get('index', 'index')->name('index');
+        Route::get('create', 'create')->name('create');
+        Route::get('edit/{id}', 'edit')->name('edit');
         Route::post('store', 'store')->name('store');
         Route::put('update/{id}', 'update')->name('update');
         Route::delete('delete/{id}', 'destroy')->name('delete');

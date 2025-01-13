@@ -199,6 +199,17 @@
                     </a>
                 </li>
 
+                <!-- Blog Links -->
+                <li>
+                    <a href="{{ route('admin.blog.index') }}">
+                        <i class="bx bx-right-arrow-alt"></i> All Blogs
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.blog.create') }}">
+                        <i class="bx bx-right-arrow-alt"></i> Create Blog
+                    </a>
+                </li>
             </ul>
         </li>
 
