@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Backend\BannerController;
+use App\Http\Controllers\Backend\BlogCategoryController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\CouponController;
@@ -103,6 +104,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         // User routes
         Route::get('all/users', 'AllUsers')->name('all.users');
+    });
+
+    // Blog routes
+    Route::prefix('admin/blog/categories')->name('admin.blog.category.')->controller(BlogCategoryController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('store', 'store')->name('store');
+        Route::put('update/{id}', 'update')->name('update');
+        Route::delete('delete/{id}', 'destroy')->name('delete');
     });
 
     // Brand routes

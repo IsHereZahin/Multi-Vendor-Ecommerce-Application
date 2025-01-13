@@ -118,9 +118,7 @@
                 'completed' => Order::where('status', 'completed')->count(),
                 'returned' => Order::whereNotNull('return_date')->count(),
                 'canceled' => Order::where('status', 'canceled')->count(),
-                'return_requests' => Order::whereNotNull('return_reason')
-                                        ->whereNull('return_date')
-                                        ->count(),
+                'return_requests' => Order::whereNotNull('return_reason')->whereNull('return_date')->count(),
             ];
         @endphp
 
@@ -132,37 +130,44 @@
             </a>
             <ul>
                 <li><a href="{{ route('admin.order.report') }}">
-                    <i class="bx bx-right-arrow-alt"></i>Orders Report<span>({{ $counts['orders'] }})</span></a>
+                        <i class="bx bx-right-arrow-alt"></i>Orders Report<span>({{ $counts['orders'] }})</span></a>
                 </li>
                 <li><a href="{{ route('admin.orders.by.status', ['status' => 'pending']) }}">
-                    <i class="bx bx-right-arrow-alt"></i>Pending Orders <span>({{ $counts['pending'] }})</span></a>
+                        <i class="bx bx-right-arrow-alt"></i>Pending Orders <span>({{ $counts['pending'] }})</span></a>
                 </li>
                 <li><a href="{{ route('admin.orders.by.status', ['status' => 'confirm']) }}">
-                    <i class="bx bx-right-arrow-alt"></i>Confirmed Orders <span>({{ $counts['confirm'] }})</span></a>
+                        <i class="bx bx-right-arrow-alt"></i>Confirmed Orders
+                        <span>({{ $counts['confirm'] }})</span></a>
                 </li>
                 <li><a href="{{ route('admin.orders.by.status', ['status' => 'processing']) }}">
-                    <i class="bx bx-right-arrow-alt"></i>Processing Orders <span>({{ $counts['processing'] }})</span></a>
+                        <i class="bx bx-right-arrow-alt"></i>Processing Orders
+                        <span>({{ $counts['processing'] }})</span></a>
                 </li>
                 <li><a href="{{ route('admin.orders.by.status', ['status' => 'picked']) }}">
-                    <i class="bx bx-right-arrow-alt"></i>Picked Orders <span>({{ $counts['picked'] }})</span></a>
+                        <i class="bx bx-right-arrow-alt"></i>Picked Orders <span>({{ $counts['picked'] }})</span></a>
                 </li>
                 <li><a href="{{ route('admin.orders.by.status', ['status' => 'shipped']) }}">
-                    <i class="bx bx-right-arrow-alt"></i>Shipped Orders <span>({{ $counts['shipped'] }})</span></a>
+                        <i class="bx bx-right-arrow-alt"></i>Shipped Orders <span>({{ $counts['shipped'] }})</span></a>
                 </li>
                 <li><a href="{{ route('admin.orders.by.status', ['status' => 'delivered']) }}">
-                    <i class="bx bx-right-arrow-alt"></i>Delivered Orders <span>({{ $counts['delivered'] }})</span></a>
+                        <i class="bx bx-right-arrow-alt"></i>Delivered Orders
+                        <span>({{ $counts['delivered'] }})</span></a>
                 </li>
                 <li><a href="{{ route('admin.orders.by.status', ['status' => 'completed']) }}">
-                    <i class="bx bx-right-arrow-alt"></i>Completed Orders <span>({{ $counts['completed'] }})</span></a>
+                        <i class="bx bx-right-arrow-alt"></i>Completed Orders
+                        <span>({{ $counts['completed'] }})</span></a>
                 </li>
                 <li><a href="{{ route('admin.orders.by.status', ['status' => 'returned']) }}">
-                    <i class="bx bx-right-arrow-alt"></i>Returned Orders <span>({{ $counts['returned'] }})</span></a>
+                        <i class="bx bx-right-arrow-alt"></i>Returned Orders
+                        <span>({{ $counts['returned'] }})</span></a>
                 </li>
                 <li><a href="{{ route('admin.orders.by.status', ['status' => 'canceled']) }}">
-                    <i class="bx bx-right-arrow-alt"></i>Canceled Orders <span>({{ $counts['canceled'] }})</span></a>
+                        <i class="bx bx-right-arrow-alt"></i>Canceled Orders
+                        <span>({{ $counts['canceled'] }})</span></a>
                 </li>
                 <li><a href="{{ route('admin.orders.by.status', ['status' => 'return_requests']) }}">
-                    <i class="bx bx-right-arrow-alt"></i>Return Requests <span>({{ $counts['return_requests'] }})</span></a>
+                        <i class="bx bx-right-arrow-alt"></i>Return Requests
+                        <span>({{ $counts['return_requests'] }})</span></a>
                 </li>
             </ul>
         </li>
@@ -180,53 +185,69 @@
             </ul>
         </li>
 
-
-<li class="menu-label">HRM</li>
-<li>
-    <a href="javascript:;" class="has-arrow">
-        <div class="parent-icon"><i class="bx bx-group"></i></div>
-        <div class="menu-title">User Management</div>
-    </a>
-    <ul>
-        <!-- Vendor User Section -->
+        <li class="menu-label">Blog Manage</li>
         <li>
-            <a class="has-arrow" href="javascript:;">
-                <i class="bx bx-right-arrow-alt"></i>Vendor Users
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class='bx bx-pencil'></i></div>  <!-- Icon for Blog Manage -->
+                <div class="menu-title">Blog Manage</div>
             </a>
             <ul>
+                <!-- Blog Category Link -->
                 <li>
-                    <a href="{{ route('inactive.vendor') }}">
-                        <i class="bx bx-right-arrow-alt"></i>Inactive Vendors
+                    <a href="{{ route('admin.blog.category.index') }}">
+                        <i class="bx bx-right-arrow-alt"></i> Blog Categories
                     </a>
                 </li>
-                <li>
-                    <a href="{{ route('active.vendor') }}">
-                        <i class="bx bx-right-arrow-alt"></i>Active Vendors
-                    </a>
-                </li>
+
             </ul>
         </li>
 
-        <!-- General User Section -->
+        <li class="menu-label">HRM</li>
         <li>
-            <a class="has-arrow" href="javascript:;">
-                <i class="bx bx-right-arrow-alt"></i>General Users
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class="bx bx-group"></i></div>
+                <div class="menu-title">User Management</div>
             </a>
             <ul>
+                <!-- Vendor User Section -->
                 <li>
-                    <a href="{{ route('all.users') }}">
-                        <i class="bx bx-right-arrow-alt"></i>All Users
+                    <a class="has-arrow" href="javascript:;">
+                        <i class="bx bx-right-arrow-alt"></i>Vendor Users
                     </a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('inactive.vendor') }}">
+                                <i class="bx bx-right-arrow-alt"></i>Inactive Vendors
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('active.vendor') }}">
+                                <i class="bx bx-right-arrow-alt"></i>Active Vendors
+                            </a>
+                        </li>
+                    </ul>
                 </li>
-                {{-- <li>
+
+                <!-- General User Section -->
+                <li>
+                    <a class="has-arrow" href="javascript:;">
+                        <i class="bx bx-right-arrow-alt"></i>General Users
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="{{ route('all.users') }}">
+                                <i class="bx bx-right-arrow-alt"></i>All Users
+                            </a>
+                        </li>
+                        {{-- <li>
                     <a href="{{ route('active.user') }}">
                         <i class="bx bx-right-arrow-alt"></i>Active Users
                     </a>
                 </li> --}}
+                    </ul>
+                </li>
             </ul>
         </li>
-    </ul>
-</li>
 
 
         <li>
