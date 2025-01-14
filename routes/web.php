@@ -41,6 +41,12 @@ Route::get('/', function () {
     return view('frontend.index');
 })->name('home');
 
+Route::controller(App\Http\Controllers\Frontend\BlogController::class)->group(function () {
+    Route::get('/blogs', 'AllBlog')->name('all.blogs');
+    Route::get('/blog/{categoryslug}', 'CategoryBlogs')->name('category.blogs');
+    Route::get('/blog/{categoryslug}/{blogslug}', 'BlogDetails')->name('blog.details');
+});
+
 // Product View Details Route
 Route::get('/product-details/{id}/{slug}', [IndexController::class, 'ProductDetails'])->name('product.details');
 Route::get('/category/{id}/{slug}', [IndexController::class, 'CategoryProduct'])->name('category.products');
