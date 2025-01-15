@@ -214,20 +214,29 @@
                                     <p>No categories found.</p>
                                 @else
                                     <div class="d-flex categori-dropdown-inner">
-                                        <ul>
-                                            @foreach ($categoriesChunked[0] as $data)
-                                                <li>
-                                                    <a href="{{ route('category.products', ['id' => $data->id, 'slug' => $data->slug]) }}"> <img src="{{ asset('upload/categories/'.$data->image) }}" alt="" />{{ $data->name }}</a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                        <ul class="end">
-                                            @foreach ($categoriesChunked[1] as $data)
-                                                <li>
-                                                    <a href="{{ route('category.products', ['id' => $data->id, 'slug' => $data->slug]) }}"> <img src="{{ asset('upload/categories/'.$data->image) }}">{{ $data->name }}</a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
+                                        @if(count($categoriesChunked[0]) > 0)
+                                            <ul>
+                                                @foreach ($categoriesChunked[0] as $data)
+                                                    <li>
+                                                        <a href="{{ route('category.products', ['id' => $data->id, 'slug' => $data->slug]) }}">
+                                                            <img src="{{ asset('upload/categories/'.$data->image) }}" alt="">{{ $data->name }}
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+
+                                        @if(isset($categoriesChunked[1]) && count($categoriesChunked[1]) > 0)
+                                            <ul class="end">
+                                                @foreach ($categoriesChunked[1] as $data)
+                                                    <li>
+                                                        <a href="{{ route('category.products', ['id' => $data->id, 'slug' => $data->slug]) }}">
+                                                            <img src="{{ asset('upload/categories/'.$data->image) }}">{{ $data->name }}
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
                                     </div>
 
                                     <div class="more_slide_open" style="display: none">
@@ -235,17 +244,24 @@
                                             <ul>
                                                 @foreach ($categoriesChunked[0] as $data)
                                                     <li>
-                                                        <a href="{{ route('category.products', ['id' => $data->id, 'slug' => $data->slug]) }}"> <img src="{{ asset('upload/categories/'.$data->image) }}">{{ $data->name }}</a>
+                                                        <a href="{{ route('category.products', ['id' => $data->id, 'slug' => $data->slug]) }}">
+                                                            <img src="{{ asset('upload/categories/'.$data->image) }}">{{ $data->name }}
+                                                        </a>
                                                     </li>
                                                 @endforeach
                                             </ul>
-                                            <ul class="end">
-                                                @foreach ($categoriesChunked[1] as $data)
-                                                    <li>
-                                                        <a href="{{ route('category.products', ['id' => $data->id, 'slug' => $data->slug]) }}"> <img src="{{ asset('upload/categories/'.$data->image) }}">{{ $data->name }}</a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
+
+                                            @if(isset($categoriesChunked[1]) && count($categoriesChunked[1]) > 0)
+                                                <ul class="end">
+                                                    @foreach ($categoriesChunked[1] as $data)
+                                                        <li>
+                                                            <a href="{{ route('category.products', ['id' => $data->id, 'slug' => $data->slug]) }}">
+                                                                <img src="{{ asset('upload/categories/'.$data->image) }}">{{ $data->name }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="more_categories"><span class="icon"></span> <span class="heading-sm-1">Show more...</span></div>

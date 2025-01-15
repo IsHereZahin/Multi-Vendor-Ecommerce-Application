@@ -40,12 +40,19 @@
                                                     {{ $item->product->product_name }}
                                                 </a>
                                             </h6>
-                                            <div class="product-rate-cover">
-                                                <div class="product-rate d-inline-block">
-                                                    <div class="product-rating" style="width: 55%"></div>
+                                            <div class="product-detail-rating">
+                                                <div class="product-rate-cover text-end">
+                                                    <div class="product-rate d-inline-block">
+                                                        <!-- Calculate average rating from product reviews -->
+                                                        <div class="product-rating" style="width: {{ $item->product->reviews->avg('rating') * 20 }}%"></div>
+                                                    </div>
+                                                    <span class="font-small ml-5 text-muted">
+                                                        <!-- Display total number of reviews -->
+                                                        ({{ $item->product->reviews->count() }} reviews)
+                                                    </span>
                                                 </div>
-                                                <span class="font-small ml-5 text-muted">0</span>
                                             </div>
+
                                         </td>
                                         <!-- Price Column -->
                                         <td class="price" data-title="Price">

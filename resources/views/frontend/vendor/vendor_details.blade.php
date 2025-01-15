@@ -34,7 +34,8 @@
                             <div class="product-cart-wrap mb-30 wow animate__animated animate__fadeIn" data-wow-delay=".1s">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
-                                        <a href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">
+                                        <a
+                                            href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">
                                             <img class="default-img" src="{{ asset($product->product_thumbnail) }}"
                                                 alt="" />
                                             @if ($product->multiImages->count() > 1)
@@ -52,20 +53,18 @@
                                         @endphp
 
                                         <a aria-label="{{ $isInWishlist ? 'Remove from wishlist' : 'Add to Wishlist' }}"
-                                        class="action-btn"
-                                        href="javascript:void(0);"
-                                        onclick="toggleWishlist({{ $product->id }})"
-                                        id="wishlist-btn-{{ $product->id }}"
-                                        data-product-id="{{ $product->id }}"> <!-- Add data-product-id -->
-                                        <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
+                                            class="action-btn" href="javascript:void(0);"
+                                            onclick="toggleWishlist({{ $product->id }})"
+                                            id="wishlist-btn-{{ $product->id }}" data-product-id="{{ $product->id }}">
+                                            <!-- Add data-product-id -->
+                                            <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
                                         </a>
 
                                         <a aria-label="Compare" class="action-btn" href="#"><i
                                                 class="fi-rs-shuffle"></i></a>
                                         <!-- Add a unique identifier to each quick view button -->
-                                        <a aria-label="Quick view" class="action-btn quick-view-btn"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModalView{{ $product->id }}"><i
+                                        <a aria-label="Quick view" class="action-btn quick-view-btn" data-bs-toggle="modal"
+                                            data-bs-target="#quickViewModal{{ $product->id }}"><i
                                                 class="fi-rs-eye"></i></a>
                                     </div>
 
@@ -90,11 +89,18 @@
                                     <h2><a
                                             href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">{{ $product->product_name }}</a>
                                     </h2>
-                                    <div class="product-rate-cover">
-                                        <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: 90%"></div>
+                                    <div class="product-detail-rating">
+                                        <div class="product-rate-cover text-end">
+                                            <div class="product-rate d-inline-block">
+                                                <!-- Calculate average rating from product reviews -->
+                                                <div class="product-rating"
+                                                    style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                            </div>
+                                            <span class="font-small ml-5 text-muted">
+                                                <!-- Display total number of reviews -->
+                                                ({{ $product->reviews->count() }} reviews)
+                                            </span>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
                                     <div>
                                         <span class="font-small text-muted">By <a
@@ -183,16 +189,22 @@
                                                     </span>
                                                     <h3 class="title-detail"><a
                                                             href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}"
-                                                            class="text-heading">{{ $product->product_name }}</a></h3>
+                                                            class="text-heading">{{ $product->product_name }}</a>
+                                                    </h3>
                                                     <div class="product-detail-rating">
                                                         <div class="product-rate-cover text-end">
                                                             <div class="product-rate d-inline-block">
-                                                                <div class="product-rating" style="width: 90%"></div>
+                                                                <!-- Calculate average rating from product reviews -->
+                                                                <div class="product-rating"
+                                                                    style="width: {{ $product->reviews->avg('rating') * 20 }}%">
+                                                                </div>
                                                             </div>
-                                                            <span class="font-small ml-5 text-muted"> (32 reviews)</span>
+                                                            <span class="font-small ml-5 text-muted">
+                                                                <!-- Display total number of reviews -->
+                                                                ({{ $product->reviews->count() }} reviews)
+                                                            </span>
                                                         </div>
                                                     </div>
-
                                                     @php
                                                         $product_size = explode(',', $product->product_size);
                                                         $product_color = explode(',', $product->product_color);
@@ -378,7 +390,8 @@
                                 <li><img class="mr-5"
                                         src="{{ asset('frontend/assets/imgs/theme/icons/icon-location.svg') }}"
                                         alt="" /><strong>Address: </strong>
-                                    <span>{{ $vendor->address ?? 'Not found!' }}</span></li>
+                                    <span>{{ $vendor->address ?? 'Not found!' }}</span>
+                                </li>
                                 <li><img class="mr-5"
                                         src="{{ asset('frontend/assets/imgs/theme/icons/icon-contact.svg') }}"
                                         alt="" /><strong>Call

@@ -427,7 +427,7 @@
             $('#summaryDiscountAmount').text('$0.00');
             $('#summaryDiscountPercent').text('-0%');
             $('#discountAmount').text('$0.00');
-            $('#totalAmount').text('$' + response.cartTotal.toFixed(2));  // Show initial total without coupon
+            $('#totalAmount').text('$' + response.cartTotal.toFixed(2)); // Show initial total without coupon
             $('.couponCode').text('N/A');
 
             // Update subtotal

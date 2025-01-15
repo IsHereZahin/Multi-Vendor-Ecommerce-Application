@@ -11,20 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('order_items')) {
-            Schema::create('order_items', function (Blueprint $table) {
-                $table->id();
-                $table->unsignedBigInteger('order_id');
-                $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
-                $table->unsignedBigInteger('product_id');
-                $table->string('vendor_id')->nullable();
-                $table->string('color')->nullable();
-                $table->string('size')->nullable();
-                $table->string('qty');
-                $table->float('price', 8, 2);
-                $table->timestamps();
-            });
-        }
+        Schema::disableForeignKeyConstraints();
+
+        Schema::create('order_items', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('order_id');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->unsignedBigInteger('product_id');
+            $table->string('vendor_id')->nullable();
+            $table->string('color')->nullable();
+            $table->string('size')->nullable();
+            $table->string('qty');
+            $table->float('price', 8, 2);
+            $table->timestamps();
+        });
+
+        Schema::enableForeignKeyConstraints();
     }
 
     /**

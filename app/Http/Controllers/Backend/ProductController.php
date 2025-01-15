@@ -19,15 +19,15 @@ class ProductController extends Controller
     public function AllProduct()
     {
         $products = Product::latest()->get();
-        return view('backend.product.product_all',compact('products'));
+        return view('backend.product.product_all', compact('products'));
     } // End Method
 
     public function AddProduct()
     {
-        $activeVendor = User::where('status','active')->where('role','vendor')->latest()->get();
+        $activeVendor = User::where('status', 'active')->where('role', 'vendor')->latest()->get();
         $brands = Brand::latest()->get();
         $categories = Category::latest()->get();
-        return view('backend.product.product_add',compact('brands','categories','activeVendor'));
+        return view('backend.product.product_add', compact('brands', 'categories', 'activeVendor'));
     } // End Method
 
     public function StoreProduct(Request $request)
@@ -45,8 +45,8 @@ class ProductController extends Controller
         }
 
         // Handle thumbnail image
-        $image = $request->file('product_thambnail');
-        $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
+        $image = $request->file('product_thumbnail');
+        $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
         Image::make($image)->resize(800, 800)->save($thumbnailPath . '/' . $name_gen);
         $save_url = 'upload/products/thambnail/' . $name_gen;
 
@@ -70,7 +70,7 @@ class ProductController extends Controller
             'featured' => $request->featured,
             'special_offer' => $request->special_offer,
             'special_deals' => $request->special_deals,
-            'product_thambnail' => $save_url,
+            'product_thumbnail' => $save_url,
             'vendor_id' => $request->vendor_id,
             'status' => 1,
             'created_at' => Carbon::now(),
@@ -100,13 +100,13 @@ class ProductController extends Controller
 
     public function EditProduct($id)
     {
-        $activeVendor = User::where('status','active')->where('role','vendor')->latest()->get();
+        $activeVendor = User::where('status', 'active')->where('role', 'vendor')->latest()->get();
         $brands = Brand::latest()->get();
         $categories = Category::latest()->get();
         $product = Product::findOrFail($id);
         $subcategories = SubCategory::where('category_id', $product->category_id)->latest()->get();
         $uploadedImages = MultiImg::where('product_id', $product->id)->get();
-        return view('backend.product.product_edit',compact('brands','categories','subcategories','activeVendor','product','uploadedImages'));
+        return view('backend.product.product_edit', compact('brands', 'categories', 'subcategories', 'activeVendor', 'product', 'uploadedImages'));
     } // End Method
 
     public function updateProduct(Request $request, $product_id)
@@ -118,7 +118,7 @@ class ProductController extends Controller
             'category_id' => $request->category_id,
             'subcategory_id' => $request->subcategory_id,
             'product_name' => $request->product_name,
-            'product_slug' => strtolower(str_replace(' ','-',$request->product_name)),
+            'product_slug' => strtolower(str_replace(' ', '-', $request->product_name)),
             'product_code' => $request->product_code,
             'product_qty' => $request->product_qty,
             'product_tags' => $request->product_tags,
@@ -140,8 +140,8 @@ class ProductController extends Controller
         // Delete images if selected for deletion
         $delete_image = $request->delete_image;
 
-        if($delete_image) { // Check if $delete_image is not null
-            foreach($delete_image as $image){
+        if ($delete_image) { // Check if $delete_image is not null
+            foreach ($delete_image as $image) {
                 $id = $image;
 
                 $imageInfo = MultiImg::query()->find($id);
@@ -149,7 +149,7 @@ class ProductController extends Controller
                 $imageInfo->delete();
 
                 // Delete old image if it exists
-                if(File::exists(public_path($image_name))) {
+                if (File::exists(public_path($image_name))) {
                     File::delete(public_path($image_name));
                 }
             }
@@ -157,10 +157,10 @@ class ProductController extends Controller
 
         // Upload new images
         if ($request->hasFile('multi_img')) {
-            foreach($request->file('multi_img') as $img){
-                $make_name = hexdec(uniqid()).'.'.$img->getClientOriginalExtension();
-                Image::make($img)->resize(800,800)->save('upload/products/multi-image/'.$make_name);
-                $uploadPath = 'upload/products/multi-image/'.$make_name;
+            foreach ($request->file('multi_img') as $img) {
+                $make_name = hexdec(uniqid()) . '.' . $img->getClientOriginalExtension();
+                Image::make($img)->resize(800, 800)->save('upload/products/multi-image/' . $make_name);
+                $uploadPath = 'upload/products/multi-image/' . $make_name;
 
                 MultiImg::create([
                     'product_id' => $product_id,
@@ -171,16 +171,16 @@ class ProductController extends Controller
         }
 
         // Delete old product thumbnail if new one is provided
-        if ($request->hasFile('product_thambnail')) {
-            $old_thumbnail = $product->product_thambnail;
-            if(File::exists(public_path($old_thumbnail))) {
+        if ($request->hasFile('product_thumbnail')) {
+            $old_thumbnail = $product->product_thumbnail;
+            if (File::exists(public_path($old_thumbnail))) {
                 File::delete(public_path($old_thumbnail));
             }
-            $image = $request->file('product_thambnail');
-            $name_gen = hexdec(uniqid()).'.'.$image->getClientOriginalExtension();
-            $save_url = 'upload/products/thambnail/'.$name_gen;
-            $product->update(['product_thambnail' => $save_url]);
-            Image::make($image)->resize(800,800)->save(public_path($save_url));
+            $image = $request->file('product_thumbnail');
+            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            $save_url = 'upload/products/thambnail/' . $name_gen;
+            $product->update(['product_thumbnail' => $save_url]);
+            Image::make($image)->resize(800, 800)->save(public_path($save_url));
         }
 
         // Redirect back with notification
@@ -197,8 +197,8 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         // Delete thumbnail image if it exists
-        if (File::exists(public_path($product->product_thambnail))) {
-            File::delete(public_path($product->product_thambnail));
+        if (File::exists(public_path($product->product_thumbnail))) {
+            File::delete(public_path($product->product_thumbnail));
         }
 
         // Delete associated images
@@ -215,7 +215,7 @@ class ProductController extends Controller
 
         // Prepare notification message
         $notification = [
-           'message' => 'Product deleted successfully!',
+            'message' => 'Product deleted successfully!',
             'alert-type' => 'warning',
         ];
 
@@ -256,5 +256,4 @@ class ProductController extends Controller
     {
         return $this->toggleProductStatus($request, 1);
     }
-
 }

@@ -21,6 +21,7 @@ use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\PaymentController;
+use App\Http\Controllers\User\ReviewController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
 use App\Http\Middleware\RedirectIfAuthenticated;
@@ -323,6 +324,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/stripe/order', 'StripeOrder')->name('stripe.order');
         Route::post('/cash-on-delivery/order', 'cashOnDeliveryOrder')->name('cash.on.delivery.order');
     });
+
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
 
 Route::middleware('auth')->group(function () {

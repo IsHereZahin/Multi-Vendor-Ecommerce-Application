@@ -63,12 +63,11 @@
                                         @endphp
 
                                         <a aria-label="{{ $isInWishlist ? 'Remove from wishlist' : 'Add to Wishlist' }}"
-                                        class="action-btn"
-                                        href="javascript:void(0);"
-                                        onclick="toggleWishlist({{ $product->id }})"
-                                        id="wishlist-btn-{{ $product->id }}"
-                                        data-product-id="{{ $product->id }}"> <!-- Add data-product-id -->
-                                        <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
+                                            class="action-btn" href="javascript:void(0);"
+                                            onclick="toggleWishlist({{ $product->id }})"
+                                            id="wishlist-btn-{{ $product->id }}"
+                                            data-product-id="{{ $product->id }}"> <!-- Add data-product-id -->
+                                            <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
                                         </a>
 
                                         <a aria-label="Compare" class="action-btn" href="#"><i
@@ -100,11 +99,17 @@
                                     <h2><a
                                             href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">{{ $product->product_name }}</a>
                                     </h2>
-                                    <div class="product-rate-cover">
-                                        <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: 90%"></div>
+                                    <div class="product-detail-rating">
+                                        <div class="product-rate-cover text-end">
+                                            <div class="product-rate d-inline-block">
+                                                <!-- Calculate average rating from product reviews -->
+                                                <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                            </div>
+                                            <span class="font-small ml-5 text-muted">
+                                                <!-- Display total number of reviews -->
+                                                ({{ $product->reviews->count() }} reviews)
+                                            </span>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
                                     <div>
                                         <span class="font-small text-muted">By <a
@@ -194,17 +199,20 @@
                                                     </span>
                                                     <h3 class="title-detail"><a
                                                             href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}"
-                                                            class="text-heading">{{ $product->product_name }}</a></h3>
+                                                            class="text-heading">{{ $product->product_name }}</a>
+                                                    </h3>
                                                     <div class="product-detail-rating">
                                                         <div class="product-rate-cover text-end">
                                                             <div class="product-rate d-inline-block">
-                                                                <div class="product-rating" style="width: 90%"></div>
+                                                                <!-- Calculate average rating from product reviews -->
+                                                                <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
                                                             </div>
-                                                            <span class="font-small ml-5 text-muted"> (32
-                                                                reviews)</span>
+                                                            <span class="font-small ml-5 text-muted">
+                                                                <!-- Display total number of reviews -->
+                                                                ({{ $product->reviews->count() }} reviews)
+                                                            </span>
                                                         </div>
                                                     </div>
-
                                                     @php
                                                         $product_size = explode(',', $product->product_size);
                                                         $product_color = explode(',', $product->product_color);
@@ -377,12 +385,11 @@
                                             @endphp
 
                                             <a aria-label="{{ $isInWishlist ? 'Remove from wishlist' : 'Add to Wishlist' }}"
-                                            class="action-btn"
-                                            href="javascript:void(0);"
-                                            onclick="toggleWishlist({{ $product->id }})"
-                                            id="wishlist-btn-{{ $product->id }}"
-                                            data-product-id="{{ $product->id }}"> <!-- Add data-product-id -->
-                                            <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
+                                                class="action-btn" href="javascript:void(0);"
+                                                onclick="toggleWishlist({{ $product->id }})"
+                                                id="wishlist-btn-{{ $product->id }}"
+                                                data-product-id="{{ $product->id }}"> <!-- Add data-product-id -->
+                                                <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
                                             </a>
 
                                             <a aria-label="Compare" class="action-btn" href="#"><i
@@ -414,11 +421,17 @@
                                         <h2><a
                                                 href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">{{ $product->product_name }}</a>
                                         </h2>
-                                        <div class="product-rate-cover">
-                                            <div class="product-rate d-inline-block">
-                                                <div class="product-rating" style="width: 90%"></div>
+                                        <div class="product-detail-rating">
+                                            <div class="product-rate-cover text-end">
+                                                <div class="product-rate d-inline-block">
+                                                    <!-- Calculate average rating from product reviews -->
+                                                    <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                </div>
+                                                <span class="font-small ml-5 text-muted">
+                                                    <!-- Display total number of reviews -->
+                                                    ({{ $product->reviews->count() }} reviews)
+                                                </span>
                                             </div>
-                                            <span class="font-small ml-5 text-muted"> (4.0)</span>
                                         </div>
                                         <div>
                                             <span class="font-small text-muted">By <a
@@ -448,8 +461,8 @@
                             </div>
 
                             <!-- Quick view modal for each product -->
-                            <div class="modal fade custom-modal" id="quickViewModalView{{ $product->id }}"
-                                tabindex="-1" aria-labelledby="quickViewModalView{{ $product->id }}"
+                            <div class="modal fade custom-modal" id="quickViewModal{{ $product->id }}"
+                                tabindex="-1" aria-labelledby="quickViewModal{{ $product->id }}"
                                 aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -512,11 +525,13 @@
                                                         <div class="product-detail-rating">
                                                             <div class="product-rate-cover text-end">
                                                                 <div class="product-rate d-inline-block">
-                                                                    <div class="product-rating" style="width: 90%">
-                                                                    </div>
+                                                                    <!-- Calculate average rating from product reviews -->
+                                                                    <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
                                                                 </div>
-                                                                <span class="font-small ml-5 text-muted"> (32
-                                                                    reviews)</span>
+                                                                <span class="font-small ml-5 text-muted">
+                                                                    <!-- Display total number of reviews -->
+                                                                    ({{ $product->reviews->count() }} reviews)
+                                                                </span>
                                                             </div>
                                                         </div>
                                                         @php
@@ -710,12 +725,13 @@
                                                 @endphp
 
                                                 <a aria-label="{{ $isInWishlist ? 'Remove from wishlist' : 'Add to Wishlist' }}"
-                                                class="action-btn"
-                                                href="javascript:void(0);"
-                                                onclick="toggleWishlist({{ $product->id }})"
-                                                id="wishlist-btn-{{ $product->id }}"
-                                                data-product-id="{{ $product->id }}"> <!-- Add data-product-id -->
-                                                <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
+                                                    class="action-btn" href="javascript:void(0);"
+                                                    onclick="toggleWishlist({{ $product->id }})"
+                                                    id="wishlist-btn-{{ $product->id }}"
+                                                    data-product-id="{{ $product->id }}">
+                                                    <!-- Add data-product-id -->
+                                                    <i
+                                                        class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
                                                 </a>
 
                                                 <a aria-label="Compare" class="action-btn" href="#"><i
@@ -746,8 +762,17 @@
                                             <h2><a
                                                     href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">{{ $product->product_name }}</a>
                                             </h2>
-                                            <div class="product-rate d-inline-block">
-                                                <div class="product-rating" style="width: 80%"></div>
+                                            <div class="product-detail-rating">
+                                                <div class="product-rate-cover text-end">
+                                                    <div class="product-rate d-inline-block">
+                                                        <!-- Calculate average rating from product reviews -->
+                                                        <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                    </div>
+                                                    <span class="font-small ml-5 text-muted">
+                                                        <!-- Display total number of reviews -->
+                                                        ({{ $product->reviews->count() }} reviews)
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div class="product-price mt-10">
                                                 @if ($product->discount_price == null)
@@ -829,11 +854,17 @@
                                         <a
                                             href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">{{ $product->product_name }}</a>
                                     </h6>
-                                    <div class="product-rate-cover">
-                                        <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: 70%"></div>
+                                    <div class="product-detail-rating">
+                                        <div class="product-rate-cover text-end">
+                                            <div class="product-rate d-inline-block">
+                                                <!-- Calculate average rating from product reviews -->
+                                                <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                            </div>
+                                            <span class="font-small ml-5 text-muted">
+                                                <!-- Display total number of reviews -->
+                                                ({{ $product->reviews->count() }} reviews)
+                                            </span>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
                                     @php
                                         $priceDifference = $product->selling_price - $product->discount_price;
@@ -873,11 +904,17 @@
                                         <a
                                             href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">{{ $product->product_name }}</a>
                                     </h6>
-                                    <div class="product-rate-cover">
-                                        <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: 70%"></div>
+                                    <div class="product-detail-rating">
+                                        <div class="product-rate-cover text-end">
+                                            <div class="product-rate d-inline-block">
+                                                <!-- Calculate average rating from product reviews -->
+                                                <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                            </div>
+                                            <span class="font-small ml-5 text-muted">
+                                                <!-- Display total number of reviews -->
+                                                ({{ $product->reviews->count() }} reviews)
+                                            </span>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
                                     @php
                                         $priceDifference = $product->selling_price - $product->discount_price;
@@ -917,11 +954,17 @@
                                         <a
                                             href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">{{ $product->product_name }}</a>
                                     </h6>
-                                    <div class="product-rate-cover">
-                                        <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: 70%"></div>
+                                    <div class="product-detail-rating">
+                                        <div class="product-rate-cover text-end">
+                                            <div class="product-rate d-inline-block">
+                                                <!-- Calculate average rating from product reviews -->
+                                                <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                            </div>
+                                            <span class="font-small ml-5 text-muted">
+                                                <!-- Display total number of reviews -->
+                                                ({{ $product->reviews->count() }} reviews)
+                                            </span>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
                                     @php
                                         $priceDifference = $product->selling_price - $product->discount_price;
@@ -961,11 +1004,17 @@
                                         <a
                                             href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">{{ $product->product_name }}</a>
                                     </h6>
-                                    <div class="product-rate-cover">
-                                        <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: 70%"></div>
+                                    <div class="product-detail-rating">
+                                        <div class="product-rate-cover text-end">
+                                            <div class="product-rate d-inline-block">
+                                                <!-- Calculate average rating from product reviews -->
+                                                <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                            </div>
+                                            <span class="font-small ml-5 text-muted">
+                                                <!-- Display total number of reviews -->
+                                                ({{ $product->reviews->count() }} reviews)
+                                            </span>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
                                     @php
                                         $priceDifference = $product->selling_price - $product->discount_price;
@@ -1039,12 +1088,11 @@
                                             @endphp
 
                                             <a aria-label="{{ $isInWishlist ? 'Remove from wishlist' : 'Add to Wishlist' }}"
-                                            class="action-btn"
-                                            href="javascript:void(0);"
-                                            onclick="toggleWishlist({{ $product->id }})"
-                                            id="wishlist-btn-{{ $product->id }}"
-                                            data-product-id="{{ $product->id }}"> <!-- Add data-product-id -->
-                                            <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
+                                                class="action-btn" href="javascript:void(0);"
+                                                onclick="toggleWishlist({{ $product->id }})"
+                                                id="wishlist-btn-{{ $product->id }}"
+                                                data-product-id="{{ $product->id }}"> <!-- Add data-product-id -->
+                                                <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
                                             </a>
 
                                             <a aria-label="Compare" class="action-btn" href="#"><i
@@ -1076,11 +1124,17 @@
                                         <h2><a
                                                 href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">{{ $product->product_name }}</a>
                                         </h2>
-                                        <div class="product-rate-cover">
-                                            <div class="product-rate d-inline-block">
-                                                <div class="product-rating" style="width: 90%"></div>
+                                        <div class="product-detail-rating">
+                                            <div class="product-rate-cover text-end">
+                                                <div class="product-rate d-inline-block">
+                                                    <!-- Calculate average rating from product reviews -->
+                                                    <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                </div>
+                                                <span class="font-small ml-5 text-muted">
+                                                    <!-- Display total number of reviews -->
+                                                    ({{ $product->reviews->count() }} reviews)
+                                                </span>
                                             </div>
-                                            <span class="font-small ml-5 text-muted"> (4.0)</span>
                                         </div>
                                         <div>
                                             <span class="font-small text-muted">By <a
@@ -1174,11 +1228,13 @@
                                                         <div class="product-detail-rating">
                                                             <div class="product-rate-cover text-end">
                                                                 <div class="product-rate d-inline-block">
-                                                                    <div class="product-rating" style="width: 90%">
-                                                                    </div>
+                                                                    <!-- Calculate average rating from product reviews -->
+                                                                    <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
                                                                 </div>
-                                                                <span class="font-small ml-5 text-muted"> (32
-                                                                    reviews)</span>
+                                                                <span class="font-small ml-5 text-muted">
+                                                                    <!-- Display total number of reviews -->
+                                                                    ({{ $product->reviews->count() }} reviews)
+                                                                </span>
                                                             </div>
                                                         </div>
                                                         @php

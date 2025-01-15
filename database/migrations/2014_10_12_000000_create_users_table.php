@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('vendor_short_info')->nullable();
             $table->enum('role', ['admin', 'vendor', 'user'])->default('user');
             $table->enum('status', ['active','inactive'])->default('active');
+            $table->timestamp('last_seen')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
