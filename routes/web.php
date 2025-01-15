@@ -245,6 +245,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         // Order Report
         Route::get('/admin/order/report', 'AdminOrderReport')->name('admin.order.report');
     });
+
+    // Product review
+    Route::controller(ReviewController::class)->group(function () {
+        Route::get('/admin/all/review', 'AdminReview')->name('admin.review');
+        Route::get('admin/review/toggle/{id}', 'toggleReviewStatus')->name('admin.review.toggle');
+    });
 });
 
 // Vendor routes

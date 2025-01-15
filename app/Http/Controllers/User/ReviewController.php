@@ -41,4 +41,26 @@ class ReviewController extends Controller
             'alert-type' => 'success'
         ]);
     }
+
+    // ---------------------------------------------------------------- Admin----------------------------------------------------------------------
+    public function AdminReview()
+    {
+        $reviews = Review::all();
+
+        return view('admin.reviews.index', compact('reviews'));
+    }
+
+    public function toggleReviewStatus($id)
+    {
+        $review = Review::findOrFail($id);
+
+        // Toggle the review's status
+        $review->status = !$review->status; // If status is 0, it will change to 1; if it's 1, it will change to 0
+        $review->save();
+
+        return redirect()->back()->with([
+            'message' => 'Review status has been updated successfully!',
+            'alert-type' => 'success'
+        ]);
+    }
 }

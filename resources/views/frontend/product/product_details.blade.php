@@ -49,11 +49,12 @@
                                         <div class="product-rate d-inline-block">
                                             <!-- Calculate average rating from product reviews -->
                                             <div class="product-rating"
-                                                style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                            </div>
                                         </div>
                                         <span class="font-small ml-5 text-muted">
                                             <!-- Display total number of reviews -->
-                                            ({{ $product->reviews->count() }} reviews)
+                                            ({{ $product->reviews->where('status', 1)->count() }} reviews)
                                         </span>
                                     </div>
                                 </div>
@@ -209,8 +210,8 @@
                                         href="#Vendor-info">Vendor</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab" href="#Reviews">Reviews
-                                        (3)</a>
+                                    <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab"
+                                        href="#Reviews">Reviews({{ $product->reviews->where('status', 1)->count() }})</a>
                                 </li>
                             </ul>
                             <div class="tab-content shop_info_tab entry-main-content">
@@ -326,11 +327,13 @@
                                                 <div class="product-rate-cover text-end">
                                                     <div class="product-rate d-inline-block">
                                                         <!-- Calculate average rating from product reviews -->
-                                                        <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                        <div class="product-rating"
+                                                            style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                                        </div>
                                                     </div>
                                                     <span class="font-small ml-5 text-muted">
                                                         <!-- Display total number of reviews -->
-                                                        ({{ $product->reviews->count() }} reviews)
+                                                        ({{ $product->reviews->where('status', 1)->count() }} reviews)
                                                     </span>
                                                 </div>
                                             </div>
@@ -402,7 +405,10 @@
                                             <div class="col-lg-8">
                                                 <h4 class="mb-30">Customer questions & answers</h4>
                                                 <div class="comment-list">
-                                                    @foreach ($product->reviews as $review)
+                                                    @php
+                                                        $reviews = $product->reviews()->where('status', 1)->get();
+                                                    @endphp
+                                                    @foreach ($reviews as $review)
                                                         <div class="single-comment justify-content-between d-flex mb-30">
                                                             <div class="user justify-content-between d-flex">
                                                                 <div
@@ -417,10 +423,13 @@
                                                                 <div class="desc">
                                                                     <div class="d-flex justify-content-between mb-10">
                                                                         <div class="d-flex align-items-center">
-                                                                            <span class="font-xs text-muted">{{ $review->created_at->format('F j, Y \a\t g:i a') }}</span>
+                                                                            <span
+                                                                                class="font-xs text-muted">{{ $review->created_at->format('F j, Y \a\t g:i a') }}</span>
                                                                         </div>
                                                                         <div class="product-rate d-inline-block">
-                                                                            <div class="product-rating" style="width: {{ $review->rating * 20 }}%"></div>
+                                                                            <div class="product-rating"
+                                                                                style="width: {{ $review->rating * 20 }}%">
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                     <p class="mb-10">{{ $review->comment }}</p>
@@ -533,12 +542,17 @@
                                             @else
                                                 <div class="row">
                                                     <div class="col-lg-8 col-md-12">
-                                                        <form class="form-contact comment_form" action="{{ route('reviews.store') }}" method="POST" id="commentForm">
+                                                        <form class="form-contact comment_form"
+                                                            action="{{ route('reviews.store') }}" method="POST"
+                                                            id="commentForm">
                                                             @csrf
                                                             <!-- Hidden input fields for product_id, user_id, and vendor_id -->
-                                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                                            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                                            <input type="hidden" name="vendor_id" value="{{ $product->vendor_id }}">
+                                                            <input type="hidden" name="product_id"
+                                                                value="{{ $product->id }}">
+                                                            <input type="hidden" name="user_id"
+                                                                value="{{ Auth::user()->id }}">
+                                                            <input type="hidden" name="vendor_id"
+                                                                value="{{ $product->vendor_id }}">
 
                                                             <div class="d-inline-block mb-30">
                                                                 <!-- Star Rating (1 to 5 stars) -->
@@ -555,14 +569,17 @@
                                                             <div class="row">
                                                                 <div class="col-12">
                                                                     <div class="form-group">
-                                                                        <textarea class="form-control w-100" name="comment" id="comment" cols="30" rows="9" placeholder="Write Comment"></textarea>
+                                                                        <textarea class="form-control w-100" name="comment" id="comment" cols="30" rows="9"
+                                                                            placeholder="Write Comment"></textarea>
                                                                     </div>
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <input type="hidden" name="rating" id="rating" value="0"> <!-- Hidden field for rating -->
-                                                                <button type="submit" class="button button-contactForm">Submit Review</button>
+                                                                <input type="hidden" name="rating" id="rating"
+                                                                    value="0"> <!-- Hidden field for rating -->
+                                                                <button type="submit"
+                                                                    class="button button-contactForm">Submit Review</button>
                                                             </div>
                                                         </form>
 
@@ -718,12 +735,13 @@
                                                             <div class="product-rate d-inline-block">
                                                                 <!-- Calculate average rating from product reviews -->
                                                                 <div class="product-rating"
-                                                                    style="width: {{ $product->reviews->avg('rating') * 20 }}%">
+                                                                    style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
                                                                 </div>
                                                             </div>
                                                             <span class="font-small ml-5 text-muted">
                                                                 <!-- Display total number of reviews -->
-                                                                ({{ $product->reviews->count() }} reviews)
+                                                                ({{ $product->reviews->where('status', 1)->count() }}
+                                                                reviews)
                                                             </span>
                                                         </div>
                                                     </div>
@@ -826,12 +844,13 @@
                                                                             <div class="product-rate d-inline-block">
                                                                                 <!-- Calculate average rating from product reviews -->
                                                                                 <div class="product-rating"
-                                                                                    style="width: {{ $product->reviews->avg('rating') * 20 }}%">
+                                                                                    style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
                                                                                 </div>
                                                                             </div>
                                                                             <span class="font-small ml-5 text-muted">
                                                                                 <!-- Display total number of reviews -->
-                                                                                ({{ $product->reviews->count() }} reviews)
+                                                                                ({{ $product->reviews->where('status', 1)->count() }}
+                                                                                reviews)
                                                                             </span>
                                                                         </div>
                                                                     </div>

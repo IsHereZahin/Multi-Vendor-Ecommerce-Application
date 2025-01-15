@@ -41,7 +41,8 @@
                             <div class="product-cart-wrap mb-30 wow animate__animated animate__fadeIn" data-wow-delay=".1s">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
-                                        <a href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">
+                                        <a
+                                            href="{{ url('/product-details/' . $product->id . '/' . $product->product_slug) }}">
                                             <img class="default-img" src="{{ asset($product->product_thumbnail) }}"
                                                 alt="" />
                                             @if ($product->multiImages->count() > 1)
@@ -59,19 +60,17 @@
                                         @endphp
 
                                         <a aria-label="{{ $isInWishlist ? 'Remove from wishlist' : 'Add to Wishlist' }}"
-                                        class="action-btn"
-                                        href="javascript:void(0);"
-                                        onclick="toggleWishlist({{ $product->id }})"
-                                        id="wishlist-btn-{{ $product->id }}"
-                                        data-product-id="{{ $product->id }}"> <!-- Add data-product-id -->
-                                        <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
+                                            class="action-btn" href="javascript:void(0);"
+                                            onclick="toggleWishlist({{ $product->id }})"
+                                            id="wishlist-btn-{{ $product->id }}" data-product-id="{{ $product->id }}">
+                                            <!-- Add data-product-id -->
+                                            <i class="fi-rs-heart {{ $isInWishlist ? 'text-danger' : '' }}"></i>
                                         </a>
 
                                         <a aria-label="Compare" class="action-btn" href="#"><i
                                                 class="fi-rs-shuffle"></i></a>
                                         <!-- Add a unique identifier to each quick view button -->
-                                        <a aria-label="Quick view" class="action-btn quick-view-btn"
-                                            data-bs-toggle="modal"
+                                        <a aria-label="Quick view" class="action-btn quick-view-btn" data-bs-toggle="modal"
                                             data-bs-target="#quickViewModal{{ $product->id }}"><i
                                                 class="fi-rs-eye"></i></a>
                                     </div>
@@ -99,11 +98,13 @@
                                         <div class="product-rate-cover text-end">
                                             <div class="product-rate d-inline-block">
                                                 <!-- Calculate average rating from product reviews -->
-                                                <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                <div class="product-rating"
+                                                    style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                                </div>
                                             </div>
                                             <span class="font-small ml-5 text-muted">
                                                 <!-- Display total number of reviews -->
-                                                ({{ $product->reviews->count() }} reviews)
+                                                ({{ $product->reviews->where('status', 1)->count() }} reviews)
                                             </span>
                                         </div>
                                     </div>
@@ -201,11 +202,14 @@
                                                         <div class="product-rate-cover text-end">
                                                             <div class="product-rate d-inline-block">
                                                                 <!-- Calculate average rating from product reviews -->
-                                                                <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                                <div class="product-rating"
+                                                                    style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                                                </div>
                                                             </div>
                                                             <span class="font-small ml-5 text-muted">
                                                                 <!-- Display total number of reviews -->
-                                                                ({{ $product->reviews->count() }} reviews)
+                                                                ({{ $product->reviews->where('status', 1)->count() }}
+                                                                reviews)
                                                             </span>
                                                         </div>
                                                     </div>

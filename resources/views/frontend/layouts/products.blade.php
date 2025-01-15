@@ -103,11 +103,13 @@
                                         <div class="product-rate-cover text-end">
                                             <div class="product-rate d-inline-block">
                                                 <!-- Calculate average rating from product reviews -->
-                                                <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                <div class="product-rating"
+                                                    style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                                </div>
                                             </div>
                                             <span class="font-small ml-5 text-muted">
                                                 <!-- Display total number of reviews -->
-                                                ({{ $product->reviews->count() }} reviews)
+                                                ({{ $product->reviews->where('status', 1)->count() }} reviews)
                                             </span>
                                         </div>
                                     </div>
@@ -205,11 +207,14 @@
                                                         <div class="product-rate-cover text-end">
                                                             <div class="product-rate d-inline-block">
                                                                 <!-- Calculate average rating from product reviews -->
-                                                                <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                                <div class="product-rating"
+                                                                    style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                                                </div>
                                                             </div>
                                                             <span class="font-small ml-5 text-muted">
                                                                 <!-- Display total number of reviews -->
-                                                                ({{ $product->reviews->count() }} reviews)
+                                                                ({{ $product->reviews->where('status', 1)->count() }}
+                                                                reviews)
                                                             </span>
                                                         </div>
                                                     </div>
@@ -425,11 +430,13 @@
                                             <div class="product-rate-cover text-end">
                                                 <div class="product-rate d-inline-block">
                                                     <!-- Calculate average rating from product reviews -->
-                                                    <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                    <div class="product-rating"
+                                                        style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                                    </div>
                                                 </div>
                                                 <span class="font-small ml-5 text-muted">
                                                     <!-- Display total number of reviews -->
-                                                    ({{ $product->reviews->count() }} reviews)
+                                                    ({{ $product->reviews->where('status', 1)->count() }} reviews)
                                                 </span>
                                             </div>
                                         </div>
@@ -526,11 +533,14 @@
                                                             <div class="product-rate-cover text-end">
                                                                 <div class="product-rate d-inline-block">
                                                                     <!-- Calculate average rating from product reviews -->
-                                                                    <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                                    <div class="product-rating"
+                                                                        style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                                                    </div>
                                                                 </div>
                                                                 <span class="font-small ml-5 text-muted">
                                                                     <!-- Display total number of reviews -->
-                                                                    ({{ $product->reviews->count() }} reviews)
+                                                                    ({{ $product->reviews->where('status', 1)->count() }}
+                                                                    reviews)
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -766,11 +776,13 @@
                                                 <div class="product-rate-cover text-end">
                                                     <div class="product-rate d-inline-block">
                                                         <!-- Calculate average rating from product reviews -->
-                                                        <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                        <div class="product-rating"
+                                                            style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                                        </div>
                                                     </div>
                                                     <span class="font-small ml-5 text-muted">
                                                         <!-- Display total number of reviews -->
-                                                        ({{ $product->reviews->count() }} reviews)
+                                                        ({{ $product->reviews->where('status', 1)->count() }} reviews)
                                                     </span>
                                                 </div>
                                             </div>
@@ -858,11 +870,13 @@
                                         <div class="product-rate-cover text-end">
                                             <div class="product-rate d-inline-block">
                                                 <!-- Calculate average rating from product reviews -->
-                                                <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                <div class="product-rating"
+                                                    style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                                </div>
                                             </div>
                                             <span class="font-small ml-5 text-muted">
                                                 <!-- Display total number of reviews -->
-                                                ({{ $product->reviews->count() }} reviews)
+                                                ({{ $product->reviews->where('status', 1)->count() }} reviews)
                                             </span>
                                         </div>
                                     </div>
@@ -908,11 +922,13 @@
                                         <div class="product-rate-cover text-end">
                                             <div class="product-rate d-inline-block">
                                                 <!-- Calculate average rating from product reviews -->
-                                                <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                <div class="product-rating"
+                                                    style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                                </div>
                                             </div>
                                             <span class="font-small ml-5 text-muted">
                                                 <!-- Display total number of reviews -->
-                                                ({{ $product->reviews->count() }} reviews)
+                                                ({{ $product->reviews->where('status', 1)->count() }} reviews)
                                             </span>
                                         </div>
                                     </div>
@@ -958,11 +974,13 @@
                                         <div class="product-rate-cover text-end">
                                             <div class="product-rate d-inline-block">
                                                 <!-- Calculate average rating from product reviews -->
-                                                <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                <div class="product-rating"
+                                                    style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                                </div>
                                             </div>
                                             <span class="font-small ml-5 text-muted">
                                                 <!-- Display total number of reviews -->
-                                                ({{ $product->reviews->count() }} reviews)
+                                                ({{ $product->reviews->where('status', 1)->count() }} reviews)
                                             </span>
                                         </div>
                                     </div>
@@ -1008,11 +1026,13 @@
                                         <div class="product-rate-cover text-end">
                                             <div class="product-rate d-inline-block">
                                                 <!-- Calculate average rating from product reviews -->
-                                                <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                <div class="product-rating"
+                                                    style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                                </div>
                                             </div>
                                             <span class="font-small ml-5 text-muted">
                                                 <!-- Display total number of reviews -->
-                                                ({{ $product->reviews->count() }} reviews)
+                                                ({{ $product->reviews->where('status', 1)->count() }} reviews)
                                             </span>
                                         </div>
                                     </div>
@@ -1128,11 +1148,13 @@
                                             <div class="product-rate-cover text-end">
                                                 <div class="product-rate d-inline-block">
                                                     <!-- Calculate average rating from product reviews -->
-                                                    <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                    <div class="product-rating"
+                                                        style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                                    </div>
                                                 </div>
                                                 <span class="font-small ml-5 text-muted">
                                                     <!-- Display total number of reviews -->
-                                                    ({{ $product->reviews->count() }} reviews)
+                                                    ({{ $product->reviews->where('status', 1)->count() }} reviews)
                                                 </span>
                                             </div>
                                         </div>
@@ -1229,11 +1251,14 @@
                                                             <div class="product-rate-cover text-end">
                                                                 <div class="product-rate d-inline-block">
                                                                     <!-- Calculate average rating from product reviews -->
-                                                                    <div class="product-rating" style="width: {{ $product->reviews->avg('rating') * 20 }}%"></div>
+                                                                    <div class="product-rating"
+                                                                        style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%">
+                                                                    </div>
                                                                 </div>
                                                                 <span class="font-small ml-5 text-muted">
                                                                     <!-- Display total number of reviews -->
-                                                                    ({{ $product->reviews->count() }} reviews)
+                                                                    ({{ $product->reviews->where('status', 1)->count() }}
+                                                                    reviews)
                                                                 </span>
                                                             </div>
                                                         </div>
