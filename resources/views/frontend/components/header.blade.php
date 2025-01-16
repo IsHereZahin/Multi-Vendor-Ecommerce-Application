@@ -10,8 +10,8 @@
                         <div class="header-info">
                             <ul>
                                 <li><a href="{{ '/dashboard' }}">My Cart</a></li>
-                                <li><a href="shop-wishlist.html">Checkout</a></li>
-                                <li><a href="shop-order.html">Order Tracking</a></li>
+                                <li><a href="{{ route('checkout') }}">Checkout</a></li>
+                                <li><a href="{{ route('user.track.orders') }}">Order Tracking</a></li>
                             </ul>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                                     </ul>
                                 </li>
 
-                                 <li>Need help? Call Us: <strong class="text-brand"> + 1800 900</strong></li>
+                                <li>Need help? Call Us: <strong class="text-brand"> {{ $site_setting->support_phone }}</strong></li>
 
                             </ul>
                         </div>
@@ -399,7 +399,7 @@
 
                     <div class="hotline d-none d-lg-flex">
                         <img src="{{ asset('frontend/assets/imgs/theme/icons/icon-headphone.svg') }}" alt="hotline" />
-                        <p>1900 - 888<span>24/7 Support Center</span></p>
+                        <p>{{ $site_setting->support_phone }}<span>{{ $site_setting->open_hours }} Support Center</span></p>
                     </div>
                     <div class="header-action-icon-2 d-block d-lg-none">
                         <div class="burger-icon burger-icon-white">
@@ -617,7 +617,7 @@
                     <a href="{{ route('login') }}"><i class="fi-rs-user"></i>Log In / Sign Up </a>
                 </div>
                 <div class="single-mobile-header-info">
-                    <a href="#"><i class="fi-rs-headphones"></i>(+01) - 2345 - 6789 </a>
+                    <a href="#"><i class="fi-rs-headphones"></i>{{ $site_setting->support_phone }}</a>
                 </div>
             </div>
             <div class="mobile-social-icon mb-50">
@@ -628,7 +628,7 @@
                 <a href="#"><img src="{{ asset('frontend/assets/imgs/theme/icons/icon-pinterest-white.svg') }}" alt="" /></a>
                 <a href="#"><img src="{{ asset('frontend/assets/imgs/theme/icons/icon-youtube-white.svg') }}" alt="" /></a>
             </div>
-            <div class="site-copyright">Copyright 2022 © Nest. All rights reserved. Powered by AliThemes.</div>
+            <div class="site-copyright">{{ $site_setting->copyright }} Powered by AliThemes.</div>
         </div>
     </div>
 </div>

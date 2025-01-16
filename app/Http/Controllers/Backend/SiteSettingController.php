@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 
@@ -19,13 +20,14 @@ class SiteSettingController extends Controller
                 'support_phone' => '20022025',
                 'email' => 'support@example.com',
                 'address' => 'RFH Mir, Flat # 1A & 1B, House # 3, Road # 1, Habib Lane, North Khulshi, Chattogram, Bangladesh',
-                'facebook_username' => '#',
-                'twitter_username' => '#',
-                'instagram_username' => '#',
-                'youtube_username' => '#',
+                'facebook_url' => '#',
+                'twitter_url' => '#',
+                'instagram_url' => '#',
+                'youtube_url' => '#',
                 'timezone' => 'UTC',
                 'open_hours' => '9AM-5PM',
                 'open_days' => 'Mon-Fri',
+                'copyright' => '© 2022, Nest - HTML E-commerce Template',
                 'maintenance_mode' => false,
             ]);
         }
@@ -67,13 +69,14 @@ class SiteSettingController extends Controller
         $setting->timezone = $request->timezone ?? $setting->timezone;
         $setting->open_hours = $request->open_hours ?? $setting->open_hours;
         $setting->open_days = $request->open_days ?? $setting->open_days;
+        $setting->copyright = $request->copyright ?? $setting->copyright;
         $setting->maintenance_mode = $request->maintenance_mode ?? $setting->maintenance_mode;
 
         // Update Social Media Usernames
-        $setting->facebook_username = $request->facebook_username ?? $setting->facebook_username;
-        $setting->twitter_username = $request->twitter_username ?? $setting->twitter_username;
-        $setting->instagram_username = $request->instagram_username ?? $setting->instagram_username;
-        $setting->youtube_username = $request->youtube_username ?? $setting->youtube_username;
+        $setting->facebook_url = $request->facebook_url ?? $setting->facebook_url;
+        $setting->twitter_url = $request->twitter_url ?? $setting->twitter_url;
+        $setting->instagram_url = $request->instagram_url ?? $setting->instagram_url;
+        $setting->youtube_url = $request->youtube_url ?? $setting->youtube_url;
 
         // Save the updated settings
         $setting->save();
@@ -95,13 +98,14 @@ class SiteSettingController extends Controller
             'support_phone' => '20022025',
             'email' => 'support@example.com',
             'address' => 'RFH Mir, Flat # 1A & 1B, House # 3, Road # 1, Habib Lane, North Khulshi, Chattogram, Bangladesh',
-            'facebook_username' => '#',
-            'twitter_username' => '#',
-            'instagram_username' => '#',
-            'youtube_username' => '#',
+            'facebook_url' => '#',
+            'twitter_url' => '#',
+            'instagram_url' => '#',
+            'youtube_url' => '#',
             'timezone' => 'UTC',
             'open_hours' => '9AM-5PM',
             'open_days' => 'Mon-Fri',
+            'copyright' => '© 2022, Nest - HTML E-commerce Template',
             'maintenance_mode' => false,
         ];
 

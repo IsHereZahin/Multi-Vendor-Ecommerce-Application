@@ -18,13 +18,14 @@ return new class extends Migration
             $table->string('support_phone');
             $table->string('email');
             $table->string('address');
-            $table->string('facebook_username');
-            $table->string('twitter_username');
-            $table->string('instagram_username');
-            $table->string('youtube_username');
+            $table->string('facebook_url');
+            $table->string('twitter_url');
+            $table->string('instagram_url');
+            $table->string('youtube_url');
             $table->string('timezone');
             $table->string('open_hours');
             $table->string('open_days');
+            $table->string('copyright');
             $table->boolean('maintenance_mode')->default(false);
             $table->timestamps();
         });

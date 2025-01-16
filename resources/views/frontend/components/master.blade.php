@@ -28,6 +28,7 @@
 <body>
     @php
         $products = \App\Models\Product::all();
+        $site_setting = \App\Models\SiteSetting::first();
     @endphp
     @include('frontend.components.header')
 
