@@ -249,7 +249,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Product review
     Route::controller(ReviewController::class)->group(function () {
         Route::get('/admin/all/review', 'AdminReview')->name('admin.review');
-        Route::get('admin/review/toggle/{id}', 'toggleReviewStatus')->name('admin.review.toggle');
+        Route::get('admin/review/toggle/{id}', 'AdminToggleReviewStatus')->name('admin.review.toggle');
+        Route::delete('admin/review/delete/{id}', 'AdminDeleteReview')->name('admin.review.delete');
     });
 });
 

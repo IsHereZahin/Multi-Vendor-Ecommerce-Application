@@ -33,7 +33,7 @@ class ReviewController extends Controller
             'vendor_id' => $request->vendor_id,
             'comment' => $request->comment,
             'rating' => $request->rating,
-            'status' => false,
+            'status' => '2',
         ]);
 
         return redirect()->back()->with([
@@ -50,16 +50,34 @@ class ReviewController extends Controller
         return view('admin.reviews.index', compact('reviews'));
     }
 
-    public function toggleReviewStatus($id)
+    public function AdminToggleReviewStatus($id)
     {
         $review = Review::findOrFail($id);
 
         // Toggle the review's status
-        $review->status = !$review->status; // If status is 0, it will change to 1; if it's 1, it will change to 0
+        if ($review->status == 0) {
+            $review->status = 1; // Published
+        } elseif ($review->status == 1) {
+            $review->status = 2; // Pending Review
+        } elseif ($review->status == 2) {
+            $review->status = 0; // Pending
+        }
+
         $review->save();
 
         return redirect()->back()->with([
             'message' => 'Review status has been updated successfully!',
+            'alert-type' => 'success'
+        ]);
+    }
+
+    public function AdminDeleteReview($id)
+    {
+        $review = Review::findOrFail($id);
+        $review->delete();
+
+        return redirect()->back()->with([
+            'message' => 'Review deleted successfully!',
             'alert-type' => 'success'
         ]);
     }

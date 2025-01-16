@@ -53,24 +53,38 @@
                                             </div>
                                         </div>
                                     </td>
+                                    <td>
+                                        @switch($review->status)
+                                            @case(0)
+                                                <span class="badge rounded-pill bg-warning">Pending</span>
+                                                @break
+                                            @case(1)
+                                                <span class="badge rounded-pill bg-success">Published</span>
+                                                @break
+                                            @case(2)
+                                                <span class="badge rounded-pill bg-secondary">Pending Review</span>
+                                                @break
+                                        @endswitch
+                                    </td>
+<td>
+    @switch($review->status)
+        @case(0)
+            <a href="{{ route('admin.review.toggle', $review->id) }}" class="btn btn-success">Approve</a>
+            @break
+        @case(1)
+            <a href="{{ route('admin.review.toggle', $review->id) }}" class="btn btn-warning">Reject</a>
+            @break
+        @case(2)
+            <a href="{{ route('admin.review.toggle', $review->id) }}" class="btn btn-secondary">Pending</a>
+            @break
+    @endswitch
 
-                                    <td>
-                                        @if ($review->status == 0)
-                                            <span class="badge rounded-pill bg-warning">Pending</span>
-                                        @elseif($review->status == 1)
-                                            <span class="badge rounded-pill bg-success">Published</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                    <td>
-                                        @if ($review->status == 0)
-                                            <a href="{{ route('admin.review.toggle', $review->id) }}"
-                                                class="btn btn-success">Approve</a>
-                                        @else
-                                            <a href="{{ route('admin.review.toggle', $review->id) }}"
-                                                class="btn btn-warning">Reject</a>
-                                        @endif
-                                    </td>
+    <form action="{{ route('admin.review.delete', $review->id) }}" method="POST" style="display: inline;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to permanently delete this review?')">Delete</button>
+    </form>
+</td>
                                 </tr>
                             @endforeach
                         </tbody>

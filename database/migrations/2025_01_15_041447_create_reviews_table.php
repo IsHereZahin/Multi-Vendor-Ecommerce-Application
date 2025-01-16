@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('vendor_id')->nullable(); // The vendor (a user with the "vendor" role)
             $table->string('rating');
             $table->text('comment');
-            $table->boolean('status')->default(false);
+            $table->integer('status')->default(2);
             $table->timestamps();
 
             // Foreign key constraints
