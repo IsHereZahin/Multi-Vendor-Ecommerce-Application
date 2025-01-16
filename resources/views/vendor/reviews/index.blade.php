@@ -1,4 +1,4 @@
-@extends('admin.components.master')
+@extends('vendor.components.master')
 @section('content')
     <div class="page-content">
         <!--breadcrumb-->
@@ -71,22 +71,22 @@
                                     <td>
                                         @switch($review->status)
                                             @case(0)
-                                                <a href="{{ route('admin.review.toggle', $review->id) }}"
+                                                <a href="{{ route('vendor.review.toggle', $review->id) }}"
                                                     class="btn btn-success">Approve</a>
                                             @break
 
                                             @case(1)
-                                                <a href="{{ route('admin.review.toggle', $review->id) }}"
+                                                <a href="{{ route('vendor.review.toggle', $review->id) }}"
                                                     class="btn btn-warning">Reject</a>
                                             @break
 
                                             @case(2)
-                                                <a href="{{ route('admin.review.toggle', $review->id) }}"
+                                                <a href="{{ route('vendor.review.toggle', $review->id) }}"
                                                     class="btn btn-secondary">Pending</a>
                                             @break
                                         @endswitch
 
-                                        <form action="{{ route('admin.review.delete', $review->id) }}" method="POST"
+                                        <form action="{{ route('vendor.review.delete', $review->id) }}" method="POST"
                                             style="display: inline;">
                                             @csrf
                                             @method('DELETE')

@@ -127,6 +127,17 @@
                 </li>
             </ul>
         </li>
+
+        <li class="menu-label">Comment and Review</li>
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class='bx bx-comment-detail'></i></div>
+                <div class="menu-title">Com. & Reviews</div>
+            </a>
+            <ul>
+                <li> <a href="{{ route('vendor.review') }}"><i class="bx bx-right-arrow-alt"></i>Product Review</a></li>
+            </ul>
+        </li>
         @endif
 		<li class="menu-label">Charts</li>
 		<li>

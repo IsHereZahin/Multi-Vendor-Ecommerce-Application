@@ -6,11 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VendorOrderController extends Controller
 {
     public function vendorOrdersByStatus($status = null)
     {
+        $vendor = Auth::user();
+
+        // Check if the authenticated user is a vendor and their status is active
+        if ($vendor->role !== 'vendor' || $vendor->status !== 'active') {
+            return redirect()->route('vendor.dashboard')->with([
+                'message' => 'Your vendor account is either inactive or not authorized.',
+                'alert-type' => 'error'
+            ]);
+        }
+
         $authVendorId = auth()->id(); // Get the authenticated vendor's ID
         $validStatuses = ['pending', 'confirm', 'processing', 'picked', 'shipped', 'delivered', 'completed', 'returned', 'canceled', 'return_requests'];
 
@@ -49,6 +60,16 @@ class VendorOrderController extends Controller
 
     public function VendorOrderDetails($id)
     {
+        $vendor = Auth::user();
+
+        // Check if the authenticated user is a vendor and their status is active
+        if ($vendor->role !== 'vendor' || $vendor->status !== 'active') {
+            return redirect()->route('vendor.dashboard')->with([
+                'message' => 'Your vendor account is either inactive or not authorized.',
+                'alert-type' => 'error'
+            ]);
+        }
+
         $authVendorId = auth()->id(); // Get the authenticated vendor's ID
 
         // Fetch the order only if it belongs to the authenticated vendor

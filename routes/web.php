@@ -292,6 +292,13 @@ Route::middleware(['auth', 'role:vendor'])->group(function () {
         Route::get('/vendor/orders/{status}', 'vendorOrdersByStatus')->name('vendor.orders.by.status');
         Route::get('/vendor/order/details/{id}', 'VendorOrderDetails')->name('vendor.order.details');
     });
+
+    // Product review
+    Route::controller(ReviewController::class)->group(function () {
+        Route::get('/vendor/all/review', 'VendorReview')->name('vendor.review');
+        Route::get('vendor/review/toggle/{id}', 'VendorToggleReviewStatus')->name('vendor.review.toggle');
+        Route::delete('vendor/review/delete/{id}', 'VendorDeleteReview')->name('vendor.review.delete');
+    });
 });
 
 // Cart and Wishlist Routes
