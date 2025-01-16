@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\ShippingAreaController;
 use App\Http\Controllers\Backend\UserManageController;
 use App\Http\Controllers\Backend\VendorOrderController;
 use App\Http\Controllers\Backend\BlogController;
+use App\Http\Controllers\Backend\SiteSEOController;
 use App\Http\Controllers\Backend\SiteSettingController;
 use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\Frontend\IndexController;
@@ -259,6 +260,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/site/setting', 'AdminSiteSetting')->name('admin.site.setting');
         Route::post('/admin/site/setting', 'UpdateSiteSetting')->name('admin.site.setting.update');
         Route::get('/admin/site/setting/reset', 'ResetSiteSetting')->name('admin.site.setting.reset');
+    });
+
+    // Site SEO
+    Route::controller(SiteSEOController::class)->group(function () {
+        Route::get('/admin/seo/setting', 'AdminSeoSetting')->name('admin.seo.setting');
+        Route::post('/admin/seo/setting', 'UpdateSeoSetting')->name('admin.seo.setting.update');
+        Route::get('/admin/seo/setting/reset', 'ResetSeoSetting')->name('admin.seo.setting.reset');
     });
 });
 
