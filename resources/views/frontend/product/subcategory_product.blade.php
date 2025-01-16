@@ -410,7 +410,7 @@
                                 </h6>
                                 <p class="price mb-0 mt-5">${{ $product->selling_price }}</p>
                                 <div class="product-rate">
-                                    <div class="product-rating" style="width: {{ rand(0, 100) }}%"> </div>
+                                    <div class="product-rating" style="width: {{ $product->reviews->where('status', 1)->avg('rating') * 20 }}%"> </div>
                                 </div>
                             </div>
                         </div>

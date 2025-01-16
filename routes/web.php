@@ -20,6 +20,7 @@ use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SiteSettingController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\ReviewController;
 use App\Http\Controllers\UserController;
@@ -251,6 +252,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/all/review', 'AdminReview')->name('admin.review');
         Route::get('admin/review/toggle/{id}', 'AdminToggleReviewStatus')->name('admin.review.toggle');
         Route::delete('admin/review/delete/{id}', 'AdminDeleteReview')->name('admin.review.delete');
+    });
+
+    // Site Setting
+    Route::controller(SiteSettingController::class)->group(function () {
+        Route::get('/admin/site/setting', 'AdminSiteSetting')->name('admin.site.setting');
+        Route::post('/admin/site/setting', 'UpdateSiteSetting')->name('admin.site.setting.update');
+        Route::get('/admin/site/setting/reset', 'ResetSiteSetting')->name('admin.site.setting.reset');
     });
 });
 

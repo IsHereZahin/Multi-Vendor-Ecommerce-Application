@@ -172,7 +172,6 @@
             </ul>
         </li>
 
-        <li class="menu-label">Shipping Area</li>
         <li>
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class='bx bx-location-plus'></i></div>
@@ -185,21 +184,20 @@
             </ul>
         </li>
 
-        <li class="menu-label">Comment and Review</li>
         <li>
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class='bx bx-comment-detail'></i></div>
                 <div class="menu-title">Com. & Reviews</div>
             </a>
             <ul>
-                <li> <a href="{{ route('admin.review') }}"><i class="bx bx-right-arrow-alt"></i>Product Review</a></li>
+                <li> <a href="{{ route('admin.review') }}"><i class="bx bx-right-arrow-alt"></i>Product Review</a>
+                </li>
             </ul>
         </li>
 
-        <li class="menu-label">Blog Manage</li>
         <li>
             <a href="javascript:;" class="has-arrow">
-                <div class="parent-icon"><i class='bx bx-pencil'></i></div>  <!-- Icon for Blog Manage -->
+                <div class="parent-icon"><i class='bx bx-pencil'></i></div> <!-- Icon for Blog Manage -->
                 <div class="menu-title">Blog Manage</div>
             </a>
             <ul>
@@ -224,7 +222,6 @@
             </ul>
         </li>
 
-        <li class="menu-label">HRM</li>
         <li>
             <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class="bx bx-group"></i></div>
@@ -271,7 +268,6 @@
             </ul>
         </li>
 
-
         <li>
             <a href="https://themeforest.net/user/codervent" target="_blank">
                 <div class="parent-icon"><i class="bx bx-support"></i>
@@ -279,6 +275,21 @@
                 <div class="menu-title">Support</div>
             </a>
         </li>
+
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class="bx bx-category"></i>
+                </div>
+                <div class="menu-title">Setting Manage</div>
+            </a>
+            <ul>
+                <li> <a href="{{ route('admin.site.setting') }}"><i class="bx bx-right-arrow-alt"></i>Site Setting</a>
+                </li>
+                <li> <a href=""><i class="bx bx-right-arrow-alt"></i>Publish Review</a>
+                </li>
+            </ul>
+        </li>
+
     </ul>
     <!--end navigation-->
 </div>
