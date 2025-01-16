@@ -1,14 +1,19 @@
 @extends('frontend.components.master')
 @section('content')
+@php
+    $categoryId = request()->segment(2); // Get the category ID from the URL
+    $category = App\Models\Category::find($categoryId); // Find the category by ID
+@endphp
+
+@section('title')
+{{ $category->name }}
+@endsection
+
     <div class="page-header mt-30 mb-50">
         <div class="container">
             <div class="archive-header">
                 <div class="row align-items-center">
                     <div class="col-xl-6">
-                        @php
-                            $categoryId = request()->segment(2); // Get the category ID from the URL
-                            $category = App\Models\Category::find($categoryId); // Find the category by ID
-                        @endphp
                         @if ($category)
                             <h1 class="mb-15">{{ $category->name }}</h1>
                             <div class="breadcrumb">

@@ -1,6 +1,10 @@
 @extends('frontend.components.master')
-
 @section('content')
+
+@section('title')
+Brands - Easy Shop
+@endsection
+
 <div class="page-header breadcrumb-wrap">
     <div class="container">
         <div class="breadcrumb">

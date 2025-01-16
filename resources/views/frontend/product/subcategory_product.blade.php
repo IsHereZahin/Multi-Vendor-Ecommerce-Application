@@ -1,14 +1,21 @@
 @extends('frontend.components.master')
 @section('content')
+
+@php
+    $subcategoryId = request()->segment(2); // Get the subcategory ID from the URL
+    $subcategory = App\Models\SubCategory::find($subcategoryId); // Find the subcategory by ID
+@endphp
+
+@section('title')
+{{ $subcategory->name }}
+@endsection
+
     <div class="page-header mt-30 mb-50">
         <div class="container">
             <div class="archive-header">
                 <div class="row align-items-center">
                     <div class="col-xl-6">
-                        @php
-                            $subcategoryId = request()->segment(2); // Get the subcategory ID from the URL
-                            $subcategory = App\Models\SubCategory::find($subcategoryId); // Find the subcategory by ID
-                        @endphp
+
                         @if ($subcategory)
                             <h1 class="mb-15">{{ $subcategory->name }}</h1>
                             <div class="breadcrumb">

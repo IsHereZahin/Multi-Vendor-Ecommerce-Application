@@ -1,6 +1,11 @@
 @extends('frontend.components.master')
 
 @section('content')
+
+@section('title')
+Wishlist Easy Multi Vendor Shop
+@endsection
+
     <main class="main">
         <div class="page-header breadcrumb-wrap">
             <div class="container">

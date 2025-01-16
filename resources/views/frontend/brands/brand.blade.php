@@ -1,5 +1,10 @@
 @extends('frontend.components.master')
 @section('content')
+
+@section('title')
+{{ $brand->name ?? 'Unknown' }}
+@endsection
+
     <div class="page-header breadcrumb-wrap">
         <div class="container">
             <div class="breadcrumb">

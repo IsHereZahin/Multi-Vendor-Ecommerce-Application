@@ -1,5 +1,10 @@
 @extends('frontend.components.master')
 @section('content')
+
+@section('title')
+    {{ request()->routeIs('category.blogs') ? ucfirst($category->blog_category_name) . ' Blog' : 'All Blogs' }}
+@endsection
+
     <main class="main">
         <div class="page-header mt-30 mb-75">
             <div class="container">
