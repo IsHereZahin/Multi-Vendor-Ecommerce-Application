@@ -555,6 +555,88 @@
             });
         }
     </script>
+
+    <script>
+        $(document).ready(function() {
+            const site_url = window.location.origin;
+
+            // Listen for keyup events on the search input field
+            $("#unique-search").on("keyup", function() {
+                let text = $(this).val();
+                let category = $("#unique-category").val(); // Get the selected category
+
+                // text length
+                if (text.length > 0) {
+                    // Call the search function
+                    performSearch(text, category);
+                } else {
+                    $("#unique-searchResults").html('').slideUp();
+                }
+            });
+
+            // Function to handle the AJAX search request
+            function performSearch(searchText, category) {
+                $.ajax({
+                    url: site_url + "/Ajax/search",
+                    method: 'POST',
+                    data: {
+                        search: searchText,
+                        category: category, // Send the selected category ID
+                        _token: $("meta[name='csrf-token']").attr("content")
+                    },
+                    success: function(response) {
+                        let html = '';
+                        if (response.length) {
+                            response.forEach(function(product) {
+                                html += `
+                            <a href="${site_url + '/product-details/' + product.id + '/' + product.product_slug}" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+                                <div class="list">
+                                    <img src="${site_url + '/' + product.product_thumbnail}" alt="${product.product_name}" />
+                                    <div>
+                                        <span>${product.product_name}</span>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <span class="old-price secondary font-md ml-15" style="text-decoration: line-through; color: gray;">$${product.selling_price}</span>
+                                    <span class="final-price font-md ml-15" style="font-weight: bold;">$${product.discount_price ? (product.selling_price - product.discount_price) : product.selling_price}</span>
+                                </div>
+                            </a>
+                        `;
+                            });
+                        } else {
+                            html = '<div class="text-center text-danger py-2">No Products Found</div>';
+                        }
+                        $("#unique-searchResults").html(html).slideDown();
+                    },
+                    error: function() {
+                        $("#unique-searchResults").html(
+                            '<div class="text-center text-danger py-2">Something went wrong. Please try again.</div>'
+                            ).slideDown();
+                    }
+                });
+            }
+
+            // Toggle visibility of search results
+            $("#unique-search").on("click", function(e) {
+                // stopPropagation() is a method in JavaScript that prevents the event from "bubbling up" or "capturing down" through the DOM (Document Object Model) tree.
+                // It stops the event from being triggered on parent elements when an event occurs on a child element.
+                e.stopPropagation();
+                if ($("#unique-searchResults").is(":visible")) {
+                    $("#unique-searchResults").slideUp();
+                } else {
+                    $("#unique-searchResults").slideDown();
+                }
+            });
+
+            // Hide results
+            $(document).click(function(e) {
+                if (!$(e.target).closest('#unique-search').length) {
+                    $("#unique-searchResults").slideUp();
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

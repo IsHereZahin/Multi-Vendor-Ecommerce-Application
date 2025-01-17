@@ -47,17 +47,15 @@ Route::controller(App\Http\Controllers\Frontend\BlogController::class)->group(fu
 });
 
 Route::controller(IndexController::class)->group(function () {
-    Route::get('/', 'home')->name('home');
+    Route::get('/', 'home')->name('home'); // Home route
     Route::post('/product/search', 'ProductSearch')->name('product.search');
+    Route::post('Ajax/search', 'AjaxProductSearch')->name('ajax.product.search');
+
+    // Product View Details Route
+    Route::get('/product-details/{id}/{slug}',  'ProductDetails')->name('product.details');
+    Route::get('/category/{id}/{slug}',  'CategoryProduct')->name('category.products');
+    Route::get('/subcategory/{id}/{slug}',  'SubCategoryProduct')->name('subcategory.products');
 });
-
-// Product View Details Route
-Route::get('/product-details/{id}/{slug}', [IndexController::class, 'ProductDetails'])->name('product.details');
-Route::get('/category/{id}/{slug}', [IndexController::class, 'CategoryProduct'])->name('category.products');
-Route::get('/subcategory/{id}/{slug}', [IndexController::class, 'SubCategoryProduct'])->name('subcategory.products');
-
-// Add to cart routes
-
 
 // All Vendor
 Route::get('/all/vendors', [VendorController::class, 'AllVendor'])->name('all.vendors');

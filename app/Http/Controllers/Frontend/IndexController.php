@@ -13,6 +13,7 @@ class IndexController extends Controller
         return view('frontend.index');
     }
 
+    // Handle regular search request (form submission)
     public function ProductSearch(Request $request)
     {
         $request->validate([
@@ -22,15 +23,36 @@ class IndexController extends Controller
         $item = $request->input('search');
         $categoryId = $request->input('category');
 
-        // If category is selected, filter by category and search term
+        // Search and filter by category if selected
         $products = Product::where('status', 1)
-        ->when($categoryId, function ($query, $categoryId) {
-            return $query->where('category_id', $categoryId);
-        })
+            ->when($categoryId, function ($query, $categoryId) {
+                return $query->where('category_id', $categoryId);
+            })
             ->where('product_name', 'LIKE', "%{$item}%")
             ->get();
 
         return view('frontend.product.search_results', compact('item', 'products'));
+    }
+
+    // Handle AJAX search request
+    public function AjaxProductSearch(Request $request)
+    {
+        $request->validate([
+            'search' => 'required',
+        ]);
+
+        $item = $request->input('search');
+        $categoryId = $request->input('category');
+
+        // Search and filter by category if selected
+        $products = Product::where('status', 1)
+            ->when($categoryId, function ($query, $categoryId) {
+                return $query->where('category_id', $categoryId);
+            })
+            ->where('product_name', 'LIKE', "%{$item}%")
+            ->get();
+
+        return response()->json($products);
     }
 
     public function ProductDetails($id, $slug)

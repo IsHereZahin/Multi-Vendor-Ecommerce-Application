@@ -61,13 +61,14 @@
                     </div>
                     <div class="header-right">
                         <div class="search-style-2">
-                            <form action="{{ route('product.search') }}" method="POST">
+                            <form action="{{ route('product.search') }}" method="POST" id="unique-search-form">
                                 @csrf
 
                                 @php
                                     $categories = App\Models\Category::all();
                                 @endphp
-                                <select class="select-active" name="category">
+
+                                <select class="select-active form-control" name="category" id="unique-category">
                                     @if ($categories->isEmpty())
                                         <option value="">No categories found</option>
                                     @else
@@ -77,8 +78,41 @@
                                         @endforeach
                                     @endif
                                 </select>
-                                <input type="text" name="search" placeholder="Search for items..." />
+
+                                <input type="text" name="search" id="unique-search" placeholder="Search for items..." autocomplete="off" />
+                                <div id="unique-searchResults"></div>
                             </form>
+
+                            <style>
+                                #unique-searchResults {
+                                    position: absolute;
+                                    top: 100%;
+                                    left: 0;
+                                    width: 100%;
+                                    background: #ffffff;
+                                    z-index: 999;
+                                    border-radius: 8px;
+                                    border: 1px solid #eee;
+                                    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                                    margin-top: 5px;
+                                    overflow-y: auto;
+                                    max-height: 300px;
+                                }
+                                .list {
+                                    padding-top: 20px;
+                                    padding-bottom: 10px;
+                                    display: flex;
+                                    align-items: center;
+                                    border-bottom: 1px solid #eee;
+                                }
+                                .list img {
+                                    width: 40px;
+                                    height: 40px;
+                                }
+                                .list div {
+                                    margin-left: 10px;
+                                }
+                            </style>
                         </div>
                         <div class="header-action-right">
                             <div class="header-action-2">
