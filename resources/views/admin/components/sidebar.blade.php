@@ -288,6 +288,18 @@
             </ul>
         </li>
 
+        <li class="menu-label">Role Permission</li>
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class="bx bx-user-lock"></i>
+                </div>
+                <div class="menu-title">Role Permission</div>
+            </a>
+            <ul>
+                <li> <a href="{{ route('all.permission') }}"><i class="bx bx-right-arrow-alt"></i>All Permission</a></li>
+            </ul>
+        </li>
+
     </ul>
     <!--end navigation-->
 </div>

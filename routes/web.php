@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\ShippingAreaController;
 use App\Http\Controllers\Backend\UserManageController;
 use App\Http\Controllers\Backend\VendorOrderController;
 use App\Http\Controllers\Backend\BlogController;
+use App\Http\Controllers\backend\RolePermissionController;
 use App\Http\Controllers\Backend\SiteSEOController;
 use App\Http\Controllers\Backend\SiteSettingController;
 use App\Http\Controllers\Frontend\WishlistController;
@@ -267,6 +268,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/seo/setting', 'AdminSeoSetting')->name('admin.seo.setting');
         Route::post('/admin/seo/setting', 'UpdateSeoSetting')->name('admin.seo.setting.update');
         Route::get('/admin/seo/setting/reset', 'ResetSeoSetting')->name('admin.seo.setting.reset');
+    });
+
+    // Role Permission Management
+    Route::controller(RolePermissionController::class)->group(function () {
+        Route::get('/admin/all/permission', 'AllPermission')->name('all.permission');
+        Route::get('/admin/permission/create', 'CreatePermission')->name('create.permission');
+        Route::post('/admin/permission/store', 'StorePermission')->name('store.permission');
+        Route::get('/admin/permission/edit/{id}', 'EditPermission')->name('edit.permission');
+        Route::put('/admin/permission/update/{id}', 'UpdatePermission')->name('update.permission');
+        Route::delete('/admin/permission/delete/{id}', 'DeletePermission')->name('delete.permission');
     });
 });
 
