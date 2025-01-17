@@ -798,26 +798,6 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                            <div class="sold mt-15 mb-15">
-                                                @php
-                                                    $randomMultiplier = mt_rand(100, 200) / 100;
-                                                    $product_stock = max(
-                                                        1,
-                                                        round($product->product_qty * $randomMultiplier),
-                                                    ); // Ensure $product_stock is at least 1
-                                                    $soldPercentage =
-                                                        $product_stock > 0
-                                                            ? ($product->product_qty / $product_stock) * 100
-                                                            : 0; // Safe division
-                                                @endphp
-                                                <div class="progress mb-5">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: {{ $soldPercentage }}%" aria-valuemin="0"
-                                                        aria-valuemax="{{ $product_stock }}"></div>
-                                                </div>
-                                                <span class="font-xs text-heading"> Sold:
-                                                    {{ $product->product_qty }}/{{ $product_stock }}</span>
-                                            </div>
                                             <a href="javascript:void(0);" class="btn w-100 hover-up"
                                                 onclick="quickAddToCart({{ $product->id }})">
                                                 <i class="fi-rs-shopping-cart mr-5"></i>Add to Cart

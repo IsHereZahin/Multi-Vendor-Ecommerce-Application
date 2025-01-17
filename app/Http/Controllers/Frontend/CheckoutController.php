@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
+use App\Models\Product;
 use App\Models\ShipDivision;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -26,6 +27,18 @@ class CheckoutController extends Controller
         foreach ($cartItems as $cartItem) {
             if (($cartItem->product->product_color && !$cartItem->color) || ($cartItem->product->product_size && !$cartItem->size)) {
                 session()->flash('message', 'Please select a color and size for all applicable items.');
+                session()->flash('alert-type', 'error');
+                return redirect()->route('cart.index');
+            }
+        }
+
+        // Check if the requested quantity is available in stock
+        $aggregatedQuantities = $cartItems->groupBy('product_id')->map(fn($items) => $items->sum('quantity'));
+
+        foreach ($aggregatedQuantities as $productId => $totalRequestedQuantity) {
+            $product = Product::find($productId);
+            if ($totalRequestedQuantity > $product->product_qty) {
+                session()->flash('message', "The total quantity for '{$product->product_name}' exceeds the available stock. Please adjust your cart.");
                 session()->flash('alert-type', 'error');
                 return redirect()->route('cart.index');
             }
@@ -71,6 +84,18 @@ class CheckoutController extends Controller
         foreach ($cartItems as $cartItem) {
             if (($cartItem->product->product_color && !$cartItem->color) || ($cartItem->product->product_size && !$cartItem->size)) {
                 session()->flash('message', 'Please select a color and size for all applicable items.');
+                session()->flash('alert-type', 'error');
+                return redirect()->route('cart.index');
+            }
+        }
+
+        // Check if the requested quantity is available in stock
+        $aggregatedQuantities = $cartItems->groupBy('product_id')->map(fn($items) => $items->sum('quantity'));
+
+        foreach ($aggregatedQuantities as $productId => $totalRequestedQuantity) {
+            $product = Product::find($productId);
+            if ($totalRequestedQuantity > $product->product_qty) {
+                session()->flash('message', "The total quantity for '{$product->product_name}' exceeds the available stock. Please adjust your cart.");
                 session()->flash('alert-type', 'error');
                 return redirect()->route('cart.index');
             }

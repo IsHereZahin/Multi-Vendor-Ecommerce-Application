@@ -137,6 +137,14 @@ class OrderController extends Controller
             $order->delivered_date = Carbon::now();
             $order->save();
 
+            // Update product stock for each order item
+            $orderItems = $order->orderItems;
+            foreach ($orderItems as $item) {
+                $product = $item->product; // Get the associated product
+                $product->product_qty -= $item->qty; // Decrease product stock by the ordered quantity
+                $product->save();
+            }
+
             return redirect()->route('admin.orders.by.status', ['status' => 'delivered'])
                 ->with('alert-type', 'success')
                 ->with('message', 'Order marked as delivered successfully!');
@@ -152,6 +160,14 @@ class OrderController extends Controller
         $order->status = 'returned';
         $order->return_date = now();
         $order->save();
+
+        // Restore the stock for each returned product
+        $orderItems = $order->orderItems;
+        foreach ($orderItems as $item) {
+            $product = $item->product; // Get the associated product
+            $product->product_qty += $item->qty; // Add the returned quantity back to stock
+            $product->save();
+        }
 
         return redirect()->back()->with('success', 'Return request accepted.');
     }
