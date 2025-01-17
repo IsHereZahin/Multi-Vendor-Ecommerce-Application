@@ -8,6 +8,31 @@ use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
+    public function home()
+    {
+        return view('frontend.index');
+    }
+
+    public function ProductSearch(Request $request)
+    {
+        $request->validate([
+            'search' => 'required',
+        ]);
+
+        $item = $request->input('search');
+        $categoryId = $request->input('category');
+
+        // If category is selected, filter by category and search term
+        $products = Product::where('status', 1)
+        ->when($categoryId, function ($query, $categoryId) {
+            return $query->where('category_id', $categoryId);
+        })
+            ->where('product_name', 'LIKE', "%{$item}%")
+            ->get();
+
+        return view('frontend.product.search_results', compact('item', 'products'));
+    }
+
     public function ProductDetails($id, $slug)
     {
         $product = Product::where('status', 1)->findOrFail($id);

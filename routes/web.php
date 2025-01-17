@@ -40,14 +40,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('frontend.index');
-})->name('home');
-
 Route::controller(App\Http\Controllers\Frontend\BlogController::class)->group(function () {
     Route::get('/blogs', 'AllBlog')->name('all.blogs');
     Route::get('/blog/{categoryslug}', 'CategoryBlogs')->name('category.blogs');
     Route::get('/blog/{categoryslug}/{blogslug}', 'BlogDetails')->name('blog.details');
+});
+
+Route::controller(IndexController::class)->group(function () {
+    Route::get('/', 'home')->name('home');
+    Route::post('/product/search', 'ProductSearch')->name('product.search');
 });
 
 // Product View Details Route

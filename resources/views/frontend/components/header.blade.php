@@ -61,21 +61,23 @@
                     </div>
                     <div class="header-right">
                         <div class="search-style-2">
-                            <form action="#">
+                            <form action="{{ route('product.search') }}" method="POST">
+                                @csrf
+
                                 @php
                                     $categories = App\Models\Category::all();
                                 @endphp
-                                <select class="select-active">
+                                <select class="select-active" name="category">
                                     @if ($categories->isEmpty())
-                                        <option>No categories found</option>
+                                        <option value="">No categories found</option>
                                     @else
-                                        <option>All Categories</option>
+                                        <option value="">All Categories</option>
                                         @foreach ($categories as $category)
-                                            <option>{{ $category->name }}</option>
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endforeach
                                     @endif
                                 </select>
-                                <input type="text" placeholder="Search for items..." />
+                                <input type="text" name="search" placeholder="Search for items..." />
                             </form>
                         </div>
                         <div class="header-action-right">

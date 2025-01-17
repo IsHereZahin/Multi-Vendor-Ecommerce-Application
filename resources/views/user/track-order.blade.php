@@ -288,7 +288,7 @@
                                 <span class="icon">
                                     <i class="fa {{ getStatusIcon('canceled') }}"></i>
                                     <div class="date-tooltip">
-                                        {{ $track->updated_at ? \Carbon\Carbon::parse($track->updated_at)->format('j M, Y h:i A') : '' }}
+                                        {{ $track->cancel_date ? \Carbon\Carbon::parse($track->cancel_date)->format('j M, Y h:i A') : '' }}
                                     </div>
                                 </span>
                                 <span class="text">Canceled</span>
