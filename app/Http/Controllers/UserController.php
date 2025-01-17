@@ -142,7 +142,22 @@ class UserController extends Controller
 
     public function UserTrackOrders()
     {
-        return view('user.track-orders');
+        return view('user.track-order');
+    }
+
+    public function UserTrackOrderDetails(Request $request)
+    {
+        $invoice_no = $request->invoice_no;
+        $email = $request->billing_email;
+
+        // Retrieve the order by invoice number and email
+        $track = Order::where('invoice_no', $invoice_no)->where('email', $email)->first();
+
+        if ($track) {
+            return view('user.track-order', compact('track'));
+        }
+
+        return redirect()->route('user.track.orders')->with('alert-type', 'error')->with('message', 'No order found!');
     }
 
     public function UserAccountDetails()

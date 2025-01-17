@@ -83,6 +83,7 @@ Route::middleware(['auth', 'role:user'])->group(function () {
         Route::post('/order/return/{id}', 'returnOrder')->name('user.return.order');
 
         Route::get('/track-orders', 'UserTrackOrders')->name('user.track.orders');
+        Route::post('/track-order', 'UserTrackOrderDetails')->name('user.track.order');
         Route::get('/account-details', 'UserAccountDetails')->name('user.account.details');
         Route::get('/change-password', 'UserChangePassword')->name('user.change.password');
     });
