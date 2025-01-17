@@ -50,8 +50,8 @@ class RolePermissionController extends Controller
         ]);
 
         $notification = array(
-            'info' => 'Permission updated successfully.',
-            'alert-type' =>'success'
+            'message' => 'Permission updated successfully.',
+            'alert-type' => 'info'
         );
 
         return redirect()->route('all.permission')->with($notification);
@@ -63,10 +63,80 @@ class RolePermissionController extends Controller
         $permission->delete();
 
         $notification = array(
-            'warning' => 'Permission deleted successfully.',
-            'alert-type' =>'success'
+            'message' => 'Permission deleted successfully.',
+            'alert-type' => 'warning'
         );
 
         return redirect()->route('all.permission')->with($notification);
+    }
+
+    // -------------------------------------------------- Role ------------------------------------------------
+    public function AllRole()
+    {
+        $roles = Role::all();
+        return view('backend.roles.index', compact('roles'));
+    }
+
+    public function CreateRole()
+    {
+        return view('backend.roles.create');
+    }
+
+    public function StoreRole(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|unique:roles|max:255',
+        ]);
+
+        $role = Role::create(['name' => $request->name]);
+
+        if ($request->has('permissions')) {
+            $role->givePermissionTo($request->permissions);
+        }
+
+        $notification = array(
+            'message' => 'Role created successfully.',
+            'alert-type' =>'success'
+        );
+
+        return redirect()->route('all.role')->with($notification);
+    }
+
+    public function EditRole($id)
+    {
+        $role = Role::find($id);
+        return view('backend.roles.edit', compact('role'));
+    }
+
+    public function UpdateRole(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|unique:roles,name,'.$id.'|max:255',
+        ]);
+
+        $role = Role::find($id);
+        $role->update(['name' => $request->name]);
+
+        $role->syncPermissions($request->permissions);
+
+        $notification = array(
+            'message' => 'Role updated successfully.',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->route('all.role')->with($notification);
+    }
+
+    public function DeleteRole($id)
+    {
+        $role = Role::find($id);
+        $role->delete();
+
+        $notification = array(
+            'message' => 'Role deleted successfully.',
+            'alert-type' => 'warning'
+        );
+
+        return redirect()->route('all.role')->with($notification);
     }
 }

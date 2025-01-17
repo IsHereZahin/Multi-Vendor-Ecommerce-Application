@@ -272,12 +272,21 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Role Permission Management
     Route::controller(RolePermissionController::class)->group(function () {
+        // Permission routes
         Route::get('/admin/all/permission', 'AllPermission')->name('all.permission');
         Route::get('/admin/permission/create', 'CreatePermission')->name('create.permission');
         Route::post('/admin/permission/store', 'StorePermission')->name('store.permission');
         Route::get('/admin/permission/edit/{id}', 'EditPermission')->name('edit.permission');
         Route::put('/admin/permission/update/{id}', 'UpdatePermission')->name('update.permission');
         Route::delete('/admin/permission/delete/{id}', 'DeletePermission')->name('delete.permission');
+
+        // Roles routes
+        Route::get('/admin/all/role', 'AllRole')->name('all.role');
+        Route::get('/admin/role/create', 'CreateRole')->name('create.role');
+        Route::post('/admin/role/store', 'StoreRole')->name('store.role');
+        Route::get('/admin/role/edit/{id}', 'EditRole')->name('edit.role');
+        Route::put('/admin/role/update/{id}', 'UpdateRole')->name('update.role');
+        Route::delete('/admin/role/delete/{id}', 'DeleteRole')->name('delete.role');
     });
 });
 

@@ -297,6 +297,7 @@
             </a>
             <ul>
                 <li> <a href="{{ route('all.permission') }}"><i class="bx bx-right-arrow-alt"></i>All Permission</a></li>
+                <li> <a href="{{ route('all.role') }}"><i class="bx bx-right-arrow-alt"></i>All Roles</a></li>
             </ul>
         </li>
 
