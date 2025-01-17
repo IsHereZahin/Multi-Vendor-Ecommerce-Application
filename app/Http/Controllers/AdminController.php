@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,7 +17,77 @@ class AdminController extends Controller
 {
     public function AdminDashboard()
     {
-        return view('admin.admin_dashboard');
+        // Retrieve all orders
+        $orders = Order::all();
+
+        // Calculate total orders and revenue
+        $totalOrders = $orders->count();
+        $totalIncome = $orders->whereNotIn('status', ['returned', 'canceled'])->sum('amount');
+
+        // Count users who have placed orders
+        $totalOrderUsers = $orders->pluck('user_id')->unique()->count();
+
+        // Count vendors who have sold items in all orders
+        $totalOrderVendor = $orders->flatMap(function ($order) {
+            return $order->orderItems->pluck('vendor_id');
+        })->unique()->count();
+
+        // Count total returned or canceled orders
+        $totalReturns = $orders->whereIn('status', ['returned', 'canceled'])->count();
+
+        // Today's Sale
+        $today = now()->format('Y-m-d');
+        $todaySale = $orders->where('order_date', $today)
+            ->whereNotIn('status', ['returned', 'canceled'])
+            ->sum('amount');
+
+        // Monthly Sale
+        $currentMonth = now()->format('F');
+        $monthlySale = $orders->where('order_month', $currentMonth)
+            ->whereNotIn('status', ['returned', 'canceled'])
+            ->sum('amount');
+
+        // Yearly Sale
+        $currentYear = now()->format('Y');
+        $yearlySale = $orders->where('order_year', $currentYear)
+            ->whereNotIn('status', ['returned', 'canceled'])
+            ->sum('amount');
+
+        // Count pending orders
+        $pendingOrders = $orders->where('status', 'pending')->count();
+
+        // Total vendors in the system
+        $totalVendors = User::where('role', 'vendor')->count();
+
+        // Total users in the system
+        $totalUsers = User::where('role', 'user')->count();
+
+        // Count top 10 products sale in the system
+        $topProducts = OrderItem::select('product_id', DB::raw('SUM(qty) AS total_quantity'))
+        ->groupBy('product_id')
+        ->orderBy('total_quantity', 'desc')
+            ->with('product')
+            ->limit(10)
+            ->get();
+
+        return view(
+            'admin.admin_dashboard',
+            compact(
+                'orders',
+                'totalOrders',
+                'totalIncome',
+                'totalOrderUsers',
+                'totalOrderVendor',
+                'totalUsers',
+                'totalReturns',
+                'todaySale',
+                'monthlySale',
+                'yearlySale',
+                'pendingOrders',
+                'totalVendors',
+                'topProducts'
+            )
+        );
     }
 
     public function AdminLogin()
