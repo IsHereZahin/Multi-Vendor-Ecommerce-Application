@@ -169,7 +169,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class
+
+        // laravel spatie for role-permission https://spatie.be/docs/laravel-permission/v6/installation-laravel
+        Spatie\Permission\PermissionServiceProvider::class,
+
     ])->toArray(),
 
     /*

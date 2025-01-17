@@ -574,6 +574,17 @@
                 }
             });
 
+            // Listen for changes in the category dropdown
+            $("#unique-category").on("change", function() {
+                let text = $("#unique-search").val(); // Get the text from the search field
+                let category = $(this).val(); // Get the selected category
+
+                // If the text is more than 2 characters or no text, trigger the search
+                if (text.length > 0 || category) {
+                    performSearch(text, category);
+                }
+            });
+
             // Function to handle the AJAX search request
             function performSearch(searchText, category) {
                 $.ajax({
@@ -589,19 +600,19 @@
                         if (response.length) {
                             response.forEach(function(product) {
                                 html += `
-                            <a href="${site_url + '/product-details/' + product.id + '/' + product.product_slug}" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
-                                <div class="list">
-                                    <img src="${site_url + '/' + product.product_thumbnail}" alt="${product.product_name}" />
-                                    <div>
-                                        <span>${product.product_name}</span>
+                                <a href="${site_url + '/product-details/' + product.id + '/' + product.product_slug}" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+                                    <div class="list">
+                                        <img src="${site_url + '/' + product.product_thumbnail}" alt="${product.product_name}" />
+                                        <div>
+                                            <span>${product.product_name}</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div style="text-align: right;">
-                                    <span class="old-price secondary font-md ml-15" style="text-decoration: line-through; color: gray;">$${product.selling_price}</span>
-                                    <span class="final-price font-md ml-15" style="font-weight: bold;">$${product.discount_price ? (product.selling_price - product.discount_price) : product.selling_price}</span>
-                                </div>
-                            </a>
-                        `;
+                                    <div style="text-align: right;">
+                                        <span class="old-price secondary font-md ml-15" style="text-decoration: line-through; color: gray;">$${product.selling_price}</span>
+                                        <span class="final-price font-md ml-15" style="font-weight: bold;">$${product.discount_price ? (product.selling_price - product.discount_price) : product.selling_price}</span>
+                                    </div>
+                                </a>
+                            `;
                             });
                         } else {
                             html = '<div class="text-center text-danger py-2">No Products Found</div>';
@@ -611,7 +622,7 @@
                     error: function() {
                         $("#unique-searchResults").html(
                             '<div class="text-center text-danger py-2">Something went wrong. Please try again.</div>'
-                            ).slideDown();
+                        ).slideDown();
                     }
                 });
             }
