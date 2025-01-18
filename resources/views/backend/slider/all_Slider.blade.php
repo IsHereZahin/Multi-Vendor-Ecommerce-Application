@@ -48,12 +48,23 @@
                                     <img src="{{ asset('upload/sliders/'.$item->image) }}" style="width: 70px; height: 70px;">
                                 </td>
                                 <td>
-                                    <a href="{{ route('edit.slider', $item->id) }}" class="btn btn-info btn-lg"><i class="fas fa-edit"></i></a>
-                                    <form method="POST" action="{{ route('delete.slider', $item->id) }}" style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-lg" onclick="return confirm('Are you sure you want to delete this slider?')"><i class="fas fa-trash-alt"></i></button>
-                                    </form>
+                                    <!-- Edit Button -->
+                                    @if (Auth::user()->can('slider.edit'))
+                                        <a href="{{ route('edit.slider', $item->id) }}" class="btn btn-info btn-lg">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    @endif
+
+                                    <!-- Delete Button -->
+                                    @if (Auth::user()->can('slider.delete'))
+                                        <form method="POST" action="{{ route('delete.slider', $item->id) }}" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-lg" onclick="return confirm('Are you sure you want to delete this slider?')">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

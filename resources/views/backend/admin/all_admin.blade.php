@@ -73,13 +73,15 @@
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{ route('edit.admin', $admin->id) }}"
-                                                class="btn btn-sm btn-info">Edit</a>
-                                            <a href="{{ route('delete.admin', $admin->id) }}"
-                                                onclick="return confirm('Are you sure you want to delete this admin?')"
-                                                class="btn btn-danger">
-                                                Delete
-                                            </a>
+                                            @if (Auth::user()->can('admin.edit'))
+                                                <a href="{{ route('edit.admin', $admin->id) }}" class="btn btn-sm btn-info">Edit</a>
+                                            @endif
+
+                                            @if (Auth::user()->can('admin.delete'))
+                                                <a href="{{ route('delete.admin', $admin->id) }}" onclick="return confirm('Are you sure you want to delete this admin?')" class="btn btn-danger">
+                                                    Delete
+                                                </a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

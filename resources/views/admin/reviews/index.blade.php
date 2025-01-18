@@ -71,28 +71,31 @@
                                     <td>
                                         @switch($review->status)
                                             @case(0)
-                                                <a href="{{ route('admin.review.toggle', $review->id) }}"
-                                                    class="btn btn-success">Approve</a>
+                                                @if (Auth::user()->can('review.approve'))
+                                                    <a href="{{ route('admin.review.toggle', $review->id) }}" class="btn btn-success">Approve</a>
+                                                @endif
                                             @break
 
                                             @case(1)
-                                                <a href="{{ route('admin.review.toggle', $review->id) }}"
-                                                    class="btn btn-warning">Reject</a>
+                                                @if (Auth::user()->can('review.reject'))
+                                                    <a href="{{ route('admin.review.toggle', $review->id) }}" class="btn btn-warning">Reject</a>
+                                                @endif
                                             @break
 
                                             @case(2)
-                                                <a href="{{ route('admin.review.toggle', $review->id) }}"
-                                                    class="btn btn-secondary">Pending</a>
+                                                @if (Auth::user()->can('review.pending'))
+                                                    <a href="{{ route('admin.review.toggle', $review->id) }}" class="btn btn-secondary">Pending</a>
+                                                @endif
                                             @break
                                         @endswitch
 
-                                        <form action="{{ route('admin.review.delete', $review->id) }}" method="POST"
-                                            style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger"
-                                                onclick="return confirm('Are you sure you want to permanently delete this review?')">Delete</button>
-                                        </form>
+                                        @if (Auth::user()->can('review.delete'))
+                                            <form action="{{ route('admin.review.delete', $review->id) }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to permanently delete this review?')">Delete</button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

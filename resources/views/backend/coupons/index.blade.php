@@ -13,11 +13,13 @@
                     </ol>
                 </nav>
             </div>
+            @if (Auth::user()->can('coupon.add'))
             <div class="ms-auto">
                 <div class="btn-group">
                     <a href="{{ route('add.coupon') }}" class="btn btn-primary">Add Coupon</a>
                 </div>
             </div>
+            @endif
         </div>
         <!--end breadcrumb-->
 
@@ -59,13 +61,19 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('edit.coupon', $coupon->id) }}" class="btn btn-info">Edit</a>
-                                        <!-- Directly delete the coupon -->
-                                        <form action="{{ route('delete.coupon', $coupon->id) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete the coupon with code: {{ $coupon->code }}?')">Delete</button>
-                                        </form>
+                                        @if (Auth::user()->can('coupon.edit'))
+                                            <!-- Edit Button -->
+                                            <a href="{{ route('edit.coupon', $coupon->id) }}" class="btn btn-info">Edit</a>
+                                        @endif
+
+                                        @if (Auth::user()->can('coupon.delete'))
+                                            <!-- Delete Button -->
+                                            <form action="{{ route('delete.coupon', $coupon->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete the coupon with code: {{ $coupon->code }}?')">Delete</button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

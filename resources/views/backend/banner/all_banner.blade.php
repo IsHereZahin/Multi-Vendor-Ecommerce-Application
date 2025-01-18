@@ -48,12 +48,19 @@
                                     <img src="{{ asset('upload/banners/'.$item->image) }}" style="width: 70px; height: 70px;">
                                 </td>
                                 <td>
-                                    <a href="{{ route('edit.banner', $item->id) }}" class="btn btn-info btn-lg"><i class="fas fa-edit"></i></a>
-                                    <form method="POST" action="{{ route('delete.banner', $item->id) }}" style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-lg" onclick="return confirm('Are you sure you want to delete this banner?')"><i class="fas fa-trash-alt"></i></button>
-                                    </form>
+                                    @if (Auth::user()->can('banner.edit'))
+                                        <a href="{{ route('edit.banner', $item->id) }}" class="btn btn-info btn-lg"><i class="fas fa-edit"></i></a>
+                                    @endif
+
+                                    @if (Auth::user()->can('banner.delete'))
+                                        <form method="POST" action="{{ route('delete.banner', $item->id) }}" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-lg" onclick="return confirm('Are you sure you want to delete this banner?')">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

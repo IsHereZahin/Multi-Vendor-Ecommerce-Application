@@ -88,9 +88,12 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('edit.product', $item->id) }}" class="btn btn-info">Edit</a>
-                                        <a href="{{ route('delete.product', $item->id) }}" class="btn btn-danger"
-                                            id="delete">Delete</a>
+                                        @if (Auth::user()->can('product.edit'))
+                                            <a href="{{ route('edit.product', $item->id) }}" class="btn btn-info">Edit</a>
+                                        @endif
+                                        @if (Auth::user()->can('product.delete'))
+                                            <a href="{{ route('delete.product', $item->id) }}" class="btn btn-danger" id="delete">Delete</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

@@ -214,10 +214,11 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.order.details', $item->id) }}" class="btn btn-info"
-                                            title="Details">
-                                            <i class="fa fa-eye"></i> Info
-                                        </a>
+                                        @if (Auth::user()->can('order.view.details'))
+                                            <a href="{{ route('admin.order.details', $item->id) }}" class="btn btn-info" title="Details">
+                                                <i class="fa fa-eye"></i> Info
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

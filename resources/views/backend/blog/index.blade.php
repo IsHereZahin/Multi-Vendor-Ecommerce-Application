@@ -45,15 +45,17 @@
                                     <td>{{ $item->category->blog_category_name }}</td>
                                     <td>{{ $item->blog_title }}</td>
                                     <td>
-                                        <a href="{{ route('admin.blog.edit', $item->id) }}" class="btn btn-info">Edit</a>
+                                        @if (Auth::user()->can('blog.edit'))
+                                            <a href="{{ route('admin.blog.edit', $item->id) }}" class="btn btn-info">Edit</a>
+                                        @endif
 
-                                        <form action="{{ route('admin.blog.delete', $item->id) }}" method="POST"
-                                            style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger"
-                                                onclick="return confirm('Are you sure you want to delete this blog post?')">Delete</button>
-                                        </form>
+                                        @if (Auth::user()->can('blog.delete'))
+                                            <form action="{{ route('admin.blog.delete', $item->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this blog post?')">Delete</button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
