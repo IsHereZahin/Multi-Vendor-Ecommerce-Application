@@ -106,6 +106,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/all/admins', 'AllAdmins')->name('all.admins');
         Route::get('/admin/add/admin', 'AddAdmin')->name('add.admin');
         Route::post('/admin/store/admin', 'StoreAdmin')->name('store.admin');
+        Route::get('/admin/edit/admin/{id}', 'EditAdmin')->name('edit.admin');
+        Route::put('/admin/update/admin/{id}', 'UpdateAdmin')->name('update.admin');
+        Route::get('/admin/delete/admin/{id}', 'DeleteAdmin')->name('delete.admin');
     });
 
     // Users manage routes

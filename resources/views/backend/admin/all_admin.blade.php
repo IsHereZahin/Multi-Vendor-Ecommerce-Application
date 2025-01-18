@@ -34,7 +34,6 @@
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th class="text-center">Role</th>
-                                <th>Last Active</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -43,39 +42,45 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>
-                                        <img src="{{ asset($admin->photo ? 'upload/user/admin/' . $admin->photo : 'adminbackend/assets/images/no_image.jpg') }}" alt="Profile Image" class="rounded-circle p-1 bg-primary" style="width: 50px; height: 50px;">
+                                        <img src="{{ asset($admin->photo ? 'upload/user/admin/' . $admin->photo : 'adminbackend/assets/images/no_image.jpg') }}"
+                                            alt="Profile Image"
+                                            class="rounded-circle p-1 {{ $admin->status == 'active' ? 'bg-success' : 'bg-danger' }} bg-primary"
+                                            title="
+                                                @if ($admin->UserOnline()) Active Now
+                                                @else
+                                                    @php
+                                                        $lastSeen = Carbon\Carbon::parse($admin->last_seen);
+                                                        $hoursDiff = $lastSeen->diffInHours(Carbon\Carbon::now());
+                                                    @endphp
+                                                    @if ($hoursDiff > 1)
+                                                        Offline (Last active: {{ $lastSeen->diffForHumans() }})
+                                                    @else
+                                                        Active: {{ $lastSeen->diffForHumans() }} @endif
+                                                @endif
+                                            "
+                                            style="width: 50px; height: 50px;">
                                     </td>
                                     <td>{{ $admin->name }}</td>
                                     <td>{{ $admin->email }}</td>
                                     <td>{{ $admin->phone }}</td>
                                     <td class="text-center">
-                                        <span class="badge rounded-pill" style="background-color: {{ $admin->role == 'superadmin' ? '#2d93ff' : ($admin->role == 'admin' ? '#ffbf00' : '#ff7043') }}; color: #fff; padding: 6px 12px;">
-                                            {{ ucfirst($admin->role) }}
-                                        </span>
+                                        @foreach($admin->roles as $role)
+                                            <span class="badge rounded-pill"
+                                                style="background-color: {{ $role->name == 'superadmin' ? '#2d93ff' : ($role->name == 'admin' ? '#ffbf00' : '#ff7043') }}; color: #fff; padding: 6px 12px;">
+                                                {{ ucfirst($role->name) }}
+                                            </span>
+                                        @endforeach
                                     </td>
                                     <td>
-                                        @if ($admin->UserOnline())
-                                            <span class="badge badge-pill bg-success text-white">Active Now</span>
-                                        @else
-                                            @php
-                                                $lastSeen = Carbon\Carbon::parse($admin->last_seen);
-                                                $hoursDiff = $lastSeen->diffInHours(Carbon\Carbon::now());
-                                            @endphp
-
-                                            @if ($hoursDiff > 1)
-                                                <span class="badge badge-pill bg-secondary text-white">Offline (Last active:
-                                                    {{ $lastSeen->diffForHumans() }})</span>
-                                            @else
-                                                <span
-                                                    class="badge badge-pill bg-warning text-dark">{{ $lastSeen->diffForHumans() }}</span>
-                                            @endif
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <span
-                                            class="btn {{ $admin->status == 'active' ? 'btn-success' : 'btn-danger' }} btn-secondary">
-                                            {{ ucfirst($admin->status) }}
-                                        </span>
+                                        <div class="btn-group">
+                                            <a href="{{ route('edit.admin', $admin->id) }}"
+                                                class="btn btn-sm btn-info">Edit</a>
+                                            <a href="{{ route('delete.admin', $admin->id) }}"
+                                                onclick="return confirm('Are you sure you want to delete this admin?')"
+                                                class="btn btn-danger">
+                                                Delete
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

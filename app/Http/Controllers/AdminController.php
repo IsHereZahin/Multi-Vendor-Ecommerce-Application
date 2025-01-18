@@ -202,7 +202,7 @@ class AdminController extends Controller
         $admin->role = 'admin';
         $admin->save();
 
-        // Role permission role
+        // Add Role permission on model_has_roles table
         if ($request->roles) {
             $admin->assignRole($request->roles);
         }
@@ -211,6 +211,60 @@ class AdminController extends Controller
             'alert-type' =>'success',
             'message' => 'Admin Added Successfully!'
         );
+
+        return redirect()->route('all.admins')->with($notification);
+    }
+
+    public function EditAdmin($id)
+    {
+        $admin = User::find($id);
+        $roles = Role::all();
+        return view('backend.admin.edit_admin', compact('admin', 'roles'));
+    }
+
+    public function UpdateAdmin(Request $request, $id)
+    {
+        $admin = User::find($id);
+        $admin->username = $request->username;
+        $admin->name = $request->name;
+        $admin->email = $request->email;
+        $admin->phone = $request->phone;
+        $admin->address = $request->address;
+
+        if ($request->password) {
+            $admin->password = Hash::make($request->password);
+        }
+
+        $admin->save();
+
+        // Remove all roles and assign new roles
+        $admin->roles()->detach();
+        if ($request->roles) {
+            $admin->assignRole($request->roles);
+        }
+
+        $notification = array(
+            'alert-type' =>'info',
+            'message' => 'Admin Updated Successfully!'
+        );
+
+        return redirect()->route('all.admins')->with($notification);
+    }
+
+    public function DeleteAdmin($id)
+    {
+        $admin = User::findOrFail($id);
+
+        // Detach all roles associated with the admin
+        $admin->roles()->detach();
+
+        // Delete the admin
+        $admin->delete();
+
+        $notification = [
+            'alert-type' => 'warning',
+            'message' => 'Admin Deleted Successfully!',
+        ];
 
         return redirect()->route('all.admins')->with($notification);
     }
