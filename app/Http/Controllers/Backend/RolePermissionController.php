@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -70,73 +72,128 @@ class RolePermissionController extends Controller
         return redirect()->route('all.permission')->with($notification);
     }
 
-    // -------------------------------------------------- Role ------------------------------------------------
-    public function AllRole()
+    // ------------------------------------------------ Roles in Permission ------------------------------------------------
+    public function IndexRolePermission()
     {
         $roles = Role::all();
-        return view('backend.roles.index', compact('roles'));
-    }
 
-    public function CreateRole()
-    {
-        return view('backend.roles.create');
-    }
-
-    public function StoreRole(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|unique:roles|max:255',
-        ]);
-
-        $role = Role::create(['name' => $request->name]);
-
-        if ($request->has('permissions')) {
-            $role->givePermissionTo($request->permissions);
+        // Fetch permissions for each role and pass them as an associative array
+        $rolePermissions = [];
+        foreach ($roles as $role) {
+            $rolePermissions[$role->id] = $role->permissions->pluck('name')->toArray(); // Get the permission names for the role
         }
 
-        $notification = array(
-            'message' => 'Role created successfully.',
-            'alert-type' =>'success'
-        );
-
-        return redirect()->route('all.role')->with($notification);
+        return view('backend.roles.attach_roles_permission.index', compact('roles', 'rolePermissions'));
     }
 
-    public function EditRole($id)
+    public function CreateRolePermission()
     {
-        $role = Role::find($id);
-        return view('backend.roles.edit', compact('role'));
+        $permissions = Permission::all();
+        $permission_groups = User::getPermissionGroups();
+        return view('backend.roles.attach_roles_permission.create', compact('permissions', 'permission_groups'));
     }
 
-    public function UpdateRole(Request $request, $id)
+    public function StoreRolePermission(Request $request)
     {
+        // first of all store role
         $request->validate([
-            'name' => 'required|unique:roles,name,'.$id.'|max:255',
+            'role_name' => 'required|unique:roles,name|max:255',
         ]);
 
-        $role = Role::find($id);
-        $role->update(['name' => $request->name]);
+        // Create the role
+        $role = Role::create(['name' => $request->role_name]); // This id will use in role_id for role_has_permission
 
-        $role->syncPermissions($request->permissions);
+
+        // and than we create here permission for role
+        $request->validate([
+            'permission' => 'required|array',
+            'permission.*' => 'exists:permissions,id',
+        ]);
+
+        // Get the permissions from the request
+        $permissions = $request->input('permission');
+
+        // Prepare data for bulk insert
+        $data = [];
+        foreach ($permissions as $permission) {
+            $data[] = [
+                'role_id' => $role->id,  // Use the created role ID
+                'permission_id' => $permission,
+            ];
+        }
+
+        // Insert permissions for the new role
+        DB::table('role_has_permissions')->insert($data);
 
         $notification = array(
-            'message' => 'Role updated successfully.',
-            'alert-type' => 'info'
+            'message' => 'Role and permissions added successfully.',
+            'alert-type' => 'success',
         );
 
-        return redirect()->route('all.role')->with($notification);
+        return redirect()->route('index.role.permission')->with($notification);
     }
 
-    public function DeleteRole($id)
+    // Edit Role Permission
+    public function EditRolePermission($id)
     {
-        $role = Role::find($id);
+        $role = Role::findOrFail($id);
+        $role_permissions = $role->permissions->pluck('id')->toArray(); // Get the permission IDs for the role
+        $permission_groups = User::getPermissionGroups();
+        return view('backend.roles.attach_roles_permission.edit', compact('role', 'permission_groups', 'role_permissions'));
+    }
+
+    // Update Role Permission
+    public function UpdateRolePermission(Request $request, $id)
+    {
+        $role = Role::findOrFail($id);
+        $request->validate([
+            'role_name' => 'required|max:255|unique:roles,name,' . $role->id,
+        ]);
+
+        // Update the role
+        $role->update(['name' => $request->role_name]);
+
+        // Validate permissions
+        $request->validate([
+            'permission' => 'required|array',
+            'permission.*' => 'exists:permissions,id',
+        ]);
+
+        $permissions = $request->input('permission');
+        $data = [];
+        foreach ($permissions as $permission) {
+            $data[] = [
+                'role_id' => $role->id,
+                'permission_id' => $permission,
+            ];
+        }
+
+        // Clear existing permissions for the role and insert new ones
+        DB::table('role_has_permissions')->where('role_id', $role->id)->delete();
+        DB::table('role_has_permissions')->insert($data);
+
+        $notification = array(
+            'message' => 'Role and permissions updated successfully.',
+            'alert-type' => 'info',
+        );
+
+        return redirect()->route('index.role.permission')->with($notification);
+    }
+
+    // Delete Role Permission
+    public function DeleteRolePermission($id)
+    {
+        $role = Role::findOrFail($id);
         $role->delete();
+
+        // Delete permissions associated with this role
+        DB::table('role_has_permissions')->where('role_id', $role->id)->delete();
 
         $notification = array(
             'message' => 'Role deleted successfully.',
-            'alert-type' => 'warning'
+            'alert-type' => 'warning',
         );
 
-        return redirect()->route('all.role')->with($notification);
+        return redirect()->route('index.role.permission')->with($notification);
     }
 }
