@@ -291,13 +291,24 @@
         <li class="menu-label">Role Permission</li>
         <li>
             <a href="javascript:;" class="has-arrow">
-                <div class="parent-icon"><i class="bx bx-user-lock"></i>
+                <div class="parent-icon"><i class="bx bx-shield-quarter"></i>
                 </div>
                 <div class="menu-title">Role Permission</div>
             </a>
             <ul>
                 <li> <a href="{{ route('all.permission') }}"><i class="bx bx-right-arrow-alt"></i>All Permission</a></li>
                 <li> <a href="{{ route('index.role.permission') }}"><i class="bx bx-right-arrow-alt"></i>All Roles in Permission</a></li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="javascript:;" class="has-arrow">
+                <div class="parent-icon"><i class="bx bx-id-card"></i>
+                </div>
+                <div class="menu-title">Admin Manage</div>
+            </a>
+            <ul>
+                <li> <a href="{{ route('all.admins') }}"><i class="bx bx-right-arrow-alt"></i>All Admin</a></li>
             </ul>
         </li>
 

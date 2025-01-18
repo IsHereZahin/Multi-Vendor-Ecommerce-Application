@@ -101,6 +101,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/change/password', 'AdminChangePassword')->name('admin.change.password');
         Route::post('/admin/password/update', 'AdminPasswordUpdate')->name('admin.password.update');
         Route::post('/admin/profile/update', 'AdminProfileUpdate')->name('admin.profile.update');
+
+        // All Admin
+        Route::get('/admin/all/admins', 'AllAdmins')->name('all.admins');
+        Route::get('/admin/add/admin', 'AddAdmin')->name('add.admin');
+        Route::post('/admin/store/admin', 'StoreAdmin')->name('store.admin');
     });
 
     // Users manage routes

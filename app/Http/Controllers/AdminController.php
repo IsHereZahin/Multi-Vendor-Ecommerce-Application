@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -172,5 +174,44 @@ class AdminController extends Controller
         ]);
 
         return back()->with("status", "Password Updated Successfully");
+    }
+
+    // --------------------------------------------- All Admin ----------------------------------------------------
+    public function AllAdmins()
+    {
+        $admins = User::where('role', 'admin')->latest()->get();
+        return view('backend.admin.all_admin', compact('admins'));
+    }
+
+    public function AddAdmin()
+    {
+        $roles = Role::all();
+        return view('backend.admin.add_admin', compact('roles'));
+    }
+
+    public function StoreAdmin(Request $request)
+    {
+        $admin = new User();
+        $admin->username = $request->username;
+        $admin->name = $request->name;
+        $admin->email = $request->email;
+        $admin->phone = $request->phone;
+        $admin->address = $request->address;
+        $admin->password =  Hash::make($request->password);
+        $admin->status = 'active';
+        $admin->role = 'admin';
+        $admin->save();
+
+        // Role permission role
+        if ($request->roles) {
+            $admin->assignRole($request->roles);
+        }
+
+        $notification = array(
+            'alert-type' =>'success',
+            'message' => 'Admin Added Successfully!'
+        );
+
+        return redirect()->route('all.admins')->with($notification);
     }
 }
