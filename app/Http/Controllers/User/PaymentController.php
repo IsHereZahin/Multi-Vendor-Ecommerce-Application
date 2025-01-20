@@ -8,9 +8,12 @@ use Carbon\Carbon;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\User;
+use App\Notifications\OrderComplete;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Session;
 
 class PaymentController extends Controller
@@ -114,6 +117,8 @@ class PaymentController extends Controller
 
         // End Send Email
 
+        $vendor_ids = [];
+
         foreach ($cartItems as $item) {
             $item_finalPrice = $item->product->selling_price;
 
@@ -131,6 +136,8 @@ class PaymentController extends Controller
                 'price' => $item_finalPrice,
                 'created_at' => Carbon::now(),
             ]);
+
+            $vendor_ids[] = $item->product->vendor_id;
         }
 
         // Clear coupon if applied
@@ -146,6 +153,13 @@ class PaymentController extends Controller
 
         Session::flash('message', 'Your order has been placed successfully!');
         Session::flash('alert-type', 'success');
+
+        $vendor_ids = array_unique($vendor_ids);
+        $admins = User::where('role', 'admin')->get();
+        $vendors = User::whereIn('id', $vendor_ids)->where('role', 'vendor')->get();
+        $recipients = $admins->merge($vendors);
+
+        Notification::send($recipients, new OrderComplete($request->name));
 
         return redirect()->route('home');
     }
@@ -226,8 +240,9 @@ class PaymentController extends Controller
         ];
 
         Mail::to($request->email)->send(new OrderMail($data));
-
         // End Send Email
+
+        $vendor_ids = [];
 
         foreach ($cartItems as $item) {
             $item_finalPrice = $item->product->selling_price;
@@ -246,6 +261,8 @@ class PaymentController extends Controller
                 'price' => $item_finalPrice,
                 'created_at' => Carbon::now(),
             ]);
+
+            $vendor_ids[] = $item->product->vendor_id;
         }
 
         // Clear coupon if applied
@@ -261,6 +278,13 @@ class PaymentController extends Controller
 
         Session::flash('message', 'Your order has been placed successfully!');
         Session::flash('alert-type', 'success');
+
+        $vendor_ids = array_unique($vendor_ids);
+        $admins = User::where('role', 'admin')->get();
+        $vendors = User::whereIn('id', $vendor_ids)->where('role', 'vendor')->get();
+        $recipients = $admins->merge($vendors);
+
+        Notification::send($recipients, new OrderComplete($request->name));
 
         return redirect()->route('home');
     }
