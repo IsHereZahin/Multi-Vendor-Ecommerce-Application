@@ -31,26 +31,37 @@ class VendorOrderController extends Controller
         }
 
         // Fetch orders related to the authenticated vendor
-        $orders = OrderItem::with(['order', 'product'])
-            ->where('vendor_id', $authVendorId)
-            ->when($status === 'return_requests', function ($query) {
-                // Orders with return_reason but no return_date (Return Requests)
-                $query->whereHas('order', function ($orderQuery) {
-                    $orderQuery->whereNotNull('return_reason')
-                        ->whereNull('return_date');
+        $orders = Order::with(['orderItems' => function ($query) use ($authVendorId, $status) {
+            $query->where('vendor_id', $authVendorId)
+                ->when($status === 'return_requests', function ($query) {
+                    // Orders with return_reason but no return_date (Return Requests)
+                    $query->whereHas('order', function ($orderQuery) {
+                        $orderQuery->whereNotNull('return_reason')
+                            ->whereNull('return_date');
+                    });
+                })
+                ->when($status === 'returned', function ($query) {
+                    // Orders with a return_date (Returned Orders)
+                    $query->whereHas('order', function ($orderQuery) {
+                        $orderQuery->whereNotNull('return_date');
+                    });
+                })
+                ->when($status && !in_array($status, ['return_requests', 'returned']), function ($query) use ($status) {
+                    // Filter by other statuses
+                    $query->whereHas('order', function ($orderQuery) use ($status) {
+                        $orderQuery->where('status', $status);
+                    });
                 });
+        }, 'orderItems.product'])
+            ->when($status === 'return_requests', function ($query) {
+                $query->whereNotNull('return_reason')
+                    ->whereNull('return_date');
             })
             ->when($status === 'returned', function ($query) {
-                // Orders with a return_date (Returned Orders)
-                $query->whereHas('order', function ($orderQuery) {
-                    $orderQuery->whereNotNull('return_date');
-                });
+                $query->whereNotNull('return_date');
             })
             ->when($status && !in_array($status, ['return_requests', 'returned']), function ($query) use ($status) {
-                // Filter by other statuses
-                $query->whereHas('order', function ($orderQuery) use ($status) {
-                    $orderQuery->where('status', $status);
-                });
+                $query->where('status', $status);
             })
             ->orderBy('id', 'DESC')
             ->get();
@@ -73,9 +84,10 @@ class VendorOrderController extends Controller
         $authVendorId = auth()->id(); // Get the authenticated vendor's ID
 
         // Fetch the order only if it belongs to the authenticated vendor
-        $order = OrderItem::with(['order', 'product', 'order.state', 'order.district', 'order.division'])
-            ->where('vendor_id', $authVendorId)
-            ->where('order_id', $id)
+        $order = Order::with(['orderItems' => function ($query) use ($authVendorId) {
+            $query->where('vendor_id', $authVendorId);
+        }, 'orderItems.product', 'state', 'district', 'division'])
+            ->where('id', $id)
             ->first();
 
         if (!$order) {
