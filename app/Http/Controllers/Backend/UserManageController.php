@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\VendorApprove;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class UserManageController extends Controller
 {
@@ -30,8 +32,11 @@ class UserManageController extends Controller
 
     public function ActiveVendorApprove(Request $request)
     {
-        $verdor_id = $request->id;
-        User::findOrFail($verdor_id)->update([
+        $vendor_id = $request->id;
+        $vendor = User::findOrFail($vendor_id);
+
+        // Update the vendor status
+        $vendor->update([
             'status' => 'active'
         ]);
 
@@ -39,6 +44,8 @@ class UserManageController extends Controller
             'message' => 'Vendor Active Successfully',
             'alert-type' => 'success'
         );
+
+        Notification::send($vendor, new VendorApprove($request->name));
 
         return redirect()->route('active.vendor')->with($notification);
     } // End

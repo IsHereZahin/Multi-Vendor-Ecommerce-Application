@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OrderComplete extends Notification
+class VendorApprove extends Notification
 {
     use Queueable;
 
@@ -26,7 +26,6 @@ class OrderComplete extends Notification
      */
     public function via(object $notifiable): array
     {
-        // return ['mail'];
         return ['database'];
     }
 
@@ -49,11 +48,11 @@ class OrderComplete extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => 'Order Notification',
-            'body' => 'A new order has been placed.',
-            'icon' => 'bx bx-box',
-            'bg_class' => 'bg-primary',
-            'text_class' => 'text-light',
+            'title' => 'Vendor Activated',
+            'body' => 'Your vendor account is active.',
+            'icon' => 'bx bx-check-circle',
+            'bg_class' => 'bg-success',
+            'text_class' => 'text-white',
         ];
     }
 }

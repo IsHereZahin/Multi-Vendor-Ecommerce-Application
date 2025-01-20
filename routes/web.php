@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\ShippingAreaController;
 use App\Http\Controllers\Backend\UserManageController;
 use App\Http\Controllers\Backend\VendorOrderController;
 use App\Http\Controllers\Backend\BlogController;
+use App\Http\Controllers\backend\NotificationController;
 use App\Http\Controllers\backend\RolePermissionController;
 use App\Http\Controllers\Backend\SiteSEOController;
 use App\Http\Controllers\Backend\SiteSettingController;
@@ -384,6 +385,12 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+
+    // notification Route
+    Route::controller(NotificationController::class)->group(function () {
+        Route::get('/notification/mark-as-read/{id}', 'markAsRead')->name('notification.markAsRead');
+        Route::get('/notifications/mark-all-as-read', 'markAllAsRead')->name('notifications.markAllAsRead');
+    });
 });
 
 Route::middleware('auth')->group(function () {

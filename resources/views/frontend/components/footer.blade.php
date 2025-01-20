@@ -1,3 +1,7 @@
+    @php
+        $products = \App\Models\Product::all();
+        $site_setting = \App\Models\SiteSetting::first();
+    @endphp
     <!-- Footer -->
     <footer class="main">
         <section class="newsletter mb-15 wow animate__animated animate__fadeIn">

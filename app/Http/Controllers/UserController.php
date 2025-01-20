@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
+use App\Notifications\OrderCancel;
+use App\Notifications\ReturnRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 
 class UserController extends Controller
 {
@@ -75,10 +78,17 @@ class UserController extends Controller
             'return_reason' => $request->return_reason,
         ]);
 
+        $vendor_ids = $order->orderItems()->pluck('vendor_id');
+        $admins = User::where('role', 'admin')->get();
+        $vendors = User::whereIn('id', $vendor_ids)->where('role', 'vendor')->get();
+        $recipients = $admins->merge($vendors);
+
+        Notification::send($recipients, new ReturnRequest($request->name));
+
         return redirect()->route('user.orders')->with('alert-type', 'success')->with('message', 'Return request submitted successfully!');
     }
 
-    public function cancelOrder($id)
+    public function cancelOrder($id, Request $request)
     {
         $order = Order::find($id);
 
@@ -97,6 +107,13 @@ class UserController extends Controller
         $order->status = 'canceled';
         $order->cancel_date = now();
         $order->save();
+
+        $vendor_ids = $order->orderItems()->pluck('vendor_id');
+        $admins = User::where('role', 'admin')->get();
+        $vendors = User::whereIn('id', $vendor_ids)->where('role', 'vendor')->get();
+        $recipients = $admins->merge($vendors);
+
+        Notification::send($recipients, new OrderCancel($request->name));
 
         return redirect()->route('user.orders')->with('alert-type', 'success')->with('message', 'Order canceled successfully!');
     }

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OrderComplete extends Notification
+class UserRegister extends Notification
 {
     use Queueable;
 
@@ -26,7 +26,6 @@ class OrderComplete extends Notification
      */
     public function via(object $notifiable): array
     {
-        // return ['mail'];
         return ['database'];
     }
 
@@ -49,11 +48,11 @@ class OrderComplete extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => 'Order Notification',
-            'body' => 'A new order has been placed.',
-            'icon' => 'bx bx-box',
-            'bg_class' => 'bg-primary',
-            'text_class' => 'text-light',
+            'title' => 'User Registration',
+            'body' => 'New user registered successfully.',
+            'icon' => 'bx bx-user-check',
+            'bg_class' => 'bg-success',
+            'text_class' => 'text-white',
         ];
     }
 }

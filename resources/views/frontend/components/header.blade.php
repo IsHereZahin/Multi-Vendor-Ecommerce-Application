@@ -1,3 +1,8 @@
+    @php
+        $products = \App\Models\Product::all();
+        $site_setting = \App\Models\SiteSetting::first();
+    @endphp
+
     <!-- Header  -->
     <header class="header-area header-style-1 header-height-2">
         <div class="mobile-promotion">

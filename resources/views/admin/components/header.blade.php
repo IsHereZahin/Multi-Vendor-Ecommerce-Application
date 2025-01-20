@@ -79,53 +79,56 @@
                             </div>
                         </div>
                     </li>
+
                     <li class="nav-item dropdown dropdown-large">
                         @php
                             $user = Auth::user();
                         @endphp
-                        <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="alert-count">{{ $user->unreadNotifications->count() }}</span>
+                        <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown">
+                            @if ($user->unreadNotifications->count() > 0)
+                                <span class="alert-count">{{ $user->unreadNotifications->count() }}</span>
+                            @endif
                             <i class='bx bx-bell'></i>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end">
-
-                            <a href="javascript:;">
-                                <div class="msg-header">
-                                    <p class="msg-header-title">Notifications</p>
-                                    <p class="msg-header-clear ms-auto">Marks all as read</p>
-                                </div>
-                            </a>
-
-                            <div class="header-notifications-list">
-
-                                @foreach ($user->notifications as $notification)
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <div class="d-flex align-items-center">
-                                            <div class="notify bg-light-primary text-primary">
-                                                <i class="{{ $notification->data['icon'] }}"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <h6 class="msg-name">{{ $notification->data['title'] }}
-                                                    <span class="msg-time float-end">{{ Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}</span>
-                                                </h6>
-                                                <p class="msg-info">{{ $notification->data['body'] }}</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                @endforeach
-
+                            <div class="msg-header">
+                                <p class="msg-header-title">Notifications</p>
+                                @if ($user->unreadNotifications->count() > 0)
+                                    <p class="msg-header-clear ms-auto" id="mark-all-read"><a href="{{ route('notifications.markAllAsRead') }}">Mark all as read</a></p>
+                                @endif
                             </div>
 
-                            <a href="javascript:;">
-                                <div class="text-center msg-footer">View All Notifications</div>
-                            </a>
+                            <div class="header-notifications-list">
+                                @if ($user->unreadNotifications->isEmpty())
+                                    <p class="text-center">No new notifications available.</p>
+                                @else
+                                    @foreach ($user->unreadNotifications as $notification)
+                                        <a class="dropdown-item" href="{{ route('notification.markAsRead', $notification->id) }}">
+                                            <div class="d-flex align-items-center">
+                                                <div class="notify {{ $notification->data['bg_class'] }} {{ $notification->data['text_class'] }}">
+                                                    <i class="{{ $notification->data['icon'] }}"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <h6 class="msg-name">
+                                                        {{ $notification->data['title'] }}
+                                                        <span class="msg-time float-end">{{ $notification->created_at->diffForHumans() }}</span>
+                                                    </h6>
+                                                    <p class="msg-info">{{ $notification->data['body'] }}</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    @endforeach
+                                @endif
+                            </div>
 
+                            @if ($user->unreadNotifications->count() > 0)
+                                <a href="javascript:;" class="text-center msg-footer">View All Notifications</a>
+                            @endif
                         </div>
                     </li>
 
                     <li class="nav-item dropdown dropdown-large">
-
                         <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="alert-count">8</span>
                             <i class='bx bx-comment'></i>
