@@ -45,12 +45,16 @@
                                     <img src="{{ asset('upload/categories/'.$item->image) }}" style="width: 70px; height: 70px;">
                                 </td>
                                 <td>
+                                    @if (Auth::user()->can('category.edit'))
                                     <a href="{{ route('edit.category', $item->id) }}" class="btn btn-info btn-lg">Edit</a>
+                                    @endif
+                                    @if (Auth::user()->can('category.delete'))
                                     <form method="POST" action="{{ route('delete.category', $item->id) }}" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-lg" onclick="return confirm('Are you sure you want to delete this category?')">Delete</button>
                                     </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

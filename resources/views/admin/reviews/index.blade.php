@@ -69,27 +69,20 @@
                                         @endswitch
                                     </td>
                                     <td>
-                                        @switch($review->status)
-                                            @case(0)
-                                                @if (Auth::user()->can('review.approve'))
+                                        @if (Auth::user()->can('review.action'))
+                                            @switch($review->status)
+                                                @case(0)
                                                     <a href="{{ route('admin.review.toggle', $review->id) }}" class="btn btn-success">Approve</a>
-                                                @endif
-                                            @break
+                                                @break
 
-                                            @case(1)
-                                                @if (Auth::user()->can('review.reject'))
+                                                @case(1)
                                                     <a href="{{ route('admin.review.toggle', $review->id) }}" class="btn btn-warning">Reject</a>
-                                                @endif
-                                            @break
+                                                @break
 
-                                            @case(2)
-                                                @if (Auth::user()->can('review.pending'))
+                                                @case(2)
                                                     <a href="{{ route('admin.review.toggle', $review->id) }}" class="btn btn-secondary">Pending</a>
-                                                @endif
-                                            @break
-                                        @endswitch
-
-                                        @if (Auth::user()->can('review.delete'))
+                                                @break
+                                            @endswitch
                                             <form action="{{ route('admin.review.delete', $review->id) }}" method="POST" style="display: inline;">
                                                 @csrf
                                                 @method('DELETE')
